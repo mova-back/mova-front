@@ -12,6 +12,7 @@ export const FeedService = {
     }
 
     const response = yield call(http(false).get, ApiRoute.DictionaryFeed);
+    console.log(response);
     return response.data;
   },
 };
