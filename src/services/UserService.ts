@@ -6,25 +6,38 @@ import SignUpFormData from '../models/forms/signUpFormData';
 import LoginData from '../models/forms/loginData';
 
 import * as AuthService from './auth.service';
-import { http } from './http.service';
 import { resetAuthData } from './auth.service';
+import { http } from './http.service';
+import { AxiosResponse } from 'axios';
+
+type LoginResponse = {
+  data: {
+    accessToken: string,
+    createdAt: string,
+    email: string,
+    id: string,
+    refreshToken: string,
+    updatedAt: string,
+    username: string,
+  }
+};
 
 export const UserService = {
-  *register(data: SignUpFormData) {
+  * register(data: SignUpFormData) {
     const response = yield call(http(false).post, ApiRoute.Users, data);
     return response.data.data;
   },
 
-  *login({ email, password }: LoginData) {
+  * login({ email, password }: LoginData) {
     // getfingerprint
-    const response = yield call(
+    const response: AxiosResponse<LoginResponse> = yield call(
       http(false).post,
       ApiRoute.UsersLogin,
       {
         email,
         password,
       },
-      { withCredentials: true }
+      { withCredentials: true },
     );
     AuthService.setAuthData({
       accessToken: response.data.data.accessToken,
@@ -33,19 +46,19 @@ export const UserService = {
     return response.data.data;
   },
 
-  *getCurrent() {
-    const response = yield call(http(true).get, ApiRoute.User, {}, true);
+  * getCurrent() {
+    const response:  AxiosResponse<LoginResponse> = yield call(http(true).get, ApiRoute.User, {}, true);
     return response.data.data;
   },
 
-  *logout() {
+  * logout() {
     try {
       // todo change to true (auth)
       yield call(
         http(true).post,
         ApiRoute.UsersLogout,
         {},
-        { withCredentials: true }
+        { withCredentials: true },
       );
       resetAuthData();
       // router push login
