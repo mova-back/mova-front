@@ -1,0 +1,71 @@
+{
+  "extends": [
+    "airbnb-typescript",
+    "airbnb/hooks",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:jest/recommended",
+    "prettier",
+    "prettier/react",
+    "prettier/@typescript-eslint",
+    "plugin:prettier/recommended"
+  ],
+  "plugins": [
+    "react",
+    "@typescript-eslint",
+    "jest"
+  ],
+  "env": {
+    "browser": true,
+    "es6": true,
+    "jest": true
+  },
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 2018,
+    "sourceType": "module",
+    "project": "./tsconfig.json"
+  },
+  "rules": {
+    "no-debugger": "warn",
+    "max-len": [
+      "warn",
+      {
+        "code": 80,
+        "ignoreStrings": true,
+        "ignoreTemplateLiterals": true,
+        "ignoreComments": true
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": [
+        "*.tsx",
+        "*.ts"
+      ],
+      "rules": {
+        "react/jsx-props-no-spreading": "off",
+        // TypeScript takes care of these for us
+        "no-undef": "off",
+        "no-return-assign": "off",
+        "no-unused-vars": "off",
+        "space-infix-ops": "off",
+        "react/prop-types": "off",
+        "react/default-props-match-prop-types": "off",
+        "@typescript-eslint/explicit-module-boundary-types": "off",
+        "@typescript-eslint/no-explicit-any": "off"
+      }
+    },
+    {
+      "files": "*.d.tsx",
+      "rules": {
+        "no-restricted-globals": "off",
+        "no-useless-constructor": "off",
+        "react/prefer-stateless-function": "off"
+      }
+    }
+  ]
+}
