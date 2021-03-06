@@ -101,27 +101,39 @@ function* rateAWordWorker({
   payload,
 }: ReturnType<typeof wordsActions.rateAWord>) {
   const { id, ratingType } = payload;
-  const response =
-    ratingType === 'like'
-      ? yield call(wordsService.likeAWord, id)
-      : yield call(wordsService.dislikeAWord, id);
-  const feedState = yield select((_state: AppStore) => _state.feed);
-  const newFeed = feedState.feed.map((_i: Word) => {
-    const i = _i;
-    if (ratingType === 'like') {
+  try {
+    const response =
+      ratingType === 'like'
+        ? yield call(wordsService.likeAWord, id)
+        : yield call(wordsService.dislikeAWord, id);
+    const feedState = yield select((_state: AppStore) => _state.feed);
+    const newFeed = feedState.feed.map((_i: Word) => {
+      const i = _i;
+      if (ratingType === 'like') {
+        const result =
+          i.id === id
+            ? { ...i, likes: response.data ? (i.likes += 1) : (i.likes -= 1) }
+            : i;
+        return result;
+      }
       const result =
         i.id === id
-          ? { ...i, likes: response ? (i.likes += 1) : (i.likes -= 1) }
+          ? {
+              ...i,
+              dislikes: response.data ? (i.dislikes += 1) : (i.dislikes -= 1),
+            }
           : i;
       return result;
-    }
-    const result =
-      i.id === id
-        ? { ...i, dislikes: response ? (i.dislikes += 1) : (i.dislikes -= 1) }
-        : i;
-    return result;
-  });
-  yield put(feedActions.fetchFeedSuccess(newFeed, feedState.offset));
+    });
+    yield put(feedActions.fetchFeedSuccess(newFeed, feedState.offset));
+  } catch (e) {
+    yield put(
+      notificationActions.addNotification({
+        type: NotificationTypes.error,
+        message: e.message,
+      })
+    );
+  }
 }
 
 // --WATCHER-SAGAS--

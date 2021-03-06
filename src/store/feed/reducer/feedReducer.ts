@@ -68,7 +68,6 @@ export const feedActions = {
       },
     } as const),
   fetchFeedSuccess: (data: Word[], offset: number) => {
-    console.log(data)
     return {
       type: FETCH_FEED_SUCCESS,
       payload: {
