@@ -12,6 +12,7 @@ import FeedbackPage from '../pages/FeedbackPage';
 import LogoutPage from '../pages/LogoutPage';
 import DeleteAccPage from '../pages/DeleteAccPage';
 import { Page } from './paths';
+import MyDictionaryPage from '../pages/MyDictionaryPage';
 
 const ROUTES: RouteConfig[] = [
   {
@@ -83,6 +84,11 @@ const ROUTES: RouteConfig[] = [
     path: Page.AddWord,
     exact: true,
     component: NewWordPage,
+  },
+  {
+    path: Page.Dictionary,
+    exact: true,
+    component: MyDictionaryPage,
   },
 ];
 
