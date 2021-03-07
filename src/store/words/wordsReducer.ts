@@ -1,11 +1,9 @@
 import { call, put, select, takeEvery } from 'redux-saga/effects';
-import { InferActionsTypes } from '../types';
+import { AppStore, InferActionsTypes } from '../types';
 import NewWordData from '../../models/forms/newWordData';
 import wordsService from '../../services/wordsService';
 import { notificationActions } from '../notification/reducer/notificationReducer';
 import NotificationTypes from '../../constants/notificationTypes';
-// eslint-disable-next-line import/no-cycle
-import { AppStore } from '../rootReducer';
 import Word from '../../models/word';
 import { feedActions } from '../feed/reducer/feedReducer';
 
