@@ -5,14 +5,15 @@ import { ApiRoute, apiRoutesCreator } from '../constants/paths';
 import { http } from './http.service';
 
 const wordsService = {
-  *createANewWord(word: any) {
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  *createANewWord(word: {}) {
     const result: AxiosResponse<Record<string, unknown>> = yield call(
       http(true).post,
       ApiRoute.CreateAWord,
       word,
       {
         withCredentials: true,
-      }
+      },
     );
     return result;
   },
@@ -21,17 +22,18 @@ const wordsService = {
       http(true).put,
       apiRoutesCreator(ApiRoute.CreateAWord, id, 'like'),
       {},
-      { withCredentials: true }
+      { withCredentials: true },
     );
     return result;
   },
   *dislikeAWord(id: string) {
-    return yield call(
+    const result: AxiosResponse<Record<string, unknown>> = yield call(
       http(true).put,
       apiRoutesCreator(ApiRoute.CreateAWord, id, 'dislike'),
       {},
-      { withCredentials: true }
+      { withCredentials: true },
     );
+    return result;
   },
 };
 export default wordsService;

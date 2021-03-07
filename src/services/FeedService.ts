@@ -6,7 +6,7 @@ import { AxiosResponse } from 'axios';
 import Word from '../models/word';
 
 export const FeedService = {
-  * fetchFeed(offset: number, limit?: number) {
+  *fetchFeed(offset: number, limit?: number) {
     const params = new URLSearchParams();
     params.append('offset', offset.toString());
     if (limit !== undefined) {

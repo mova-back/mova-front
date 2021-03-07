@@ -14,7 +14,7 @@ const useStyles = makeStyles(() =>
         background: '#00BB80',
       },
     },
-  })
+  }),
 );
 
 const ResetPassword: React.FC = () => {

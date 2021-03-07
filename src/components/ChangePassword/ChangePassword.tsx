@@ -1,19 +1,7 @@
 import * as React from 'react';
-import {
-  Formik,
-  Field,
-  FormikHelpers,
-  FormikProps,
-  FieldProps,
-  Form,
-} from 'formik';
+import { Formik, Field, FormikHelpers, FormikProps, FieldProps, Form } from 'formik';
 
-import {
-  Box,
-  CircularProgress,
-  createStyles,
-  makeStyles,
-} from '@material-ui/core';
+import { Box, CircularProgress, createStyles, makeStyles } from '@material-ui/core';
 
 import Input from '../Input/Input';
 import ActionButton from '../ActionButton/ActionButton';
@@ -40,7 +28,7 @@ const useStyles = makeStyles(() =>
       marginTop: -12,
       marginLeft: -12,
     },
-  })
+  }),
 );
 
 const ChangePassword: React.FC = () => {
@@ -50,10 +38,7 @@ const ChangePassword: React.FC = () => {
     <Formik
       initialValues={ChangePasswordSchema.initialState}
       validationSchema={ChangePasswordSchema.validSchema}
-      onSubmit={(
-        values: ChangePasswordData,
-        meta: FormikHelpers<ChangePasswordData>
-      ) => {
+      onSubmit={(values: ChangePasswordData, meta: FormikHelpers<ChangePasswordData>) => {
         // console.log(values);
         meta.setSubmitting(false);
       }}
@@ -67,9 +52,7 @@ const ChangePassword: React.FC = () => {
                   <Input
                     {...formikField}
                     error={Boolean(meta.error && meta.touched)}
-                    helperText={
-                      meta.error && meta.touched ? field.helperText : ''
-                    }
+                    helperText={meta.error && meta.touched ? field.helperText : ''}
                   />
                 )}
               </Field>
@@ -85,12 +68,7 @@ const ChangePassword: React.FC = () => {
               >
                 Змяніць пароль
               </ActionButton>
-              {isSubmitting && (
-                <CircularProgress
-                  size={24}
-                  className={classes.progressIndicator}
-                />
-              )}
+              {isSubmitting && <CircularProgress size={24} className={classes.progressIndicator} />}
             </div>
           </Box>
         </Form>

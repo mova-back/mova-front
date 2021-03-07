@@ -9,7 +9,7 @@ const useStyles = makeStyles(() =>
     root: {
       paddingTop: '30px',
     },
-  })
+  }),
 );
 
 const ChangePasswordPage: React.FC = () => {

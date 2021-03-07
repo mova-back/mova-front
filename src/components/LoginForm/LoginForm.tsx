@@ -1,21 +1,9 @@
 import * as React from 'react';
-import {
-  Field,
-  FieldProps,
-  Form,
-  Formik,
-  FormikHelpers,
-  FormikProps,
-} from 'formik';
+import { Field, FieldProps, Form, Formik, FormikHelpers, FormikProps } from 'formik';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 
-import {
-  Box,
-  CircularProgress,
-  createStyles,
-  makeStyles,
-} from '@material-ui/core';
+import { Box, CircularProgress, createStyles, makeStyles } from '@material-ui/core';
 
 import { useDispatch } from 'react-redux';
 import Input from '../Input/Input';
@@ -41,7 +29,7 @@ const useStyles = makeStyles(() =>
     submitButton: {
       width: '100%',
     },
-  })
+  }),
 );
 
 // type Props = {
@@ -82,12 +70,7 @@ const LoginForm: React.FC = () => {
                 return (
                   <FormControlLabel
                     control={
-                      <Checkbox
-                        checked={value}
-                        onChange={onChange}
-                        name={name}
-                        color="primary"
-                      />
+                      <Checkbox checked={value} onChange={onChange} name={name} color="primary" />
                     }
                     label="Запомніць?"
                   />
@@ -105,12 +88,7 @@ const LoginForm: React.FC = () => {
               >
                 Увайсці
               </ActionButton>
-              {isSubmitting && (
-                <CircularProgress
-                  size={24}
-                  className={classes.progressIndicator}
-                />
-              )}
+              {isSubmitting && <CircularProgress size={24} className={classes.progressIndicator} />}
             </div>
           </Box>
         </Form>

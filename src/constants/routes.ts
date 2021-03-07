@@ -1,4 +1,3 @@
-import { RouteConfig } from 'react-router-config';
 import MainPage from '../pages/MainPage';
 import LoginPage from '../pages/LoginPage';
 import SignUpPage from '../pages/SignUpPage';
@@ -14,7 +13,7 @@ import DeleteAccPage from '../pages/DeleteAccPage';
 import { Page } from './paths';
 import MyDictionaryPage from '../pages/MyDictionaryPage';
 
-const ROUTES: RouteConfig[] = [
+const ROUTES = [
   {
     path: Page.Home,
     exact: true,

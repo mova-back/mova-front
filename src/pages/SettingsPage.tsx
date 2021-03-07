@@ -14,14 +14,14 @@ import {
 } from '@material-ui/core';
 import { useTheme } from '@material-ui/core/styles';
 
-import { AppStore } from '../store/rootReducer';
+import { RootState } from '../store/rootReducer';
 import { Page } from '../constants/paths';
 import Wrapper from '../components/App/Wrapper/Wrapper';
 import { CustomThemeOptions } from '../styles/types';
 import BottomNav from '../components/App/BottomNav/BottomNav';
 
 const SettingsPage: React.FC = () => {
-  const currentUser = useSelector((state: AppStore) => state.user.currentUser);
+  const currentUser = useSelector((state: RootState) => state.user.currentUser);
   const theme: CustomThemeOptions = useTheme();
 
   const useStyles = makeStyles(() =>
@@ -95,7 +95,7 @@ const SettingsPage: React.FC = () => {
       bottomLinkIcon: {
         paddingRight: 15,
       },
-    })
+    }),
   );
   const classes = useStyles();
   return (
@@ -128,44 +128,26 @@ const SettingsPage: React.FC = () => {
         />
       </div>
       <div className={classes.radioContainer}>
-        <div className={classes.radioContainerLabel}>
-          Паказваць словы ў стужцы:
-        </div>
+        <div className={classes.radioContainerLabel}>Паказваць словы ў стужцы:</div>
         <RadioGroup defaultValue="popular">
           <FormControlLabel
             value="popular"
             control={<Radio color="default" />}
             label="Самыя папулярныя"
           />
-          <FormControlLabel
-            value="new"
-            control={<Radio color="default" />}
-            label="Самыя новыя"
-          />
+          <FormControlLabel value="new" control={<Radio color="default" />} label="Самыя новыя" />
         </RadioGroup>
       </div>
       {currentUser ? (
         <>
-          <Button
-            className={classes.bottomLinkButton}
-            component={NavLink}
-            to={Page.Feedback}
-          >
+          <Button className={classes.bottomLinkButton} component={NavLink} to={Page.Feedback}>
             <span>
-              <img
-                className={classes.bottomLinkIcon}
-                src="./assets/images/mail.png"
-                alt="mail"
-              />
+              <img className={classes.bottomLinkIcon} src="./assets/images/mail.png" alt="mail" />
               Зваротная сувязь
             </span>
             <img src="./assets/images/rightArrow.png" alt="right arrow" />
           </Button>
-          <Button
-            className={classes.bottomLinkButton}
-            component={NavLink}
-            to={Page.Logout}
-          >
+          <Button className={classes.bottomLinkButton} component={NavLink} to={Page.Logout}>
             <span>
               <img
                 className={classes.bottomLinkIcon}
@@ -176,17 +158,9 @@ const SettingsPage: React.FC = () => {
             </span>
             <img src="./assets/images/rightArrow.png" alt="right arrow" />
           </Button>
-          <Button
-            className={classes.bottomLinkButton}
-            component={NavLink}
-            to={Page.DeleteAcc}
-          >
+          <Button className={classes.bottomLinkButton} component={NavLink} to={Page.DeleteAcc}>
             <span>
-              <img
-                className={classes.bottomLinkIcon}
-                src="./assets/images/bin.png"
-                alt="mail"
-              />
+              <img className={classes.bottomLinkIcon} src="./assets/images/bin.png" alt="mail" />
               Выдаліць акаунт
             </span>
             <img src="./assets/images/rightArrow.png" alt="right arrow" />

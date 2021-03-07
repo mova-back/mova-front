@@ -6,7 +6,7 @@ import { Box, createStyles, IconButton, makeStyles } from '@material-ui/core';
 import LockOpenIcon from '@material-ui/icons/LockOpen';
 
 import CurrentUser from './CurrentUser/CurrentUser';
-import { AppStore } from '../../../../../store/rootReducer';
+import { RootState } from '../../../../../store/rootReducer';
 import { Page } from '../../../../../constants/paths';
 
 const useStyles = makeStyles(() =>
@@ -14,7 +14,7 @@ const useStyles = makeStyles(() =>
     action: {
       marginLeft: 'auto',
     },
-  })
+  }),
 );
 
 interface IProps {
@@ -22,9 +22,7 @@ interface IProps {
 }
 
 const DrawerHeader: React.FC<IProps> = ({ onAction }) => {
-  const { currentUser, fetching } = useSelector(
-    (state: AppStore) => state.user
-  );
+  const { currentUser, fetching } = useSelector((state: RootState) => state.user);
 
   const classes = useStyles();
 
@@ -49,11 +47,7 @@ const DrawerHeader: React.FC<IProps> = ({ onAction }) => {
           <LockOpenIcon />
         </IconButton>
       ) : (
-        <CurrentUser
-          user={currentUser}
-          fetching={fetching}
-          onLogoutClicked={handleLogout}
-        />
+        <CurrentUser user={currentUser} fetching={fetching} onLogoutClicked={handleLogout} />
       )}
     </Box>
   );

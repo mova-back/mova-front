@@ -20,10 +20,7 @@ export type FeedStore = {
   readonly fetching: boolean;
 };
 
-const feedReducer = (
-  state: FeedStore = initialState,
-  action: FeedActionsTypes
-): FeedStore => {
+const feedReducer = (state: FeedStore = initialState, action: FeedActionsTypes): FeedStore => {
   switch (action.type) {
     case FETCH_FEED:
       return {

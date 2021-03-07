@@ -37,9 +37,7 @@ export function getAccessBearerToken(): string {
 
 export function setRefreshToken(status: string) {
   if (!['', 'true'].includes(status)) {
-    throw new Error(
-      `setRefreshToken: invalid value ${status}; Expect one of ['', 'true']`
-    );
+    throw new Error(`setRefreshToken: invalid value ${status}; Expect one of ['', 'true']`);
   }
 
   localStorage.setItem('refreshToken', status);
@@ -50,7 +48,10 @@ export function hasRefreshToken(): boolean {
 }
 
 export function setAuthData(
-  { accessToken, exp } = { accessToken: '', exp: 0 }
+  { accessToken, exp } = {
+    accessToken: '',
+    exp: 0,
+  },
 ) {
   setRefreshToken('true');
   setAccessBearerToken(accessToken);
@@ -64,9 +65,10 @@ export function resetAuthData() {
 }
 
 // https://stackoverflow.com/questions/35228052/debounce-function-implemented-with-promises
-export function debounce(inner: any, ms = 0) {
-  let timer: any = null;
-  let resolves: Array<any> = [];
+// eslint-disable-next-line @typescript-eslint/ban-types
+export function debounce(inner: () => {}, ms = 0) {
+  let timer: ReturnType<typeof setTimeout>;
+  let resolves: Array<(value?: unknown) => void> = [];
 
   return () => {
     clearTimeout(timer);
@@ -95,7 +97,7 @@ export async function refreshTokens() {
         {},
         {
           withCredentials: true,
-        }
+        },
       )
       .then((res: AxiosResponse<TokenData>) => res.data);
     setAuthData({

@@ -20,12 +20,10 @@ const initialState: NotificationStore = {
   },
 };
 
-export type NotificationActionsTypes = InferActionsTypes<
-  typeof notificationActions
->;
+export type NotificationActionsTypes = InferActionsTypes<typeof notificationActions>;
 const notificationReducer = (
   state = initialState,
-  action: NotificationActionsTypes
+  action: NotificationActionsTypes,
 ): NotificationStore => {
   switch (action.type) {
     case SHOW_NOTIFICATION:

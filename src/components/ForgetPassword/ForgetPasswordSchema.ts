@@ -5,8 +5,6 @@ export default {
     email: '',
   },
   validSchema: Yup.object().shape({
-    email: Yup.string()
-      .email('Invalid email')
-      .required('This field is required'),
+    email: Yup.string().email('Invalid email').required('This field is required'),
   }),
 };

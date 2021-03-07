@@ -1,14 +1,16 @@
-import LoginFormData from '../../../models/forms/loginFormData';
+import { FormikHelpers } from 'formik';
 import User from '../../../models/user';
 import HttpError from '../../../models/httpError';
 import SignUpFormData from '../../../models/forms/signUpFormData';
+import LoginFormData from '../../../models/forms/loginFormData';
 import { InferActionsTypes } from '../../types';
 
-type UserStore = {
+export type UserState = {
   readonly currentUser: User | null;
   readonly fetching: boolean;
 };
-const initialState: UserStore = {
+
+const initialState: UserState = {
   currentUser: null,
   fetching: false,
 };
@@ -31,10 +33,7 @@ export const GET_CURRENT_USER_ERROR = 'GET_CURRENT_USER_ERROR';
 
 export type UserActionsType = InferActionsTypes<typeof userActions>;
 
-const userReducer = (
-  state: UserStore = initialState,
-  action: UserActionsType
-): UserStore => {
+const userReducer = (state: UserState = initialState, action: UserActionsType): UserState => {
   switch (action.type) {
     case REGISTRATION:
     case GET_CURRENT_USER:
@@ -68,7 +67,7 @@ const userReducer = (
 };
 
 export const userActions = {
-  login: (data: LoginFormData, meta: any) =>
+  login: (data: LoginFormData, meta: FormikHelpers<LoginFormData>) =>
     ({
       type: LOGIN,
       payload: data,
@@ -107,7 +106,7 @@ export const userActions = {
       type: LOGOUT_ERROR,
     } as const),
 
-  registration: (data: SignUpFormData, meta: any) =>
+  registration: (data: SignUpFormData, meta: FormikHelpers<SignUpFormData>) =>
     ({
       type: REGISTRATION,
       payload: data,

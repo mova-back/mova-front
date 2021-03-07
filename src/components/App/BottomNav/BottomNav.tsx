@@ -1,10 +1,6 @@
 import * as React from 'react';
 
-import {
-  Box,
-  BottomNavigation,
-  BottomNavigationAction,
-} from '@material-ui/core';
+import { Box, BottomNavigation, BottomNavigationAction } from '@material-ui/core';
 
 import RouterNavLink from './RouterNavLink/RouterNavLink';
 import BOTTOM_NAVIGATION from '../../../constants/bottomNavRoutes';

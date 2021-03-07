@@ -6,6 +6,9 @@ import { notificationActions } from '../notification/reducer/notificationReducer
 import NotificationTypes from '../../constants/notificationTypes';
 import Word from '../../models/word';
 import { feedActions } from '../feed/reducer/feedReducer';
+import NotificationConfig from '../../models/notification';
+/* eslint-disable */
+import { RootState } from '../rootReducer';
 
 // --CONSTANTS--
 export const CREATE_A_NEW_WORD = 'wordReducer/CREATE_A_NEW_WORD';
@@ -17,13 +20,17 @@ const RATE_A_WORD = 'wordReducer/RATE_A_WORD';
 
 type WordsActionType = InferActionsTypes<typeof wordsActions>;
 
-const initialState = {
+type ReducerStore = {
+  readonly isFetching: boolean;
+};
+
+const initialState: ReducerStore = {
   isFetching: false,
 };
 
 // --REDUCER--
 
-const wordsReducer = (state: any = initialState, action: WordsActionType) => {
+const wordsReducer = (state = initialState, action: WordsActionType) => {
   switch (action.type) {
     case CREATE_A_NEW_WORD:
       return {
@@ -44,7 +51,7 @@ const wordsReducer = (state: any = initialState, action: WordsActionType) => {
 // --ACTION-CREATORS--
 
 export const wordsActions = {
-  fetchCreateANewWord: (newWord: NewWordData, meta: any) =>
+  fetchCreateANewWord: (newWord: NewWordData, meta: {}) =>
     ({ type: CREATE_A_NEW_WORD, payload: { newWord, meta } } as const),
   createANewWordSuccess: () =>
     ({
@@ -66,6 +73,7 @@ export function* createANewWordWorker({
   payload,
 }: ReturnType<typeof wordsActions.fetchCreateANewWord>) {
   const { meta, newWord } = payload;
+  // @ts-ignore
   const { resetForm, setSubmitting } = meta;
   const result = {
     ...newWord,
@@ -80,7 +88,7 @@ export function* createANewWordWorker({
       notificationActions.addNotification({
         type: NotificationTypes.success,
         message: 'Word has been added',
-      })
+      }),
     );
   } catch (e) {
     yield call(resetForm, null);
@@ -89,29 +97,28 @@ export function* createANewWordWorker({
       notificationActions.addNotification({
         type: NotificationTypes.error,
         message: e.message,
-      })
+      }),
     );
     yield put(wordsActions.createANewWordError());
   }
 }
 
-function* rateAWordWorker({
-  payload,
-}: ReturnType<typeof wordsActions.rateAWord>) {
+function* rateAWordWorker({ payload }: ReturnType<typeof wordsActions.rateAWord>) {
   const { id, ratingType } = payload;
   try {
     const response =
       ratingType === 'like'
-        ? yield call(wordsService.likeAWord, id)
-        : yield call(wordsService.dislikeAWord, id);
-    const feedState = yield select((_state: AppStore) => _state.feed);
+        ? // @ts-ignore
+          yield call(wordsService.likeAWord, id)
+        : // @ts-ignore
+          yield call(wordsService.dislikeAWord, id);
+    // @ts-ignore
+    const feedState = yield select((_state: RootState) => _state.feed);
     const newFeed = feedState.feed.map((_i: Word) => {
       const i = _i;
       if (ratingType === 'like') {
         const result =
-          i.id === id
-            ? { ...i, likes: response.data ? (i.likes += 1) : (i.likes -= 1) }
-            : i;
+          i.id === id ? { ...i, likes: response.data ? (i.likes += 1) : (i.likes -= 1) } : i;
         return result;
       }
       const result =
@@ -129,7 +136,7 @@ function* rateAWordWorker({
       notificationActions.addNotification({
         type: NotificationTypes.error,
         message: e.message,
-      })
+      }),
     );
   }
 }

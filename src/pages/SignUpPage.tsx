@@ -2,14 +2,8 @@ import * as React from 'react';
 import { useSelector } from 'react-redux';
 import { NavLink, Redirect } from 'react-router-dom';
 
-import {
-  Box,
-  createStyles,
-  makeStyles,
-  Link,
-  Typography,
-} from '@material-ui/core';
-import { AppStore } from '../store/rootReducer';
+import { Box, createStyles, Link, makeStyles, Typography } from '@material-ui/core';
+import { RootState } from '../store/rootReducer';
 import { Page } from '../constants/paths';
 import Wrapper from '../components/App/Wrapper/Wrapper';
 import SignUpForm from '../components/SignUpForm/SignUpForm';
@@ -30,12 +24,12 @@ const useStyles = makeStyles(() =>
     header: {
       fontSize: '30px',
     },
-  })
+  }),
 );
 
 const SignUpPage: React.FC = () => {
   const classes = useStyles();
-  const currentUser = useSelector((state: AppStore) => state.user.currentUser);
+  const currentUser = useSelector((state: RootState) => state.user.currentUser);
 
   if (currentUser) {
     return <Redirect to={Page.Home} />;

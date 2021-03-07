@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { NavLink, Redirect } from 'react-router-dom';
 import { Box, createStyles, makeStyles, Link } from '@material-ui/core';
 import { useTheme } from '@material-ui/core/styles';
-import { AppStore } from '../store/rootReducer';
+import { RootState } from '../store/rootReducer';
 import { Page } from '../constants/paths';
 import Wrapper from '../components/App/Wrapper/Wrapper';
 import { CustomThemeOptions } from '../styles/types';
@@ -28,11 +28,11 @@ const LoginPage: React.FC = () => {
         fontStyle: 'italic',
         fontSize: '16px',
       },
-    })
+    }),
   );
 
   const classes = useStyles({ theme });
-  const currentUser = useSelector((state: AppStore) => state.user.currentUser);
+  const currentUser = useSelector((state: RootState) => state.user.currentUser);
 
   if (currentUser) {
     return <Redirect to={Page.Home} />;
@@ -46,8 +46,8 @@ const LoginPage: React.FC = () => {
         </Link>
         <h2 className={classes.header}>Залагініцца</h2>
         <p className={classes.headerText}>
-          Каб пачаць карыстацца слоўнікам, калі ласка, увайдзі ў свой акаунт.
-          Пасля ты зможаш уносіць свае словы і ўзбагачаць нашу Родную мову!
+          Каб пачаць карыстацца слоўнікам, калі ласка, увайдзі ў свой акаунт. Пасля ты зможаш
+          уносіць свае словы і ўзбагачаць нашу Родную мову!
         </p>
       </div>
       <Box p={3}>
