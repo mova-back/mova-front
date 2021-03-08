@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Formik, Field, FormikHelpers, FormikProps, FieldProps, Form } from 'formik';
+import { Field, FieldProps, Form, Formik, FormikHelpers, FormikProps } from 'formik';
 
 import { Box, CircularProgress, createStyles, makeStyles } from '@material-ui/core';
 
@@ -51,6 +51,7 @@ const ChangePassword: React.FC = () => {
                 {({ field: formikField, meta }: FieldProps) => (
                   <Input
                     {...formikField}
+                    label={field.label}
                     error={Boolean(meta.error && meta.touched)}
                     helperText={meta.error && meta.touched ? field.helperText : ''}
                   />

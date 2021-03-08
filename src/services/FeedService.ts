@@ -12,7 +12,7 @@ export const FeedService = {
     if (limit !== undefined) {
       params.append('limit', limit.toString());
     }
-    const response: AxiosResponse<Word[]> = yield call(http(false).get, ApiRoute.DictionaryFeed);
-    return response.data;
+    const response: Word[] = yield call(http(false).get, ApiRoute.DictionaryFeed);
+    return response;
   },
 };
