@@ -30,7 +30,7 @@ const useStyles = makeStyles(() =>
       width: '70%',
       marginTop: 200,
     },
-  })
+  }),
 );
 
 const LogoutPage: React.FC = () => {

@@ -1,17 +1,7 @@
 /* eslint-disable */
-import {
-  take,
-  actionChannel,
-  call,
-  put,
-  fork,
-  race,
-  delay,
-} from 'redux-saga/effects';
+import { take, actionChannel, call, put, fork, race, delay } from 'redux-saga/effects';
 
-import {
-  AddNotificationAction,
-} from '../types';
+import { AddNotificationAction } from '../types';
 
 import NotificationConfig from '../../../models/notification';
 import {
@@ -22,11 +12,9 @@ import {
 } from '../reducer/notificationReducer';
 
 export function* watchForNotifications() {
-  const notificationChannel = yield actionChannel(ADD_NOTIFICATION);
+  const notificationChannel: string = yield actionChannel(ADD_NOTIFICATION);
   while (true) {
-    const { payload } = (yield take(
-      notificationChannel
-    )) as AddNotificationAction;
+    const { payload } = (yield take(notificationChannel)) as AddNotificationAction;
     yield call(displayNotification, payload);
   }
 }

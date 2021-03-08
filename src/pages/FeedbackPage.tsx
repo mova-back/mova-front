@@ -36,7 +36,7 @@ const SettingsPage: React.FC = () => {
       button: {
         width: '70%',
       },
-    })
+    }),
   );
 
   const classes = useStyles();
@@ -49,9 +49,7 @@ const SettingsPage: React.FC = () => {
         прапановы ці варыянты палепшання <br />
         нашага слоўніка
       </div>
-      <div className={classes.textareaLabel}>
-        Ваша паведамленне адміністратару
-      </div>
+      <div className={classes.textareaLabel}>Ваша паведамленне адміністратару</div>
       <div className={classes.textareaContainer}>
         <TextField
           placeholder="Увядзіце ваша паведамленне"
@@ -59,9 +57,7 @@ const SettingsPage: React.FC = () => {
           rows={10}
           fullWidth
           value={feedback}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setFeedback(e.target.value)
-          }
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFeedback(e.target.value)}
           variant="outlined"
           classes={{ root: classes.textarea }}
         />

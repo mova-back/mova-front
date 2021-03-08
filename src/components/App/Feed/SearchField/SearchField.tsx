@@ -17,7 +17,7 @@ const SearchField: React.FC = () => {
         zIndex: 1100,
         width: '60%',
       },
-    })
+    }),
   );
   const classes = useStyles({ theme });
 

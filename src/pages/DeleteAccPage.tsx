@@ -32,7 +32,7 @@ const useStyles = makeStyles(() =>
       fontWeight: 'bold',
       marginTop: 25,
     },
-  })
+  }),
 );
 
 const DeleteAccPage: React.FC = () => {
@@ -49,9 +49,7 @@ const DeleteAccPage: React.FC = () => {
       >
         <div className={classes.icon} />
         <p className={classes.header}>Дзякуй, што былі з намі!</p>
-        <span className={classes.text}>
-          Вы дакладна хочаце выдаліць акаунт?
-        </span>
+        <span className={classes.text}>Вы дакладна хочаце выдаліць акаунт?</span>
         <ActionButton
           variant="contained"
           color="secondary"

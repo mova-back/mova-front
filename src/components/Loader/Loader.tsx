@@ -7,12 +7,7 @@ interface IProps {
 
 const Loader: React.FC<IProps> = ({ className }) => {
   return (
-    <Box
-      display="flex"
-      justifyContent="center"
-      alignItems="center"
-      className={className}
-    >
+    <Box display="flex" justifyContent="center" alignItems="center" className={className}>
       <CircularProgress />
     </Box>
   );

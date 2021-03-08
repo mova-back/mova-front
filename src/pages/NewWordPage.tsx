@@ -9,15 +9,9 @@ import { hasRefreshToken } from '../services/auth.service';
 import { Page } from '../constants/paths';
 
 const PleaseSignIn = () => (
-  <Box
-    display="flex"
-    flexDirection="column"
-    alignItems="center"
-    justifyContent="center"
-  >
+  <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
     <Typography variant="h4" align="center">
-      Паважаны госць! <br /> Каб мець пашыранныя правы ды магчымасці, калі
-      ласка, <br />
+      Паважаны госць! <br /> Каб мець пашыранныя правы ды магчымасці, калі ласка, <br />
       <Link underline="always" component={NavLink} to={Page.Signup}>
         зарэгіструйся
       </Link>

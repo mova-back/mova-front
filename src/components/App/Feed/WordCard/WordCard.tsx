@@ -75,7 +75,7 @@ const useStyles = makeStyles((theme) =>
       boxShadow: '4px 12px 25px rgba(71, 55, 255, 0.3)',
       borderRadius: '8px',
     },
-  })
+  }),
 );
 
 interface IProps {
@@ -111,9 +111,7 @@ const WordCard: React.FC<IProps> = ({
 
   const maxMeaningLength = 120;
   const meaningShort =
-    meaning.length > maxMeaningLength
-      ? `${meaning.slice(0, maxMeaningLength)}...`
-      : meaning;
+    meaning.length > maxMeaningLength ? `${meaning.slice(0, maxMeaningLength)}...` : meaning;
 
   const theme: CustomThemeOptions = useTheme();
   const classes = useStyles(theme);
@@ -209,8 +207,7 @@ const WordCard: React.FC<IProps> = ({
           <Grow
             {...TransitionProps}
             style={{
-              transformOrigin:
-                placement === 'bottom' ? 'center top' : 'center bottom',
+              transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom',
             }}
           >
             <Paper>

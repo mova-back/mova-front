@@ -8,11 +8,12 @@ import ActionBar from './ActionBar/ActionBar';
 const useStyles = makeStyles(() =>
   createStyles({
     wrapper: {
-      background:
-        'linear-gradient(180deg, rgba(239,237,255,1) 0%, rgba(255,255,255,1) 60%)',
+      background: 'linear-gradient(180deg, rgba(239,237,255,1) 0%, rgba(255,255,255,1) 60%)',
       minHeight: 'calc(100vh - 108px)',
+      display: 'flex',
+      flexDirection: 'column',
     },
-  })
+  }),
 );
 
 const Wrapper: React.FC<IProps> = ({ actionBarHeader, children }) => {

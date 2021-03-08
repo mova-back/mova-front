@@ -49,7 +49,7 @@ const ForgetPasswordPage: React.FC = () => {
       link: {
         fontWeight: 'bold',
       },
-    })
+    }),
   );
   const classes = useStyles();
 
@@ -60,9 +60,7 @@ const ForgetPasswordPage: React.FC = () => {
           <img src="./assets/images/logo.png" alt="app-logo" />
         </Link>
         <h2 className={classes.header}>Забыўся пароль?</h2>
-        <p className={classes.note}>
-          Калі ласка, укажы пошту, якую ты пазначыў пры рэгістрацыі
-        </p>
+        <p className={classes.note}>Калі ласка, укажы пошту, якую ты пазначыў пры рэгістрацыі</p>
       </div>
       <ForgetPassword />
       {/* {query ? (

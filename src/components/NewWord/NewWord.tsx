@@ -1,12 +1,5 @@
 import * as React from 'react';
-import {
-  Field,
-  FieldProps,
-  Form,
-  Formik,
-  FormikHelpers,
-  FormikProps,
-} from 'formik';
+import { Field, FieldProps, Form, Formik, FormikHelpers, FormikProps } from 'formik';
 
 import {
   Box,
@@ -24,10 +17,7 @@ import ActionButton from '../ActionButton/ActionButton';
 import NewWordSchema from './NewWordSchema';
 import { transformToCapitalize, transformToUppercase } from '../../utils';
 
-import {
-  NEWWORD_NO_REQUIRED,
-  NEWWORD_REQUIRED,
-} from '../../constants/forms/newword';
+import { NEWWORD_NO_REQUIRED, NEWWORD_REQUIRED } from '../../constants/forms/newword';
 import NewWordData from '../../models/forms/newWordData';
 import { wordsActions } from '../../store/words/wordsReducer';
 
@@ -71,7 +61,7 @@ const useStyles = makeStyles(() =>
       marginTop: -12,
       marginLeft: -12,
     },
-  })
+  }),
 );
 
 const NewWord: React.FC = () => {
@@ -97,9 +87,7 @@ const NewWord: React.FC = () => {
                       {...formikField}
                       label={transformToUppercase(field.label)}
                       error={Boolean(meta.error && meta.touched)}
-                      helperText={
-                        meta.error && meta.touched ? field.helperText : ''
-                      }
+                      helperText={meta.error && meta.touched ? field.helperText : ''}
                     />
                   )}
                 </Field>
@@ -111,13 +99,7 @@ const NewWord: React.FC = () => {
                     className={classes.switch}
                     label={`${transformToUppercase('Лаянка')}*`}
                     labelPlacement="start"
-                    control={
-                      <Switch
-                        id="swearing"
-                        checked={value}
-                        onChange={onChange}
-                      />
-                    }
+                    control={<Switch id="swearing" checked={value} onChange={onChange} />}
                   />
                 )}
               </Field>
@@ -129,9 +111,7 @@ const NewWord: React.FC = () => {
                       {...formikField}
                       label={transformToCapitalize(field.label)}
                       error={Boolean(meta.error && meta.value)}
-                      helperText={
-                        meta.error && meta.value ? field.helperText : ''
-                      }
+                      helperText={meta.error && meta.value ? field.helperText : ''}
                     />
                   )}
                 </Field>
@@ -148,10 +128,7 @@ const NewWord: React.FC = () => {
                   Адправіць
                 </ActionButton>
                 {isSubmitting && (
-                  <CircularProgress
-                    size={24}
-                    className={classes.progressIndicator}
-                  />
+                  <CircularProgress size={24} className={classes.progressIndicator} />
                 )}
               </div>
             </Box>

@@ -1,13 +1,7 @@
 import * as React from 'react';
 import { NavLink } from 'react-router-dom';
 
-import {
-  Box,
-  Typography,
-  createStyles,
-  makeStyles,
-  Link,
-} from '@material-ui/core';
+import { Box, createStyles, Link, makeStyles, Typography } from '@material-ui/core';
 
 import { Page } from '../constants/paths';
 
@@ -33,7 +27,7 @@ const useStyles = makeStyles(() =>
     link: {
       fontWeight: 'bold',
     },
-  })
+  }),
 );
 
 const ThankYoupage: React.FC = () => {
@@ -45,8 +39,8 @@ const ThankYoupage: React.FC = () => {
         <Box>
           <ThankYou title="Дзякуй!" />
           <Typography className={classes.wrapperText} align="center">
-            Для таго, каб пацвердзіць рэгістрацыю, перайдзі па спасылцы, што
-            прыйшла на пошту, якую ты ўказаў пры рэгістрацыі
+            Для таго, каб пацвердзіць рэгістрацыю, перайдзі па спасылцы, што прыйшла на пошту, якую
+            ты ўказаў пры рэгістрацыі
           </Typography>
         </Box>
         <Box>

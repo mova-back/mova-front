@@ -1,12 +1,6 @@
 import React from 'react';
 
-import {
-  Box,
-  createStyles,
-  IconButton,
-  makeStyles,
-  Typography,
-} from '@material-ui/core';
+import { Box, createStyles, IconButton, makeStyles, Typography } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
@@ -33,7 +27,7 @@ const useStyles = makeStyles(() =>
     action: {
       marginLeft: 'auto',
     },
-  })
+  }),
 );
 
 const CurrentUser: React.FC<IProps> = ({ user, fetching, onLogoutClicked }) => {
@@ -52,11 +46,7 @@ const CurrentUser: React.FC<IProps> = ({ user, fetching, onLogoutClicked }) => {
             </Typography>
           </div>
           <Link to="/logout">
-            <IconButton
-              className={classes.action}
-              edge="end"
-              onClick={onLogoutClicked}
-            >
+            <IconButton className={classes.action} edge="end" onClick={onLogoutClicked}>
               <ExitToAppIcon />
             </IconButton>
           </Link>

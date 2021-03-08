@@ -15,7 +15,7 @@ const useStyles = makeStyles(() =>
     title: {
       fontSize: '30px',
     },
-  })
+  }),
 );
 
 interface IProps {

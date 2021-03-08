@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import { ApiRoute } from '../constants/paths';
 
 let BEARER_TOKEN = '';
@@ -37,9 +37,7 @@ export function getAccessBearerToken(): string {
 
 export function setRefreshToken(status: string) {
   if (!['', 'true'].includes(status)) {
-    throw new Error(
-      `setRefreshToken: invalid value ${status}; Expect one of ['', 'true']`
-    );
+    throw new Error(`setRefreshToken: invalid value ${status}; Expect one of ['', 'true']`);
   }
 
   localStorage.setItem('refreshToken', status);
@@ -50,7 +48,10 @@ export function hasRefreshToken(): boolean {
 }
 
 export function setAuthData(
-  { accessToken, exp } = { accessToken: '', exp: 0 }
+  { accessToken, exp } = {
+    accessToken: '',
+    exp: 0,
+  },
 ) {
   setRefreshToken('true');
   setAccessBearerToken(accessToken);
@@ -64,9 +65,10 @@ export function resetAuthData() {
 }
 
 // https://stackoverflow.com/questions/35228052/debounce-function-implemented-with-promises
-export function debounce(inner: any, ms = 0) {
-  let timer: any = null;
-  let resolves: Array<any> = [];
+// eslint-disable-next-line @typescript-eslint/ban-types
+export function debounce(inner: () => {}, ms = 0) {
+  let timer: ReturnType<typeof setTimeout>;
+  let resolves: Array<(value?: unknown) => void> = [];
 
   return () => {
     clearTimeout(timer);
@@ -80,18 +82,27 @@ export function debounce(inner: any, ms = 0) {
   };
 }
 
+type TokenData = {
+  data: {
+    accessToken: string;
+    refreshToken: string;
+  };
+};
+
 export async function refreshTokens() {
   try {
-    const response: any = await axios.post(
-      ApiRoute.Refresh,
-      {},
-      {
-        withCredentials: true,
-      }
-    );
+    const response: TokenData = await axios
+      .post(
+        ApiRoute.Refresh,
+        {},
+        {
+          withCredentials: true,
+        },
+      )
+      .then((res: AxiosResponse<TokenData>) => res.data);
     setAuthData({
-      accessToken: response.data.data.accessToken,
-      exp: parseTokenData(response.data.data.accessToken).exp,
+      accessToken: response.data.accessToken,
+      exp: parseTokenData(response.data.accessToken).exp,
     });
     return response.data;
   } catch (error) {

@@ -33,7 +33,7 @@ const useStyles = makeStyles(() =>
       width: '100%',
       textAlign: 'center',
     },
-  })
+  }),
 );
 
 const ActionBar: React.FC<IProps> = ({ header, settingsElementMode }) => {
@@ -41,10 +41,7 @@ const ActionBar: React.FC<IProps> = ({ header, settingsElementMode }) => {
 
   const [drawerVisible, setDrawerVisible] = React.useState(false);
 
-  const drawerRoutePaths = React.useMemo(
-    () => NAV_DRAWER_ROUTES.map((route) => route.path),
-    []
-  );
+  const drawerRoutePaths = React.useMemo(() => NAV_DRAWER_ROUTES.map((route) => route.path), []);
   const settingsPaths = [Page.Feedback, Page.Logout, Page.DeleteAcc];
 
   const toggleDrawer = React.useCallback(() => {
@@ -73,12 +70,7 @@ const ActionBar: React.FC<IProps> = ({ header, settingsElementMode }) => {
           <h1 className={classes.header}>{header}</h1>
           {!settingsElementMode ? (
             <Box marginLeft="auto">
-              <IconButton
-                edge="end"
-                color="inherit"
-                aria-label="menu"
-                onClick={toggleDrawer}
-              >
+              <IconButton edge="end" color="inherit" aria-label="menu" onClick={toggleDrawer}>
                 <MenuIcon />
               </IconButton>
             </Box>

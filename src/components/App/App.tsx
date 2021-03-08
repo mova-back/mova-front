@@ -4,15 +4,12 @@ import { Route, Switch } from 'react-router-dom';
 import SnackbarContainer from './SnackbarContainer/SnackbarContainer';
 import ROUTES from '../../constants/routes';
 import { userActions } from '../../store/user/reducer/userReducer';
-import { AppStore } from '../../store/rootReducer';
-import {
-  hasRefreshToken,
-  debounceRefreshTokens,
-} from '../../services/auth.service';
+import { hasRefreshToken, debounceRefreshTokens } from '../../services/auth.service';
+import { RootState } from '../../store/rootReducer';
 
 const App: React.FC = () => {
   const dispatch = useDispatch();
-  const { currentUser } = useSelector((state: AppStore) => state.user);
+  const { currentUser } = useSelector((state: RootState) => state.user);
 
   React.useEffect(() => {
     async function firstLoad() {
@@ -30,7 +27,7 @@ const App: React.FC = () => {
       <SnackbarContainer />
       <Switch>
         {ROUTES.map(({ component, exact, path }) => (
-          <Route component={component} exact={exact} path={path} />
+          <Route component={component} key={path} exact={exact} path={path} />
         ))}
       </Switch>
     </div>

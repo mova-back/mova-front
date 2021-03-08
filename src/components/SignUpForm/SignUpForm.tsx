@@ -1,19 +1,7 @@
 import * as React from 'react';
-import {
-  Field,
-  FieldProps,
-  Form,
-  Formik,
-  FormikHelpers,
-  FormikProps,
-} from 'formik';
+import { Field, FieldProps, Form, Formik, FormikHelpers, FormikProps } from 'formik';
 
-import {
-  Box,
-  CircularProgress,
-  createStyles,
-  makeStyles,
-} from '@material-ui/core';
+import { Box, CircularProgress, createStyles, makeStyles } from '@material-ui/core';
 import { useDispatch } from 'react-redux';
 import Input from '../Input/Input';
 import ActionButton from '../ActionButton/ActionButton';
@@ -38,7 +26,7 @@ const useStyles = makeStyles(() =>
     submitButton: {
       width: '100%',
     },
-  })
+  }),
 );
 
 const SignUpForm: React.FC = () => {
@@ -49,10 +37,7 @@ const SignUpForm: React.FC = () => {
       initialValues={SignUpFormSchema.initialState}
       enableReinitialize
       validationSchema={SignUpFormSchema.validSchema}
-      onSubmit={(
-        values: SignUpFormData,
-        meta: FormikHelpers<SignUpFormData>
-      ) => {
+      onSubmit={(values: SignUpFormData, meta: FormikHelpers<SignUpFormData>) => {
         meta.setSubmitting(true);
         dispatch(userActions.registration(values, meta));
       }}
@@ -83,12 +68,7 @@ const SignUpForm: React.FC = () => {
               >
                 Зарэгістравацца
               </ActionButton>
-              {isSubmitting && (
-                <CircularProgress
-                  size={24}
-                  className={classes.progressIndicator}
-                />
-              )}
+              {isSubmitting && <CircularProgress size={24} className={classes.progressIndicator} />}
             </div>
           </Box>
         </Form>

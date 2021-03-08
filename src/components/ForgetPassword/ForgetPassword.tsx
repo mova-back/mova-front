@@ -1,19 +1,7 @@
 import * as React from 'react';
-import {
-  Formik,
-  Field,
-  FormikHelpers,
-  FormikProps,
-  FieldProps,
-  Form,
-} from 'formik';
+import { Formik, Field, FormikHelpers, FormikProps, FieldProps, Form } from 'formik';
 
-import {
-  Box,
-  CircularProgress,
-  createStyles,
-  makeStyles,
-} from '@material-ui/core';
+import { Box, CircularProgress, createStyles, makeStyles } from '@material-ui/core';
 
 import Input from '../Input/Input';
 import ActionButton from '../ActionButton/ActionButton';
@@ -39,7 +27,7 @@ const useStyles = makeStyles(() =>
       marginTop: -12,
       marginLeft: -12,
     },
-  })
+  }),
 );
 
 const FORGET_PASSWORD = [
@@ -60,10 +48,7 @@ const ForgetPassword: React.FC = () => {
     <Formik
       initialValues={ForgetPasswordSchema.initialState}
       validationSchema={ForgetPasswordSchema.validSchema}
-      onSubmit={(
-        values: ForgetPasswordData,
-        meta: FormikHelpers<ForgetPasswordData>
-      ) => {
+      onSubmit={(values: ForgetPasswordData, meta: FormikHelpers<ForgetPasswordData>) => {
         // console.log(values);
         meta.setSubmitting(false);
       }}
@@ -78,9 +63,7 @@ const ForgetPassword: React.FC = () => {
                     {...formikField}
                     label={field.label}
                     error={Boolean(meta.error && meta.touched)}
-                    helperText={
-                      meta.error && meta.touched ? field.helperText : ''
-                    }
+                    helperText={meta.error && meta.touched ? field.helperText : ''}
                   />
                 )}
               </Field>
@@ -96,12 +79,7 @@ const ForgetPassword: React.FC = () => {
               >
                 Адправіць
               </ActionButton>
-              {isSubmitting && (
-                <CircularProgress
-                  size={24}
-                  className={classes.progressIndicator}
-                />
-              )}
+              {isSubmitting && <CircularProgress size={24} className={classes.progressIndicator} />}
             </div>
           </Box>
         </Form>

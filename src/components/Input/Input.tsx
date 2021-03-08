@@ -67,8 +67,7 @@ const useStyles = makeStyles((theme) =>
     },
     error: {
       '& $inputContainer::after': {
-        background:
-          'linear-gradient(179.24deg, #FB6767 -5.37%, #D20000 196.64%)',
+        background: 'linear-gradient(179.24deg, #FB6767 -5.37%, #D20000 196.64%)',
       },
       '& $input': {
         boxShadow: '0px 10px 15px #F8F3F3',
@@ -88,7 +87,7 @@ const useStyles = makeStyles((theme) =>
         boxShadow: '0px 10px 15px #DDEBDC',
       },
     },
-  })
+  }),
 );
 
 interface IProps {

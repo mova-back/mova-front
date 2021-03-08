@@ -1,1 +1,4 @@
-export interface IProps {  header?: string;  settingsElementMode?: boolean;}
+export interface IProps {
+  header?: string;
+  settingsElementMode?: boolean;
+}

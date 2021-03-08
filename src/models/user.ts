@@ -5,8 +5,6 @@ type User = {
   created_at: string;
   updated_at: string;
   access_token: string;
-  bio: null;
-  image: null;
 };
 
 export default User;
