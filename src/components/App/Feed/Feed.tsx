@@ -6,7 +6,7 @@ import WordCard from './WordCard/WordCard';
 import { RootState } from '../../../store/rootReducer';
 import Loader from '../../Loader/Loader';
 import SearchField from './SearchField/SearchField';
-import { feedActions } from '../../../store/feed/reducer/feedReducer';
+import { wordsActions } from '../../../store/words/wordsReducer';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -23,10 +23,10 @@ interface IProps {
 const Feed: React.FC<IProps> = ({ className }) => {
   const dispatch = useDispatch();
   const classes = useStyles();
-  const { feed, fetching } = useSelector((state: RootState) => state.feed);
+  const { feed, fetching } = useSelector((state: RootState) => state.word);
 
   React.useEffect(() => {
-    dispatch(feedActions.fetchFeed(0));
+    dispatch(wordsActions.fetchFeed(0));
   }, [dispatch]);
   return (
     <Box display="grid" gridGap={8} p={1} pb={10} className={className}>
