@@ -111,7 +111,9 @@ const WordCard: React.FC<IProps> = ({
 
   const maxMeaningLength = 120;
   const meaningShort =
-    meaning.length > maxMeaningLength ? `${meaning.slice(0, maxMeaningLength)}...` : meaning;
+    meaning && meaning.length > maxMeaningLength
+      ? `${meaning.slice(0, maxMeaningLength)}...`
+      : meaning;
 
   const theme: CustomThemeOptions = useTheme();
   const classes = useStyles(theme);
