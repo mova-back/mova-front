@@ -1,8 +1,11 @@
 {
-    "root": "build/",
-    "proxies": {
-        "/api/": {
-          "origin": "https://movabackend.herokuapp.com/"
-        }
-      }
+  "root": "build/",
+  "routes": {
+    "/**": "index.html"
+  },
+  "proxies": {
+    "/api/": {
+      "origin": "${HOST}"
+    }
   }
+}
