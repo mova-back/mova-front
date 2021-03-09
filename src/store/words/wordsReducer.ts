@@ -172,8 +172,8 @@ function* rateAWordWorker({ payload }: ReturnType<typeof wordsActions.rateAWord>
           yield call(wordsService.dislikeAWord, id);
 
     // @ts-ignore
-    const feedState = yield select((_state: RootState) => _state.feed);
-    const newFeed = feedState.feed.map((_i: Word) => {
+    const wordState = yield select((_state: RootState) => _state.word);
+    const newFeed = wordState.feed.map((_i: Word) => {
       const i = _i;
       if (ratingType === 'like') {
         const result =
@@ -189,7 +189,7 @@ function* rateAWordWorker({ payload }: ReturnType<typeof wordsActions.rateAWord>
           : i;
       return result;
     });
-    yield put(wordsActions.fetchFeedSuccess(newFeed, feedState.offset));
+    yield put(wordsActions.fetchFeedSuccess(newFeed, wordState.offset));
   } catch (e) {
     yield put(
       notificationActions.addNotification({
