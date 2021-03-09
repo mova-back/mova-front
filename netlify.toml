@@ -1,0 +1,5 @@
+[[redirects]]
+  from = "/api/*"
+  to = "https://movabackend.herokuapp.com/"
+  status = 200
+
