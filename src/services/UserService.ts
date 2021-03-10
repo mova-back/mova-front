@@ -1,7 +1,6 @@
-/* eslint-disable */
 import { call } from 'redux-saga/effects';
-import { SagaIterator } from '@redux-saga/core';
 
+import { AxiosResponse } from 'axios';
 import { ApiRoute } from '../constants/paths';
 import SignUpFormData from '../models/forms/signUpFormData';
 import LoginData from '../models/forms/loginData';
@@ -9,22 +8,14 @@ import LoginData from '../models/forms/loginData';
 import * as AuthService from './auth.service';
 import { resetAuthData } from './auth.service';
 import { http } from './http.service';
-import { AxiosResponse } from 'axios';
+import User from '../models/user';
 
-type LoginResponse = {
-  data: {
-    accessToken: string;
-    createdAt: string;
-    email: string;
-    id: string;
-    refreshToken: string;
-    updatedAt: string;
-    username: string;
-  };
+export type LoginResponse = {
+  data: User;
 };
 
 export const UserService = {
-  *register(data: SignUpFormData): SagaIterator<LoginResponse> {
+  *register(data: SignUpFormData) {
     const response: AxiosResponse<LoginResponse> = yield call(
       http(false).post,
       ApiRoute.Users,
@@ -35,6 +26,7 @@ export const UserService = {
 
   *login({ email, password }: LoginData) {
     // getfingerprint
+
     const response: AxiosResponse<LoginResponse> = yield call(
       http(false).post,
       ApiRoute.UsersLogin,

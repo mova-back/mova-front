@@ -1,26 +1,24 @@
-/* eslint-disable */
 import { call, put, takeEvery } from 'redux-saga/effects';
-import { UserService } from '../../../services/UserService';
+import { LoginResponse, UserService } from '../../../services/UserService';
 import { LoginAction, RegistrationAction } from '../types';
 import NotificationTypes from '../../../constants/notificationTypes';
 import { GET_CURRENT_USER, LOGIN, LOGOUT, REGISTRATION, userActions } from '../reducer/userReducer';
 import { notificationActions } from '../../notification/reducer/notificationReducer';
+import User from '../../../models/user';
 
 export function* register({ payload, meta }: RegistrationAction) {
   const { resetForm, setSubmitting } = meta;
   try {
-    // @ts-ignore
-    const user = yield call(UserService.register, payload);
+    const user: LoginResponse = yield call(UserService.register, payload);
     yield put(
       notificationActions.addNotification({
         type: NotificationTypes.success,
         message: 'Registered',
       }),
     );
-    // @ts-ignore
-    yield call(meta, null);
+
     yield call(setSubmitting, false);
-    yield put(userActions.registrationSuccess(user));
+    yield put(userActions.registrationSuccess(user.data));
   } catch (e) {
     yield put(
       notificationActions.addNotification({
@@ -28,8 +26,7 @@ export function* register({ payload, meta }: RegistrationAction) {
         message: e.message,
       }),
     );
-    // @ts-ignore
-    yield call(resetForm, null);
+    yield call(resetForm, {});
     yield call(setSubmitting, false);
     yield put(userActions.registrationError(e));
   }
@@ -37,8 +34,7 @@ export function* register({ payload, meta }: RegistrationAction) {
 
 export function* getCurrentUser() {
   try {
-    // @ts-ignore
-    const user = yield call(UserService.getCurrent);
+    const user: User = yield call(UserService.getCurrent);
     yield put(userActions.getCurrentUserSuccess(user));
   } catch (e) {
     yield put(userActions.getCurrentUserError(e));
@@ -49,8 +45,7 @@ export function* login({ payload, meta }: LoginAction) {
   const { resetForm, setSubmitting } = meta;
   try {
     const { rememberMe, ...loginData } = payload;
-    // @ts-ignore
-    const user = yield call(UserService.login, loginData);
+    const user: User = yield call(UserService.login, loginData);
     // yield call(resetForm, null);
     // yield call(setSubmitting, false);
     yield put(
@@ -61,8 +56,7 @@ export function* login({ payload, meta }: LoginAction) {
     );
     yield put(userActions.loginSuccess(user));
   } catch (e) {
-    // @ts-ignore
-    yield call(resetForm, null);
+    yield call(resetForm, {});
     yield call(setSubmitting, false);
     yield put(
       notificationActions.addNotification({

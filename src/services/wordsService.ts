@@ -3,11 +3,26 @@ import { call } from 'redux-saga/effects';
 import { AxiosResponse } from 'axios';
 import { ApiRoute, apiRoutesCreator } from '../constants/paths';
 import { http } from './http.service';
+import Word from '../models/word';
+
+type CreateWordResponse = {
+  data: Word;
+};
+
+type NewWordWithTags = {
+  swearing: boolean;
+  usages: string;
+  tags: string[];
+  helperText?: string;
+  wordname: string;
+  meaning: string;
+  extended_description: string;
+};
 
 const wordsService = {
   // eslint-disable-next-line @typescript-eslint/ban-types
-  *createANewWord(word: {}) {
-    const result: AxiosResponse<Record<string, unknown>> = yield call(
+  *createANewWord(word: NewWordWithTags) {
+    const result: AxiosResponse<CreateWordResponse> = yield call(
       http(true).post,
       ApiRoute.CreateAWord,
       word,
@@ -15,7 +30,7 @@ const wordsService = {
         withCredentials: true,
       },
     );
-    return result;
+    return result.data.data;
   },
   *likeAWord(id: string) {
     const result: AxiosResponse<Record<string, unknown>> = yield call(
@@ -24,6 +39,8 @@ const wordsService = {
       {},
       { withCredentials: true },
     );
+    // eslint-disable-next-line no-debugger
+    debugger;
     return result;
   },
   *dislikeAWord(id: string) {
