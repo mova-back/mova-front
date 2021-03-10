@@ -27,6 +27,10 @@ export enum ApiRoute {
   CreateAWord = '/api/dictionary/word',
 }
 
-export const apiRoutesCreator = (baseUrl: string, query: string, additionalUrl?: string) => {
+export const apiRoutesCreator = (
+  baseUrl: string,
+  query: string,
+  additionalUrl?: string,
+): string => {
   return additionalUrl ? `${baseUrl}/${query}/${additionalUrl}` : `${baseUrl}/${query}`;
 };

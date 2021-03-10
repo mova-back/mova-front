@@ -23,6 +23,7 @@ export const FETCH_FEED = 'wordReducer/FETCH_FEED';
 export const FETCH_FEED_SUCCESS = 'wordReducer/FETCH_FEED_SUCCESSSSS';
 export const FETCH_FEED_ERROR = 'wordReducer/FETCH_FEED_ERROR';
 export const PURGE_FEED = 'wordReducer/PURGE_FEED';
+const FETCH_MY_FAVOURITE_WORDS = 'wordsReducer/FETCH_MY_FAVOURITE_WORDS';
 
 type WordsActionType = InferActionsTypes<typeof wordsActions>;
 
@@ -100,12 +101,13 @@ export const wordsActions = {
       payload: { id, ratingType },
     } as const),
 
-  fetchFeed: (offset: number, limit = 20) =>
+  fetchFeed: (offset: number, limit = 20, option?: string) =>
     ({
       type: FETCH_FEED,
       payload: {
         offset,
         limit,
+        option
       },
     } as const),
 
@@ -124,6 +126,10 @@ export const wordsActions = {
       type: FETCH_FEED_ERROR,
       payload: error,
     } as const),
+  fetchMyFavouriteWords: () =>
+    ({
+      type: FETCH_MY_FAVOURITE_WORDS,
+    } as const),
 };
 
 // --WORKER-SAGAS--
@@ -138,7 +144,7 @@ export function* createANewWordWorker({
     tags: newWord.tags.split(',').map((i) => i.trim()), // creating ['tag1', 'tag2'] from 'tag1, tag2'
   };
   try {
-    yield call(wordsService.createANewWord, result);
+    yield call<typeof wordsService.createANewWord>(wordsService.createANewWord, result);
     yield call(resetForm, {});
     yield call(setSubmitting, false);
     yield put(wordsActions.createANewWordSuccess());
@@ -171,8 +177,7 @@ function* rateAWordWorker({ payload }: ReturnType<typeof wordsActions.rateAWord>
         : // @ts-ignore
           yield call(wordsService.dislikeAWord, id);
 
-    // @ts-ignore
-    const wordState = yield select((_state: RootState) => _state.word);
+    const wordState: ReducerState = yield select((_state: RootState) => _state.word);
     const newFeed = wordState.feed.map((_i: Word) => {
       const i = _i;
       if (ratingType === 'like') {
@@ -189,7 +194,7 @@ function* rateAWordWorker({ payload }: ReturnType<typeof wordsActions.rateAWord>
           : i;
       return result;
     });
-    yield put(wordsActions.fetchFeedSuccess(newFeed, wordState.offset));
+    yield put(wordsActions.fetchFeedSuccess(newFeed, wordState.currentOffset));
   } catch (e) {
     yield put(
       notificationActions.addNotification({
@@ -202,8 +207,8 @@ function* rateAWordWorker({ payload }: ReturnType<typeof wordsActions.rateAWord>
 
 export function* feed(action: any) {
   try {
-    const { offset, limit } = action.payload;
-    const words: AxiosResponse<Word[]> = yield call(FeedService.fetchFeed, offset, limit);
+    const { offset, limit, option } = action.payload;
+    const words: AxiosResponse<Word[]> = yield call(FeedService.fetchFeed, offset, limit, option);
     yield put(wordsActions.fetchFeedSuccess(words.data, offset));
   } catch (e) {
     yield put(

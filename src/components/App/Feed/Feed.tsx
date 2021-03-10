@@ -18,16 +18,17 @@ const useStyles = makeStyles(() =>
 
 interface IProps {
   className?: string;
+  option?: string;
 }
 
-const Feed: React.FC<IProps> = ({ className }) => {
+const Feed: React.FC<IProps> = ({ className, option }) => {
   const dispatch = useDispatch();
   const classes = useStyles();
   const { feed, fetching } = useSelector((state: RootState) => state.word);
 
   React.useEffect(() => {
-    dispatch(wordsActions.fetchFeed(0));
-  }, [dispatch]);
+    dispatch(wordsActions.fetchFeed(0, 20, option));
+  }, [dispatch, option]);
   return (
     <Box display="grid" gridGap={8} p={1} pb={10} className={className}>
       {fetching ? (
