@@ -1,24 +1,56 @@
-import React from 'react';
-
-import { Link } from 'react-router-dom';
-import { Button, ButtonGroup } from '@material-ui/core';
+import React, { useEffect, useState } from 'react';
+import { Button, ButtonGroup, createStyles, makeStyles } from '@material-ui/core';
+import { useDispatch } from 'react-redux';
 import Wrapper from '../components/App/Wrapper/Wrapper';
 import BottomNav from '../components/App/BottomNav/BottomNav';
-import { Page } from '../constants/paths';
+import { wordsActions } from '../store/words/wordsReducer';
+import Feed from '../components/App/Feed/Feed';
 
-const MyDictionaryPage: React.FC = () => (
-  <div>
-    <Wrapper>
-      <ButtonGroup disableElevation variant="contained" color="primary">
-        <Button>Словы са стужкi</Button>
-        <Button>Мае словы</Button>
-        <Button>
-          <Link to={Page.ChangePassword}>Change password</Link>
-        </Button>
-      </ButtonGroup>
-    </Wrapper>
-    <BottomNav />
-  </div>
+const useStyles = makeStyles(() =>
+  createStyles({
+    wrapper: {
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '10px',
+    },
+    sec: {
+      position: 'absolute',
+      top: '100px',
+      left: '50%',
+      transform: 'translate(-50%)',
+    },
+  }),
 );
 
+const MyDictionaryPage: React.FC = () => {
+  const [tab, setTab] = useState('favourite');
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(wordsActions.fetchFeed(0, 20, tab));
+  }, [dispatch, tab]);
+
+  const classes = useStyles();
+  return (
+    <div>
+      <Wrapper>
+        <div>
+          <ButtonGroup
+            size="small"
+            className={classes.sec}
+            disableElevation
+            variant="contained"
+            color="primary"
+          >
+            <Button onClick={() => setTab('favourite')}>Словы са стужкi</Button>
+            <Button onClick={() => setTab('my')}>Мае словы</Button>
+          </ButtonGroup>
+          {tab === 'favourite' ? <Feed option="favourite" /> : <Feed option="my" />}
+        </div>
+      </Wrapper>
+      <BottomNav />
+    </div>
+  );
+};
 export default MyDictionaryPage;
