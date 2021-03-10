@@ -74,5 +74,5 @@
       "enzyme-to-json/serializer"
     ]
   },
-  "proxy": "https://movabackend.herokuapp.com/"
+  "proxy": "https://movabackend.herokuapp.com"
 }
