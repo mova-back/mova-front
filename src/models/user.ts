@@ -4,7 +4,8 @@ type User = {
   email: string;
   created_at: string;
   updated_at: string;
-  access_token: string;
+  accessToken: string;
+  refreshToken: string;
 };
 
 export default User;

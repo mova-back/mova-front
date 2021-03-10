@@ -1,11 +1,11 @@
 type NewWordData = {
-  wordname: string;
-  meaning: string;
   swearing: boolean;
-  extended_description: string;
   usages: string;
   tags: string;
   helperText?: string;
+  wordname: string;
+  meaning: string;
+  extended_description: string;
 };
 
 export default NewWordData;

@@ -1,5 +1,3 @@
-import User from './user';
-
 export type Tag = string;
 
 type Word = {
