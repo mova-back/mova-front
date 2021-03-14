@@ -11,6 +11,7 @@ import HttpError from '../../models/httpError';
 import NewWordData from '../../models/forms/newWordData';
 import { FeedService } from '../../services/FeedService';
 import { RootState } from '../rootReducer';
+import { useHistory } from 'react-router-dom';
 
 // --CONSTANTS--
 export const CREATE_A_NEW_WORD = 'wordReducer/CREATE_A_NEW_WORD';
@@ -82,8 +83,8 @@ const wordsReducer = (state = initialState, action: WordsActionType) => {
 // --ACTION-CREATORS--
 
 export const wordsActions = {
-  fetchCreateANewWord: (newWord: NewWordData, meta: FormikHelpers<NewWordData>) =>
-    ({ type: CREATE_A_NEW_WORD, payload: { newWord, meta } } as const),
+  fetchCreateANewWord: (newWord: NewWordData, meta: FormikHelpers<NewWordData>, history:  ReturnType<typeof useHistory>) =>
+    ({ type: CREATE_A_NEW_WORD, payload: { newWord, meta, history } } as const),
 
   createANewWordSuccess: () =>
     ({
@@ -137,7 +138,7 @@ export const wordsActions = {
 export function* createANewWordWorker({
   payload,
 }: ReturnType<typeof wordsActions.fetchCreateANewWord>) {
-  const { meta, newWord } = payload;
+  const { meta, newWord, history } = payload;
   const { resetForm, setSubmitting } = meta;
   const result = {
     ...newWord,
@@ -154,6 +155,8 @@ export function* createANewWordWorker({
         message: 'Word has been added',
       }),
     );
+    debugger
+    history.push('/');
   } catch (e) {
     yield call(resetForm, {});
     yield call(setSubmitting, false);
