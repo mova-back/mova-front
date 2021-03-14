@@ -26,7 +26,6 @@ export const UserService = {
 
   *login({ email, password }: LoginData) {
     // getfingerprint
-
     const response: AxiosResponse<LoginResponse> = yield call(
       http(false).post,
       ApiRoute.UsersLogin,

@@ -8,6 +8,7 @@ import { Page } from '../constants/paths';
 import Wrapper from '../components/App/Wrapper/Wrapper';
 import { CustomThemeOptions } from '../styles/types';
 import LoginForm from '../components/LoginForm/LoginForm';
+import BottomNav from '../components/App/BottomNav/BottomNav';
 
 const LoginPage: React.FC = () => {
   const theme: CustomThemeOptions = useTheme();
@@ -39,43 +40,46 @@ const LoginPage: React.FC = () => {
   }
 
   return (
-    <Wrapper background="background4">
-      <div className={classes.headerContainer}>
-        <Link component={NavLink} to={Page.Home}>
-          <img src="./assets/images/logo.png" alt="app-logo" />
-        </Link>
-        <h2 className={classes.header}>Залагініцца</h2>
-        <p className={classes.headerText}>
-          Каб пачаць карыстацца слоўнікам, калі ласка, увайдзі ў свой акаунт. Пасля ты зможаш
-          уносіць свае словы і ўзбагачаць нашу Родную мову!
-        </p>
-      </div>
-      <Box p={3}>
-        <LoginForm />
-        <Box pl={6} pr={6} mt={2} display="flex" justifyContent="space-between">
-          <Link
-            color="textPrimary"
-            underline="always"
-            variant="body1"
-            className={classes.link}
-            component={NavLink}
-            to={Page.Signup}
-          >
-            Стварыць акаунт
+    <>
+      <Wrapper background="background4">
+        <div className={classes.headerContainer}>
+          <Link component={NavLink} to={Page.Home}>
+            <img src="./assets/images/logo.png" alt="app-logo" />
           </Link>
-          <Link
-            color="textPrimary"
-            underline="always"
-            variant="body1"
-            className={classes.link}
-            component={NavLink}
-            to={Page.ForgetPassword}
-          >
-            Забыў пароль
-          </Link>
+          <h2 className={classes.header}>Залагініцца</h2>
+          <p className={classes.headerText}>
+            Каб пачаць карыстацца слоўнікам, калі ласка, увайдзі ў свой акаунт. Пасля ты зможаш
+            уносіць свае словы і ўзбагачаць нашу Родную мову!
+          </p>
+        </div>
+        <Box p={3}>
+          <LoginForm />
+          <Box pl={6} pr={6} mt={2} display="flex" justifyContent="space-between">
+            <Link
+              color="textPrimary"
+              underline="always"
+              variant="body1"
+              className={classes.link}
+              component={NavLink}
+              to={Page.Signup}
+            >
+              Стварыць акаунт
+            </Link>
+            <Link
+              color="textPrimary"
+              underline="always"
+              variant="body1"
+              className={classes.link}
+              component={NavLink}
+              to={Page.ForgetPassword}
+            >
+              Забыў пароль
+            </Link>
+          </Box>
         </Box>
-      </Box>
-    </Wrapper>
+      </Wrapper>
+      <BottomNav />
+    </>
   );
 };
 

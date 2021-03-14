@@ -10,6 +10,8 @@ import {
 } from '@material-ui/core';
 
 import { useDispatch } from 'react-redux';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { useHistory } from 'react-router';
 import Input from '../Input/Input';
 import Switch from '../Switch/Switch';
 import ActionButton from '../ActionButton/ActionButton';
@@ -67,13 +69,14 @@ const useStyles = makeStyles(() =>
 const NewWord: React.FC = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const history = useHistory();
   return (
     <Formik
       initialValues={NewWordSchema.initialState}
       enableReinitialize
       validationSchema={NewWordSchema.validSchema}
       onSubmit={(values: NewWordData, meta: FormikHelpers<NewWordData>) => {
-        dispatch(wordsActions.fetchCreateANewWord(values, meta));
+        dispatch(wordsActions.fetchCreateANewWord(values, meta, history));
       }}
     >
       {({ dirty, isValid, isSubmitting }: FormikProps<NewWordData>) => (
