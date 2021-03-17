@@ -194,6 +194,7 @@ export function* confirmRegistrationWorker(
   const { query } = action.payload;
   try {
     let email = '';
+    console.log('This is query: ', query);
     if (query) email = yield call(UserService.confirmRegistration, query);
     yield put(
       notificationActions.addNotification({

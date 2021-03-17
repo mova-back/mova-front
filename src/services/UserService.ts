@@ -38,21 +38,14 @@ export const UserService = {
   *confirmRegistration(
     query: string,
   ): Generator<StrictEffect, { message: string }, AxiosResponse<ConfirmRegistrationResponseType>> {
-    const response = yield call(http(false).post, ApiRoute.ConfirmRegistration, query);
+    const response = yield call(http(false).post, ApiRoute.ConfirmRegistration, {
+      emailConfirmToken: query,
+    });
     return response.data.data;
   },
 
-  *signIn({
-    email,
-    password,
-  }: LoginData): Generator<
-    StrictEffect,
-    SignInResponseDataType,
-    AxiosResponse<SignInResponseType>
-  > {
-    // getfingerprint
-
-    const response = yield call(
+  *signIn({ email, password }: LoginData): Generator<StrictEffect, User, any> {
+    const response: AxiosResponse<SignInResponseType> = yield call(
       http(false).post,
       ApiRoute.UsersLogin,
       {
@@ -61,11 +54,13 @@ export const UserService = {
       },
       { withCredentials: true },
     );
+    const { accessToken, refreshToken } = response.data.data;
     AuthService.setAuthData({
-      accessToken: response.data.data.accessToken,
-      exp: AuthService.parseTokenData(response.data.data.accessToken).exp,
+      accessToken,
+      exp: AuthService.parseTokenData(refreshToken).exp,
     });
-    return response.data.data;
+    const user: User = yield call(this.getCurrent);
+    return user;
   },
 
   *getCurrent(): Generator<StrictEffect, User, AxiosResponse<GetCurrentUserType>> {
