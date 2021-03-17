@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
+import { call, put, select, StrictEffect, takeEvery, takeLatest } from 'redux-saga/effects';
 import { FormikHelpers } from 'formik';
 import { AxiosResponse } from 'axios';
 import { InferActionsTypes } from '../types';
@@ -12,6 +12,7 @@ import NewWordData from '../../models/forms/newWordData';
 import { FeedService } from '../../services/FeedService';
 import { RootState } from '../rootReducer';
 import { useHistory } from 'react-router-dom';
+import { Page } from '../../constants/paths';
 
 // --CONSTANTS--
 export const CREATE_A_NEW_WORD = 'wordReducer/CREATE_A_NEW_WORD';
@@ -83,8 +84,11 @@ const wordsReducer = (state = initialState, action: WordsActionType) => {
 // --ACTION-CREATORS--
 
 export const wordsActions = {
-  fetchCreateANewWord: (newWord: NewWordData, meta: FormikHelpers<NewWordData>, history:  ReturnType<typeof useHistory>) =>
-    ({ type: CREATE_A_NEW_WORD, payload: { newWord, meta, history } } as const),
+  fetchCreateANewWord: (
+    newWord: NewWordData,
+    meta: FormikHelpers<NewWordData>,
+    history: ReturnType<typeof useHistory>,
+  ) => ({ type: CREATE_A_NEW_WORD, payload: { newWord, meta, history } } as const),
 
   createANewWordSuccess: () =>
     ({
@@ -108,7 +112,7 @@ export const wordsActions = {
       payload: {
         offset,
         limit,
-        option
+        option,
       },
     } as const),
 
@@ -137,7 +141,7 @@ export const wordsActions = {
 
 export function* createANewWordWorker({
   payload,
-}: ReturnType<typeof wordsActions.fetchCreateANewWord>) {
+}: ReturnType<typeof wordsActions.fetchCreateANewWord>): Generator<StrictEffect, void, unknown> {
   const { meta, newWord, history } = payload;
   const { resetForm, setSubmitting } = meta;
   const result = {
@@ -155,8 +159,7 @@ export function* createANewWordWorker({
         message: 'Word has been added',
       }),
     );
-    debugger
-    history.push('/');
+    history.push(Page.Home);
   } catch (e) {
     yield call(resetForm, {});
     yield call(setSubmitting, false);
@@ -170,17 +173,23 @@ export function* createANewWordWorker({
   }
 }
 
-function* rateAWordWorker({ payload }: ReturnType<typeof wordsActions.rateAWord>) {
+function* rateAWordWorker({
+  payload,
+}: ReturnType<typeof wordsActions.rateAWord>): Generator<
+  StrictEffect,
+  void,
+  any //(AxiosResponse<Word[]> | ReducerState)
+> {
   const { id, ratingType } = payload;
   try {
-    const response =
+    const response: AxiosResponse<Word[]> =
       ratingType === 'like'
         ? // @ts-ignore
           yield call(wordsService.likeAWord, id)
         : // @ts-ignore
           yield call(wordsService.dislikeAWord, id);
 
-    const wordState: ReducerState = yield select((_state: RootState) => _state.word);
+    const wordState = yield select((_state: RootState) => _state.word);
     const newFeed = wordState.feed.map((_i: Word) => {
       const i = _i;
       if (ratingType === 'like') {
@@ -208,10 +217,10 @@ function* rateAWordWorker({ payload }: ReturnType<typeof wordsActions.rateAWord>
   }
 }
 
-export function* feed(action: any) {
+export function* feed(action: any): Generator<StrictEffect, void, AxiosResponse<Word[]>> {
   try {
     const { offset, limit, option } = action.payload;
-    const words: AxiosResponse<Word[]> = yield call(FeedService.fetchFeed, offset, limit, option);
+    const words = yield call(FeedService.fetchFeed, offset, limit, option);
     yield put(wordsActions.fetchFeedSuccess(words.data, offset));
   } catch (e) {
     yield put(

@@ -1,4 +1,4 @@
-import { call } from 'redux-saga/effects';
+import { call, StrictEffect } from 'redux-saga/effects';
 
 import { AxiosResponse } from 'axios';
 import { ApiRoute } from '../constants/paths';
@@ -10,24 +10,49 @@ import { resetAuthData } from './auth.service';
 import { http } from './http.service';
 import User from '../models/user';
 
-export type LoginResponse = {
+type ConfirmRegistrationResponseType = {
+  data: {
+    message: string;
+  };
+};
+
+type SignInResponseType = {
+  success: boolean;
+  data: SignInResponseDataType;
+};
+export type SignInResponseDataType = {
+  accessToken: string;
+  refreshToken: string;
+};
+type GetCurrentUserType = {
   data: User;
 };
 
 export const UserService = {
-  *register(data: SignUpFormData) {
-    const response: AxiosResponse<LoginResponse> = yield call(
-      http(false).post,
-      ApiRoute.Users,
-      data,
-    );
-    return response.data;
+  *signUp(
+    data: SignUpFormData,
+  ): Generator<StrictEffect, SignInResponseDataType, AxiosResponse<SignInResponseType>> {
+    const response = yield call(http(false).post, ApiRoute.User, data);
+    return response.data.data;
+  },
+  *confirmRegistration(
+    query: string,
+  ): Generator<StrictEffect, { message: string }, AxiosResponse<ConfirmRegistrationResponseType>> {
+    const response = yield call(http(false).post, ApiRoute.ConfirmRegistration, query);
+    return response.data.data;
   },
 
-  *login({ email, password }: LoginData) {
+  *signIn({
+    email,
+    password,
+  }: LoginData): Generator<
+    StrictEffect,
+    SignInResponseDataType,
+    AxiosResponse<SignInResponseType>
+  > {
     // getfingerprint
 
-    const response: AxiosResponse<LoginResponse> = yield call(
+    const response = yield call(
       http(false).post,
       ApiRoute.UsersLogin,
       {
@@ -43,17 +68,12 @@ export const UserService = {
     return response.data.data;
   },
 
-  *getCurrent() {
-    const response: AxiosResponse<LoginResponse> = yield call(
-      http(true).get,
-      ApiRoute.User,
-      {},
-      true,
-    );
+  *getCurrent(): Generator<StrictEffect, User, AxiosResponse<GetCurrentUserType>> {
+    const response = yield call(http(true).get, ApiRoute.User, {}, true);
     return response.data.data;
   },
 
-  *logout() {
+  *logout(): Generator<StrictEffect, void, unknown> {
     try {
       // todo change to true (auth)
       yield call(http(true).post, ApiRoute.UsersLogout, {}, { withCredentials: true });

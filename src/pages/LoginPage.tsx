@@ -78,7 +78,6 @@ const LoginPage: React.FC = () => {
           </Box>
         </Box>
       </Wrapper>
-      <BottomNav />
     </>
   );
 };

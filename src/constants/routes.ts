@@ -12,6 +12,7 @@ import LogoutPage from '../pages/LogoutPage';
 import DeleteAccPage from '../pages/DeleteAccPage';
 import { Page } from './paths';
 import MyDictionaryPage from '../pages/MyDictionaryPage';
+import ConfirmRegistrationPage from '../pages/ConfirmRegistrationPage';
 
 const ROUTES = [
   {
@@ -68,6 +69,11 @@ const ROUTES = [
     path: Page.ChangePassword,
     exact: true,
     component: ChangePasswordPage,
+  },
+  {
+    path: Page.ConfirmRegistration,
+    exact: false,
+    component: ConfirmRegistrationPage,
   },
   {
     path: Page.Feedback,

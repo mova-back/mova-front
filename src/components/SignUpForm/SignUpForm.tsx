@@ -3,6 +3,9 @@ import { Field, FieldProps, Form, Formik, FormikHelpers, FormikProps } from 'for
 
 import { Box, CircularProgress, createStyles, makeStyles } from '@material-ui/core';
 import { useDispatch } from 'react-redux';
+
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { useHistory } from 'react-router';
 import Input from '../Input/Input';
 import ActionButton from '../ActionButton/ActionButton';
 
@@ -32,6 +35,7 @@ const useStyles = makeStyles(() =>
 const SignUpForm: React.FC = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const history = useHistory();
   return (
     <Formik
       initialValues={SignUpFormSchema.initialState}
@@ -39,7 +43,7 @@ const SignUpForm: React.FC = () => {
       validationSchema={SignUpFormSchema.validSchema}
       onSubmit={(values: SignUpFormData, meta: FormikHelpers<SignUpFormData>) => {
         meta.setSubmitting(true);
-        dispatch(userActions.registration(values, meta));
+        dispatch(userActions.registration(values, meta, history));
       }}
     >
       {({ isSubmitting, dirty, isValid }: FormikProps<SignUpFormData>) => (
