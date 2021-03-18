@@ -18,9 +18,9 @@ export enum Page {
 
 export enum ApiRoute {
   Api = '',
-  User = '/api/user',
+  User = '/api/user/current',
   Users = '/api/users',
-  Refresh = '/api/auth/refresh',
+  Refresh = '/api/auth/refresh-token',
   UsersLogin = '/api/auth/login',
   UsersLogout = '/api/auth/logout',
   DictionaryFeed = '/api/dictionary/feed',

@@ -54,12 +54,12 @@ export const UserService = {
       },
       { withCredentials: true },
     );
-    const { accessToken, refreshToken } = response.data.data;
+    const { accessToken } = response.data.data;
     AuthService.setAuthData({
       accessToken,
-      exp: AuthService.parseTokenData(refreshToken).exp,
+      exp: AuthService.parseTokenData(accessToken).exp,
     });
-    const user: User = yield call(this.getCurrent);
+    const user: User = yield call(UserService.getCurrent);
     return user;
   },
 

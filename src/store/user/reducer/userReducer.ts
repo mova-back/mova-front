@@ -230,6 +230,7 @@ export function* signInWorker({
   const { resetForm, setSubmitting } = meta;
   try {
     const { rememberMe, ...loginData } = payload;
+
     const user: User = yield call(UserService.signIn, loginData);
     // yield call(resetForm, null);
     // yield call(setSubmitting, false);
