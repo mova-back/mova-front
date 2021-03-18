@@ -32,7 +32,7 @@ export const UserService = {
   *signUp(
     data: SignUpFormData,
   ): Generator<StrictEffect, SignInResponseDataType, AxiosResponse<SignInResponseType>> {
-    const response = yield call(http(false).post, ApiRoute.User, data);
+    const response = yield call(http(false).post, ApiRoute.Registration, data);
     return response.data.data;
   },
   *confirmRegistration(

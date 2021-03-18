@@ -35,7 +35,7 @@ export function getAccessBearerToken(): string {
   return BEARER_TOKEN;
 }
 
-export function setRefreshToken(status: string) {
+export function setRefreshToken(status: string): void {
   if (!['', 'true'].includes(status)) {
     throw new Error(`setRefreshToken: invalid value ${status}; Expect one of ['', 'true']`);
   }
@@ -44,8 +44,6 @@ export function setRefreshToken(status: string) {
 }
 
 export function hasRefreshToken(): boolean {
-  // eslint-disable-next-line no-debugger
-  debugger;
   return Boolean(localStorage.getItem('refreshToken'));
 }
 
@@ -54,15 +52,13 @@ export function setAuthData(
     accessToken: '',
     exp: 0,
   },
-) {
-  // eslint-disable-next-line no-debugger
-  debugger;
+): void {
   setRefreshToken('true');
   setAccessBearerToken(accessToken);
   accessTokenExpDate = exp;
 }
 
-export function resetAuthData() {
+export function resetAuthData(): void {
   accessTokenExpDate = 0;
   setRefreshToken('');
   setAccessBearerToken('');
@@ -104,8 +100,6 @@ export async function refreshTokens() {
         },
       )
       .then((res: AxiosResponse<TokenData>) => res.data);
-    // eslint-disable-next-line no-debugger
-    debugger;
     setAuthData({
       accessToken: response.data.accessToken,
       exp: parseTokenData(response.data.refreshToken).exp,
