@@ -21,8 +21,6 @@ export function parseTokenData(accessToken: string) {
   try {
     // eslint-disable-next-line prefer-destructuring
     payload = accessToken.split('.')[1];
-    // eslint-disable-next-line no-debugger
-    debugger;
     tokenData = JSON.parse(atob(payload));
   } catch (error) {
     throw new Error(error);
