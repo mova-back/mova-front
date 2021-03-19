@@ -255,7 +255,7 @@ export function* signInWorker({
 }
 
 export function* signOutWorker(): Generator<StrictEffect, void, unknown> {
-  yield call(UserService.logout);
+  yield call(UserService.signOut);
   try {
     yield put(
       notificationActions.addNotification({

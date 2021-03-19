@@ -1,5 +1,7 @@
 import axios, { AxiosResponse } from 'axios';
-import { ApiRoute } from '../constants/paths';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { useHistory } from 'react-router';
+import { ApiRoute, Page } from '../constants/paths';
 
 let BEARER_TOKEN = '';
 let accessTokenExpDate = 0;
@@ -19,6 +21,8 @@ export function parseTokenData(accessToken: string) {
   try {
     // eslint-disable-next-line prefer-destructuring
     payload = accessToken.split('.')[1];
+    // eslint-disable-next-line no-debugger
+    debugger;
     tokenData = JSON.parse(atob(payload));
   } catch (error) {
     throw new Error(error);
@@ -89,7 +93,7 @@ type TokenData = {
   };
 };
 
-export async function refreshTokens() {
+export async function refreshTokens(history?: ReturnType<typeof useHistory>) {
   try {
     const response: TokenData = await axios
       .post(
@@ -102,16 +106,16 @@ export async function refreshTokens() {
       .then((res: AxiosResponse<TokenData>) => res.data);
     setAuthData({
       accessToken: response.data.accessToken,
-      exp: parseTokenData(response.data.refreshToken).exp,
+      exp: parseTokenData(response.data.accessToken).exp,
     });
     return response.data;
   } catch (error) {
     resetAuthData();
-    // router push '/login'
+    if (history) history.push(Page.Logout);
     throw new Error(error);
   }
 }
 
-export const debounceRefreshTokens = debounce(() => {
-  return refreshTokens();
+export const debounceRefreshTokens = debounce((history?: ReturnType<typeof useHistory>) => {
+  return refreshTokens(history);
 }, 100);

@@ -68,7 +68,7 @@ export const UserService = {
     return response.data.data;
   },
 
-  *logout(): Generator<StrictEffect, void, unknown> {
+  *signOut(): Generator<StrictEffect, void, unknown> {
     try {
       // todo change to true (auth)
       yield call(http(true).post, ApiRoute.UsersLogout, {}, { withCredentials: true });
