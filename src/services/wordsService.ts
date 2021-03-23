@@ -39,8 +39,6 @@ const wordsService = {
       {},
       { withCredentials: true },
     );
-    // eslint-disable-next-line no-debugger
-    debugger;
     return result;
   },
   *dislikeAWord(id: string) {

@@ -1,6 +1,6 @@
 /* eslint-disable */
 import { call } from 'redux-saga/effects';
-import { ApiRoute } from '../constants/paths';
+import { ApiRoute, wordUrlCreator } from '../constants/paths';
 import { http } from './http.service';
 import { AxiosResponse } from 'axios';
 import Word from '../models/word';
@@ -12,14 +12,16 @@ export const FeedService = {
     if (limit !== undefined) {
       params.append('limit', limit.toString());
     }
-    let response: Word[];
+    let response: AxiosResponse<Word[]>;
     switch (option) {
       case 'favourite':
         return (response = yield call(mockFavourites));
       case 'my':
         return (response = yield call(mockMy));
-      default:
-        return (response = yield call(http(false).get, ApiRoute.DictionaryFeed));
+      default: {
+        response = yield call(http(false).get, wordUrlCreator());
+        return response.data;
+      }
     }
   },
 };

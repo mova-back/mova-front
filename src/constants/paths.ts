@@ -27,7 +27,7 @@ export enum ApiRoute {
   Refresh = '/api/auth/refresh-token',
   UsersLogin = '/api/auth/login',
   UsersLogout = '/api/auth/logout',
-  DictionaryFeed = '/api/dictionary/feed',
+  Words = '/api/words',
   CreateAWord = '/api/dictionary/word',
   ChangePassword = '/api/user/change-password',
   ResetPassword = '/api/user/reset-password',
@@ -38,6 +38,10 @@ export enum ApiRoute {
   ConfirmEmail = '/api/user/confirm-email',
   CancelEmailChanging = 'api/user/cancel-email-changing',
 }
+
+export const wordUrlCreator = (page = 0, limit = 20) => {
+  return `${ApiRoute.Words}?page=${page}&limit=${limit}`;
+};
 
 export const apiRoutesCreator = (
   baseUrl: string,

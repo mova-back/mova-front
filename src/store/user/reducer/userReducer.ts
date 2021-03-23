@@ -386,7 +386,6 @@ export function* changePasswordWorker({ payload }: ReturnType<typeof userActions
         message: `Password cannot be changed now ${e.message}`,
       }),
     );
-    throw new Error(e);
   }
 }
 export function* changeEmailWorker({ payload }: ReturnType<typeof userActions.changeEmail>) {

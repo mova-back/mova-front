@@ -67,11 +67,11 @@ const wordsReducer = (state = initialState, action: WordsActionType) => {
         fetching: false,
       };
     case FETCH_FEED_SUCCESS: {
-      const { data, offset } = action.payload;
+      const { data, page } = action.payload;
       return {
         ...state,
         feed: [...data],
-        currentOffset: offset,
+        currentPage: page,
         fetching: false,
       };
     }
@@ -106,22 +106,22 @@ export const wordsActions = {
       payload: { id, ratingType },
     } as const),
 
-  fetchFeed: (offset: number, limit = 20, option?: string) =>
+  fetchFeed: (page: number, limit = 20, option?: string) =>
     ({
       type: FETCH_FEED,
       payload: {
-        offset,
+        page,
         limit,
         option,
       },
     } as const),
 
-  fetchFeedSuccess: (data: Word[], offset: number) => {
+  fetchFeedSuccess: (data: Word[], page: number) => {
     return {
       type: FETCH_FEED_SUCCESS,
       payload: {
         data,
-        offset,
+        page,
       },
     } as const;
   },
@@ -221,9 +221,10 @@ export function* feedWorker(
   action: ReturnType<typeof wordsActions.fetchFeed>,
 ): Generator<StrictEffect, void, AxiosResponse<Word[]>> {
   try {
-    const { offset, limit, option } = action.payload;
-    const words = yield call(FeedService.fetchFeed, offset, limit, option);
-    yield put(wordsActions.fetchFeedSuccess(words.data, offset));
+    const { page, limit, option } = action.payload;
+    const words = yield call(FeedService.fetchFeed, page, limit, option);
+    debugger;
+    yield put(wordsActions.fetchFeedSuccess(words.data, page));
   } catch (e) {
     console.log('FEED ERROR: ', e);
     yield put(
