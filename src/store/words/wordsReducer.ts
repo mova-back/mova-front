@@ -292,7 +292,7 @@ function* rateAWordWorker({
         if (response.success) yield put(wordsActions.removeLikeSuccess(id, isLiked, isDisliked));
       } else {
         // just dislike a word
-        const response = yield call(wordsService.rateAWord, ApiRoute.LikeAWord, id);
+        const response = yield call(wordsService.rateAWord, ApiRoute.DislikeAWord, id);
         if (response.success) yield put(wordsActions.dislikeSuccess(id, isLiked, isDisliked));
       }
     }
