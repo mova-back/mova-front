@@ -5,6 +5,7 @@ import { Box, createStyles, Link, makeStyles, Typography } from '@material-ui/co
 
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
+import ErrorIcon from '@material-ui/icons/Error';
 import { Page } from '../constants/paths';
 
 import Wrapper from '../components/App/Wrapper/Wrapper';
@@ -33,6 +34,9 @@ const useStyles = makeStyles(() =>
     link: {
       fontWeight: 'bold',
     },
+    icon: {
+      transform: 'scale(5)',
+    },
   }),
 );
 
@@ -42,14 +46,16 @@ const ConfirmRegistrationPage: React.FC = () => {
   const dispatch = useDispatch();
   const email = useSelector((state: RootState) => state.user.email);
   const location = useLocation();
-
-  // eslint-disable-next-line no-debugger
-  debugger;
+  const isError = useSelector((state: RootState) => state.user.isError);
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
     const emailConfirmToken = searchParams.get('emailConfirmToken');
-    dispatch(userActions.confirmRegistration(emailConfirmToken));
+    dispatch(
+      location.pathname === Page.ConfirmRegistration
+        ? userActions.confirmRegistration(emailConfirmToken)
+        : userActions.confirmChangeEmail(emailConfirmToken),
+    );
   }, [dispatch, location]);
 
   return (
@@ -61,10 +67,14 @@ const ConfirmRegistrationPage: React.FC = () => {
           <>
             <Box>
               <Box display="flex" alignItems="center" justifyContent="center">
-                <Tick />
+                {isError ? <ErrorIcon className={classes.icon} color="error" /> : <Tick />}
               </Box>
               <Typography className={classes.wrapperText} align="center">
-                <Typography variant="h2">{email}</Typography> is now confirmed, now you can login
+                {isError ? (
+                  <Typography>Something went wrong... Try again later</Typography>
+                ) : (
+                  <Typography>{email} is now confirmed, now you can login</Typography>
+                )}
               </Typography>
             </Box>
             <Box>

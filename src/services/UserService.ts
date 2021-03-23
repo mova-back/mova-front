@@ -9,6 +9,7 @@ import * as AuthService from './auth.service';
 import { resetAuthData } from './auth.service';
 import { http } from './http.service';
 import User from '../models/user';
+import { ChangePasswordDataType } from '../models/forms/changePasswordData';
 
 type ConfirmRegistrationResponseType = {
   data: {
@@ -43,7 +44,32 @@ export const UserService = {
     });
     return response.data.data;
   },
-
+  *confirmChangeEmail(
+    query: string,
+  ): Generator<StrictEffect, { message: string }, AxiosResponse<ConfirmRegistrationResponseType>> {
+    const response = yield call(http(false).post, ApiRoute.ConfirmEmail, {
+      emailConfirmToken: query,
+    });
+    return response.data.data;
+  },
+  *confirmResetPassword({
+    password,
+    resetPasswordToken,
+  }: {
+    password: string;
+    resetPasswordToken: string;
+  }): Generator<StrictEffect, void, unknown> {
+    yield call(http(false).post, ApiRoute.ResetPassword, {
+      resetPasswordToken,
+      password,
+    });
+  },
+  *resetPassword(email: string): Generator<StrictEffect, void, unknown> {
+    yield call(http(false).post, ApiRoute.SendResetPasswordEmail, { email });
+  },
+  *changeEmail(newEmail: string): Generator<StrictEffect, void, unknown> {
+    yield call(http(true).post, ApiRoute.ChangeEmail, { newEmail });
+  },
   *signIn({ email, password }: LoginData): Generator<StrictEffect, User, any> {
     const response: AxiosResponse<SignInResponseType> = yield call(
       http(false).post,
@@ -78,5 +104,9 @@ export const UserService = {
     } catch (error) {
       throw new Error(error);
     }
+  },
+  *changePassword(formData: ChangePasswordDataType) {
+    const { oldPassword, newPassword } = formData;
+    yield call(http(true).post, ApiRoute.ChangePassword, { oldPassword, newPassword });
   },
 };

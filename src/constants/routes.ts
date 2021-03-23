@@ -12,7 +12,9 @@ import LogoutPage from '../pages/LogoutPage';
 import DeleteAccPage from '../pages/DeleteAccPage';
 import { Page } from './paths';
 import MyDictionaryPage from '../pages/MyDictionaryPage';
-import ConfirmRegistrationPage from '../pages/ConfirmRegistrationPage';
+import ConfirmRegistrationPage from '../pages/ConfirmRegistrationOrMailPage';
+import ResetPasswordPage from '../pages/ResetPasswordPage';
+import ChangeEmailPage from '../pages/ChangeEmailPage';
 
 const ROUTES = [
   {
@@ -71,7 +73,12 @@ const ROUTES = [
     component: ChangePasswordPage,
   },
   {
-    path: Page.ConfirmRegistration,
+    path: Page.ResetPassword,
+    exact: false,
+    component: ResetPasswordPage,
+  },
+  {
+    path: [Page.ConfirmRegistration, Page.ConfirmEmail],
     exact: false,
     component: ConfirmRegistrationPage,
   },
@@ -95,6 +102,7 @@ const ROUTES = [
     exact: true,
     component: MyDictionaryPage,
   },
+  { path: Page.ChangeEmail, exact: true, component: ChangeEmailPage },
 ];
 
 export default ROUTES;

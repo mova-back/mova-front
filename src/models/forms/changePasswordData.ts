@@ -1,7 +1,18 @@
-type ChangePasswordData = {
-  old_password: string;
-  new_password: string;
+import { FormikHelpers } from 'formik';
+
+type ChangePasswordDataWithValidation = {
+  oldPassword: string;
+  newPassword: string;
   confirm_new_password: string;
 };
+export type ChangePasswordDataType = {
+  oldPassword: string;
+  newPassword: string;
+};
+export type ChangePasswordFormDataType = {
+  oldPassword: string;
+  newPassword: string;
+  meta: FormikHelpers<ChangePasswordDataWithValidation>;
+};
 
-export default ChangePasswordData;
+export default ChangePasswordDataWithValidation;

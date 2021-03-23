@@ -217,12 +217,15 @@ function* rateAWordWorker({
   }
 }
 
-export function* feed(action: any): Generator<StrictEffect, void, AxiosResponse<Word[]>> {
+export function* feedWorker(
+  action: ReturnType<typeof wordsActions.fetchFeed>,
+): Generator<StrictEffect, void, AxiosResponse<Word[]>> {
   try {
     const { offset, limit, option } = action.payload;
     const words = yield call(FeedService.fetchFeed, offset, limit, option);
     yield put(wordsActions.fetchFeedSuccess(words.data, offset));
   } catch (e) {
+    console.log('FEED ERROR: ', e);
     yield put(
       notificationActions.addNotification({
         type: NotificationTypes.error,
@@ -237,7 +240,7 @@ export function* feed(action: any): Generator<StrictEffect, void, AxiosResponse<
 export const wordsSagas = [
   takeEvery(CREATE_A_NEW_WORD, createANewWordWorker),
   takeEvery(RATE_A_WORD, rateAWordWorker),
-  takeLatest(FETCH_FEED, feed),
+  takeLatest(FETCH_FEED, feedWorker),
 ];
 
 export default wordsReducer;

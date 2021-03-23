@@ -14,6 +14,9 @@ export enum Page {
   Logout = '/logout',
   DeleteAcc = '/delete-acc',
   ConfirmRegistration = '/confirm-registration',
+  ResetPassword = '/reset-password',
+  ChangeEmail = '/change-email',
+  ConfirmEmail = '/confirm-email',
 }
 
 export enum ApiRoute {
@@ -30,9 +33,9 @@ export enum ApiRoute {
   ResetPassword = '/api/user/reset-password',
   SendResetPasswordEmail = '/api/user/send-reset-password-email',
   ChangeEmail = '/api/user/change-email',
-  ConfirmEmail = '/api/user/confirm-email',
   ConfirmRegistration = '/api/user/confirm-registration',
   ResendConfirmNewEmailToken = 'api/user/resend-confirm-new-email-token',
+  ConfirmEmail = '/api/user/confirm-email',
   CancelEmailChanging = 'api/user/cancel-email-changing',
 }
 

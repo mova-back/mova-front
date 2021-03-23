@@ -27,7 +27,12 @@ const App: React.FC = () => {
       <SnackbarContainer />
       <Switch>
         {ROUTES.map(({ component, exact, path }) => (
-          <Route component={component} key={path} exact={exact} path={path} />
+          <Route
+            component={component}
+            key={Array.isArray(path) ? path[0] : path}
+            exact={exact}
+            path={path}
+          />
         ))}
       </Switch>
     </div>

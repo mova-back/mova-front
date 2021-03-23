@@ -3,11 +3,13 @@ import { Formik, Field, FormikHelpers, FormikProps, FieldProps, Form } from 'for
 
 import { Box, CircularProgress, createStyles, makeStyles } from '@material-ui/core';
 
+import { useDispatch } from 'react-redux';
 import Input from '../Input/Input';
 import ActionButton from '../ActionButton/ActionButton';
 
 import ForgetPasswordSchema from './ForgetPasswordSchema';
 import ForgetPasswordData from '../../models/forms/forgetPasswordData';
+import { userActions } from '../../store/user/reducer/userReducer';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -43,14 +45,14 @@ const FORGET_PASSWORD = [
 
 const ForgetPassword: React.FC = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   return (
     <Formik
       initialValues={ForgetPasswordSchema.initialState}
       validationSchema={ForgetPasswordSchema.validSchema}
       onSubmit={(values: ForgetPasswordData, meta: FormikHelpers<ForgetPasswordData>) => {
-        // console.log(values);
-        meta.setSubmitting(false);
+        dispatch(userActions.resetPassword(values.email, meta));
       }}
     >
       {({ dirty, isValid, isSubmitting }: FormikProps<ForgetPasswordData>) => (

@@ -3,14 +3,14 @@ import IForm from './interfaceForm';
 const changePassword: IForm[] = [
   {
     id: 'oldPassword',
-    name: 'old_password',
+    name: 'oldPassword',
     type: 'password',
     label: 'Стары пароль',
     helperText: 'Абавязковае поле',
   },
   {
     id: 'newPassword',
-    name: 'new_password',
+    name: 'newPassword',
     type: 'password',
     label: 'Hoвы пароль',
     helperText: 'Абавязковае поле',

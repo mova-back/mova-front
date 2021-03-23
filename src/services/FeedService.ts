@@ -25,62 +25,74 @@ export const FeedService = {
 };
 
 function mockMy() {
-  return {
-    data: [
-      {
-        updatedAt: '',
-        id: '123',
-        wordname: 'MyWord1',
-        userId: '12344',
-        meaning: 'MyWord1Meaning',
-        extended_description: 'some description',
-        createdAt: '',
-        tags: ['TAG1', 'TAG2', 'TAG3'],
-        likes: 15,
-        dislikes: 2,
-      },
-      {
-        updatedAt: '',
-        id: '123',
-        wordname: 'MyWord2',
-        userId: '12344',
-        meaning: 'MyWord2Meaning',
-        extended_description: 'some description',
-        createdAt: '',
-        tags: ['TAG1', 'TAG2', 'TAG3'],
-        likes: 15,
-        dislikes: 2,
-      },
-    ],
-  };
+  return new Promise((res) =>
+    setTimeout(
+      () =>
+        res({
+          data: [
+            {
+              updatedAt: '',
+              id: '123',
+              wordname: 'MyWord1',
+              userId: '12344',
+              meaning: 'MyWord1Meaning',
+              extended_description: 'some description',
+              createdAt: '',
+              tags: ['TAG1', 'TAG2', 'TAG3'],
+              likes: 15,
+              dislikes: 2,
+            },
+            {
+              updatedAt: '',
+              id: '123',
+              wordname: 'MyWord2',
+              userId: '12344',
+              meaning: 'MyWord2Meaning',
+              extended_description: 'some description',
+              createdAt: '',
+              tags: ['TAG1', 'TAG2', 'TAG3'],
+              likes: 15,
+              dislikes: 2,
+            },
+          ],
+        }),
+      300,
+    ),
+  );
 }
 function mockFavourites() {
-  return {
-    data: [
-      {
-        updatedAt: '',
-        id: '123',
-        wordname: 'MyFavouriteWord1',
-        userId: '12344',
-        meaning: 'MyFavouriteWord1Meaning',
-        extended_description: 'some description',
-        createdAt: '',
-        tags: ['TAG1', 'TAG2', 'TAG3'],
-        likes: 15,
-        dislikes: 2,
-      },
-      {
-        updatedAt: '',
-        id: '123',
-        wordname: 'MyFavouriteWord2',
-        userId: '12344',
-        meaning: 'MyFavouriteWord2Meaning',
-        extended_description: 'some description',
-        createdAt: '',
-        tags: ['TAG133', 'TAG244', 'TAG53'],
-        likes: 15,
-        dislikes: 2,
-      },
-    ],
-  };
+  return new Promise((res) =>
+    setTimeout(
+      () =>
+        res({
+          data: [
+            {
+              updatedAt: '',
+              id: '123',
+              wordname: 'MyFavouriteWord1',
+              userId: '12344',
+              meaning: 'MyFavouriteWord1Meaning',
+              extended_description: 'some description',
+              createdAt: '',
+              tags: ['TAG1', 'TAG2', 'TAG3'],
+              likes: 15,
+              dislikes: 2,
+            },
+            {
+              updatedAt: '',
+              id: '123',
+              wordname: 'MyFavouriteWord2',
+              userId: '12344',
+              meaning: 'MyFavouriteWord2Meaning',
+              extended_description: 'some description',
+              createdAt: '',
+              tags: ['TAG133', 'TAG244', 'TAG53'],
+              likes: 15,
+              dislikes: 2,
+            },
+          ],
+        }),
+      300,
+    ),
+  );
 }

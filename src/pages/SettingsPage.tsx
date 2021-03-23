@@ -1,8 +1,11 @@
 import * as React from 'react';
 import { useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
+import VpnKeyIcon from '@material-ui/icons/VpnKey';
+import MailIcon from '@material-ui/icons/Mail';
 
 import {
+  Box,
   Button,
   createStyles,
   FormControlLabel,
@@ -19,10 +22,51 @@ import { Page } from '../constants/paths';
 import Wrapper from '../components/App/Wrapper/Wrapper';
 import { CustomThemeOptions } from '../styles/types';
 import BottomNav from '../components/App/BottomNav/BottomNav';
+import Loader from '../components/Loader/Loader';
+
+type TabProps = {
+  renderIcon: () => any;
+  tabName: string;
+  page: string;
+};
+const Tab: React.FC<TabProps> = ({ renderIcon, tabName, page }) => {
+  const theme: CustomThemeOptions = useTheme();
+  const useStyles = makeStyles(() =>
+    createStyles({
+      bottomLinkButton: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        padding: '2% 5%',
+        width: '100%',
+        textTransform: 'none',
+        fontSize: 16,
+        borderRadius: 0,
+        borderBottom: `1px solid ${theme.custom.colors.borderOpacity10}`,
+        '&:hover, &:active': {
+          borderRadius: 8,
+        },
+        '&:active': {
+          fontWeight: 'bold',
+        },
+      },
+    }),
+  );
+  const classes = useStyles();
+  return (
+    <Button className={classes.bottomLinkButton} component={NavLink} to={page}>
+      <Box display="flex" alignItems="center">
+        {renderIcon()}
+        <span>{tabName}</span>
+      </Box>
+      <img src="./assets/images/rightArrow.png" alt="right arrow" />
+    </Button>
+  );
+};
 
 const SettingsPage: React.FC = () => {
   const currentUser = useSelector((state: RootState) => state.user.currentUser);
   const theme: CustomThemeOptions = useTheme();
+  const fetching = useSelector((state: RootState) => state.user.fetching);
 
   const useStyles = makeStyles(() =>
     createStyles({
@@ -95,78 +139,98 @@ const SettingsPage: React.FC = () => {
       bottomLinkIcon: {
         paddingRight: 15,
       },
+      icon: {
+        width: 20,
+        marginRight: 15,
+      },
     }),
   );
   const classes = useStyles();
   return (
     <Wrapper actionBarHeader="Налады">
-      {!currentUser ? (
-        <div className={classes.guestUserHeader}>
-          <strong>Паважаны госць!</strong>
-          <br />
-          Каб мець пашыранныя правы ды
-          <br />
-          магчымасці, калі ласка,
-          <br />
-          <Link
-            underline="always"
-            className={classes.guestUserHeaderLink}
-            component={NavLink}
-            to={Page.Signup}
-          >
-            <strong>зарэгіструйся</strong>
-          </Link>
-        </div>
-      ) : null}
-      <div className={classes.swearWordsSwitchContainer}>
-        <span className={classes.switchLabel}>Паказваць лаянку ў стужцы</span>
-        <Switch
-          disableRipple
-          classes={{
-            root: classes.switchRoot,
-          }}
-        />
-      </div>
-      <div className={classes.radioContainer}>
-        <div className={classes.radioContainerLabel}>Паказваць словы ў стужцы:</div>
-        <RadioGroup defaultValue="popular">
-          <FormControlLabel
-            value="popular"
-            control={<Radio color="default" />}
-            label="Самыя папулярныя"
-          />
-          <FormControlLabel value="new" control={<Radio color="default" />} label="Самыя новыя" />
-        </RadioGroup>
-      </div>
-      {currentUser ? (
+      {fetching ? (
+        <Loader />
+      ) : (
         <>
-          <Button className={classes.bottomLinkButton} component={NavLink} to={Page.Feedback}>
-            <span>
-              <img className={classes.bottomLinkIcon} src="./assets/images/mail.png" alt="mail" />
-              Зваротная сувязь
-            </span>
-            <img src="./assets/images/rightArrow.png" alt="right arrow" />
-          </Button>
-          <Button className={classes.bottomLinkButton} component={NavLink} to={Page.Logout}>
-            <span>
-              <img
-                className={classes.bottomLinkIcon}
-                src="./assets/images/logout.png"
-                alt="logout"
+          {!currentUser ? (
+            <div className={classes.guestUserHeader}>
+              <strong>Паважаны госць!</strong>
+              <br />
+              Каб мець пашыранныя правы ды
+              <br />
+              магчымасці, калі ласка,
+              <br />
+              <Link
+                underline="always"
+                className={classes.guestUserHeaderLink}
+                component={NavLink}
+                to={Page.Signup}
+              >
+                <strong>зарэгіструйся</strong>
+              </Link>
+            </div>
+          ) : null}
+          <div className={classes.swearWordsSwitchContainer}>
+            <span className={classes.switchLabel}>Паказваць лаянку ў стужцы</span>
+            <Switch
+              disableRipple
+              classes={{
+                root: classes.switchRoot,
+              }}
+            />
+          </div>
+          <div className={classes.radioContainer}>
+            <div className={classes.radioContainerLabel}>Паказваць словы ў стужцы:</div>
+            <RadioGroup defaultValue="popular">
+              <FormControlLabel
+                value="popular"
+                control={<Radio color="default" />}
+                label="Самыя папулярныя"
               />
-              Разлагініцца
-            </span>
-            <img src="./assets/images/rightArrow.png" alt="right arrow" />
-          </Button>
-          <Button className={classes.bottomLinkButton} component={NavLink} to={Page.DeleteAcc}>
-            <span>
-              <img className={classes.bottomLinkIcon} src="./assets/images/bin.png" alt="mail" />
-              Выдаліць акаунт
-            </span>
-            <img src="./assets/images/rightArrow.png" alt="right arrow" />
-          </Button>
+              <FormControlLabel
+                value="new"
+                control={<Radio color="default" />}
+                label="Самыя новыя"
+              />
+            </RadioGroup>
+          </div>
+          {currentUser ? (
+            <>
+              <Tab
+                renderIcon={() => (
+                  <img className={classes.icon} src="./assets/images/mail.png" alt="mail" />
+                )}
+                tabName="Зваротная сувязь"
+                page={Page.Feedback}
+              />
+              <Tab
+                renderIcon={() => <VpnKeyIcon className={classes.icon} color="disabled" />}
+                tabName="Змянiць пароль"
+                page={Page.ChangePassword}
+              />
+              <Tab
+                renderIcon={() => <MailIcon className={classes.icon} color="disabled" />}
+                tabName="Змянiць пошту"
+                page={Page.ChangeEmail}
+              />
+              <Tab
+                renderIcon={() => (
+                  <img className={classes.icon} src="./assets/images/logout.png" alt="logout" />
+                )}
+                tabName="Разлагініцца"
+                page={Page.Logout}
+              />
+              <Tab
+                renderIcon={() => (
+                  <img className={classes.icon} src="./assets/images/bin.png" alt="mail" />
+                )}
+                tabName="Выдаліць акаунт"
+                page={Page.DeleteAcc}
+              />
+            </>
+          ) : null}
         </>
-      ) : null}
+      )}
       <BottomNav />
     </Wrapper>
   );
