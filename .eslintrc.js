@@ -28,6 +28,7 @@ module.exports = {
   },
   ignorePatterns: ['.eslintrc.js'],
   rules: {
+    'no-debugger': 'warn',
     'react/prop-types': 'off',
     'react/jsx-props-no-spreading': 'off',
     'linebreak-style': 'off',
