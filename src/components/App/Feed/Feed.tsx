@@ -7,6 +7,7 @@ import { RootState } from '../../../store/rootReducer';
 import Loader from '../../Loader/Loader';
 import SearchField from './SearchField/SearchField';
 import { wordsActions } from '../../../store/words/wordsReducer';
+import { hasRefreshToken } from '../../../services/auth.service';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -25,10 +26,17 @@ const Feed: React.FC<IProps> = ({ className, option }) => {
   const dispatch = useDispatch();
   const classes = useStyles();
   const { feed, fetching } = useSelector((state: RootState) => state.word);
+  const currentUser = useSelector((state: RootState) => state.user.currentUser);
 
   React.useEffect(() => {
-    dispatch(wordsActions.fetchFeed(0, 20, option));
-  }, [dispatch, option]);
+    if (hasRefreshToken()) {
+      if (currentUser) dispatch(wordsActions.fetchFeed(0, 20, option));
+    } else {
+      dispatch(wordsActions.fetchFeed(0, 20, option));
+    }
+  }, [dispatch, option, currentUser]);
+  // eslint-disable-next-line no-debugger
+  // debugger;
   return (
     <Box display="grid" gridGap={8} p={1} pb={10} className={className}>
       {fetching ? (
@@ -38,13 +46,15 @@ const Feed: React.FC<IProps> = ({ className, option }) => {
           <SearchField />
           {feed.map((word) => (
             <WordCard
-              key={word.id}
+              key={word._id}
               likes={word.likes}
               dislikes={word.dislikes}
-              id={word.id}
-              word={word.wordname}
+              _id={word._id}
+              wordname={word.wordname}
               meaning={word.meaning}
-              description={word.extended_description}
+              isLiked={word.isLiked}
+              isDisliked={word.isDisliked}
+              description={word.description}
               tags={word.tags}
               createdAt={word.createdAt}
               userId={word.userId}

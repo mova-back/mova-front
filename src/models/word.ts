@@ -2,15 +2,15 @@ export type Tag = string;
 
 type Word = {
   updatedAt: string;
-  id: string;
+  _id: string;
   wordname: string;
   userId: string;
   meaning: string;
-  extended_description: string;
+  description: string;
   createdAt: string;
   tags: Tag[];
-  likes: number;
-  dislikes: number;
+  likes: string[];
+  dislikes: string[];
 };
 
 export default Word;

@@ -1,12 +1,17 @@
-import { call } from 'redux-saga/effects';
+import { call, StrictEffect } from 'redux-saga/effects';
 
 import { AxiosResponse } from 'axios';
-import { ApiRoute, apiRoutesCreator } from '../constants/paths';
+import { ApiRoute, apiRoutesCreator, rateAWordRouteCreator } from '../constants/paths';
 import { http } from './http.service';
 import Word from '../models/word';
 
 type CreateWordResponse = {
   data: Word;
+};
+
+export type RateAWordResponseType = {
+  success: boolean;
+  message: string;
 };
 
 type NewWordWithTags = {
@@ -32,23 +37,17 @@ const wordsService = {
     );
     return result.data.data;
   },
-  *likeAWord(id: string) {
-    const result: AxiosResponse<Record<string, unknown>> = yield call(
+  *rateAWord(
+    route: ApiRoute.LikeAWord | ApiRoute.DislikeAWord | ApiRoute.RemoveLike,
+    id: string,
+  ): Generator<StrictEffect, RateAWordResponseType, AxiosResponse<RateAWordResponseType>> {
+    const result = yield call(
       http(true).put,
-      apiRoutesCreator(ApiRoute.CreateAWord, id, 'like'),
+      rateAWordRouteCreator(route, id),
       {},
       { withCredentials: true },
     );
-    return result;
-  },
-  *dislikeAWord(id: string) {
-    const result: AxiosResponse<Record<string, unknown>> = yield call(
-      http(true).put,
-      apiRoutesCreator(ApiRoute.CreateAWord, id, 'dislike'),
-      {},
-      { withCredentials: true },
-    );
-    return result;
+    return result.data;
   },
 };
 export default wordsService;

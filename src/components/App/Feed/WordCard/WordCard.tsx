@@ -29,11 +29,16 @@ import ThumbUpOutlinedIcon from '@material-ui/icons/ThumbUpOutlined';
 import ThumbDownOutlinedIcon from '@material-ui/icons/ThumbDownOutlined';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import ThumbUpIcon from '@material-ui/icons/ThumbUp';
+import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 import { Tag } from '../../../../models/word';
 import { FORMAT_DATE } from '../../../../constants/utilConstants';
 import { CustomThemeOptions } from '../../../../styles/types';
 import { wordsActions } from '../../../../store/words/wordsReducer';
+import { WordCardProps } from './types';
+import { RootState } from '../../../../store/rootReducer';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -78,28 +83,17 @@ const useStyles = makeStyles((theme) =>
   }),
 );
 
-interface IProps {
-  word: string;
-  meaning: string;
-  description: string;
-  tags: Tag[];
-  createdAt: string;
-  userId: string;
-  className?: string;
-  id: string;
-  likes: number;
-  dislikes: number;
-}
-
-const WordCard: React.FC<IProps> = ({
-  word,
+const WordCard: React.FC<WordCardProps> = ({
+  wordname,
   meaning,
   description,
   tags,
   createdAt,
+  isLiked,
+  isDisliked,
   userId,
   className,
-  id,
+  _id,
   likes,
   dislikes,
 }) => {
@@ -117,13 +111,14 @@ const WordCard: React.FC<IProps> = ({
 
   const theme: CustomThemeOptions = useTheme();
   const classes = useStyles(theme);
-
+  // eslint-disable-next-line no-debugger
+  debugger;
   return (
     <Card className={clsx(classes.root, className)} component="article">
       <CardContent>
         <Box display="flex" position="relative" pr={5}>
           <Typography variant="h6" align="left">
-            {word}
+            {wordname}
           </Typography>
           <Box className={classes.bookmark}>
             <IconButton
@@ -158,16 +153,31 @@ const WordCard: React.FC<IProps> = ({
       </CardContent>
       <CardActions disableSpacing>
         <Button
-          startIcon={<ThumbUpOutlinedIcon className={classes.thumb} />}
+          startIcon={
+            isLiked ? (
+              <ThumbUpIcon className={classes.thumb} />
+            ) : (
+              <ThumbUpOutlinedIcon className={classes.thumb} />
+            )
+          }
           className={classes.thumbUp}
-          onClick={() => dispatch(wordsActions.rateAWord(id, 'like'))}
+          onClick={() => {
+            dispatch(wordsActions.rateAWord(_id, 'like', isLiked, isDisliked));
+          }}
         >
           {likes}
         </Button>
+
         <Button
-          startIcon={<ThumbDownOutlinedIcon className={classes.thumb} />}
+          startIcon={
+            isDisliked ? (
+              <ThumbDownIcon className={classes.thumb} />
+            ) : (
+              <ThumbDownOutlinedIcon className={classes.thumb} />
+            )
+          }
           className={classes.thumbDown}
-          onClick={() => dispatch(wordsActions.rateAWord(id, 'dislike'))}
+          onClick={() => dispatch(wordsActions.rateAWord(_id, 'dislike', isLiked, isDisliked))}
         >
           {dislikes}
         </Button>

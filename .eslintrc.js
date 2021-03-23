@@ -29,6 +29,7 @@ module.exports = {
   ignorePatterns: ['.eslintrc.js'],
   rules: {
     'no-debugger': 'warn',
+    'no-underscore-dangle': 0,
     'react/prop-types': 'off',
     'react/jsx-props-no-spreading': 'off',
     'linebreak-style': 'off',

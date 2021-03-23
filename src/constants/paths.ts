@@ -28,7 +28,7 @@ export enum ApiRoute {
   UsersLogin = '/api/auth/login',
   UsersLogout = '/api/auth/logout',
   Words = '/api/words',
-  CreateAWord = '/api/dictionary/word',
+  CreateAWord = '/api/word',
   ChangePassword = '/api/user/change-password',
   ResetPassword = '/api/user/reset-password',
   SendResetPasswordEmail = '/api/user/send-reset-password-email',
@@ -37,11 +37,18 @@ export enum ApiRoute {
   ResendConfirmNewEmailToken = 'api/user/resend-confirm-new-email-token',
   ConfirmEmail = '/api/user/confirm-email',
   CancelEmailChanging = 'api/user/cancel-email-changing',
+  LikeAWord = '/api/word/like',
+  DislikeAWord = '/api/word/dislike',
+  RemoveLike = '/api/word/removelike',
 }
 
-export const wordUrlCreator = (page = 0, limit = 20) => {
-  return `${ApiRoute.Words}?page=${page}&limit=${limit}`;
-};
+export const wordUrlCreator = (page = 0, limit = 20) =>
+  `${ApiRoute.Words}?page=${page}&limit=${limit}`;
+
+export const rateAWordRouteCreator = (
+  route: ApiRoute.LikeAWord | ApiRoute.DislikeAWord | ApiRoute.RemoveLike,
+  id: string,
+) => `${route}/${id}`;
 
 export const apiRoutesCreator = (
   baseUrl: string,
