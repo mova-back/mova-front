@@ -26,7 +26,7 @@ const NEWWORD_NO_REQUIRED: IForm[] = [
     type: 'text',
     placeholder: 'Увядзіце прыклад',
     label: 'Пашыранае апісанне',
-    helperText: 'Уводзьце кірыліцу',
+    helperText: 'Уводзьце кірыліцу, мінімальная даўжыня - 5 знакаў',
   },
   {
     id: 'usages',
@@ -34,7 +34,7 @@ const NEWWORD_NO_REQUIRED: IForm[] = [
     type: 'text',
     placeholder: 'Столін',
     label: 'Дзе пачулі?',
-    helperText: 'Уводзьце кірыліцу',
+    helperText: 'Уводзьце кірыліцу, мінімальная даўжыня - 5 знакаў',
   },
   {
     id: 'tags',

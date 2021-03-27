@@ -13,8 +13,8 @@ export default {
     wordname: Yup.string().required('Error'),
     meaning: Yup.string().required('Error'),
     swearing: Yup.boolean(),
-    extended_description: Yup.string(),
-    usages: Yup.string(),
+    extended_description: Yup.string().min(5, 'Too Short!'),
+    usages: Yup.string().min(5, 'Too Short!'),
     tags: Yup.string(),
   }),
 };

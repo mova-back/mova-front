@@ -1,12 +1,13 @@
-export interface WordCardProps {
+export interface WordCardInterface {
   isLiked: boolean;
+  isFavourited: boolean;
   wordname: string;
   isDisliked: boolean;
   meaning: string;
   description: string;
   tags: string[];
   createdAt: string;
-  userId: string;
+  createdByUserId: string;
   className?: string;
   _id: string;
   likes: number;

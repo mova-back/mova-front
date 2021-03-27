@@ -4,13 +4,14 @@ type Word = {
   updatedAt: string;
   _id: string;
   wordname: string;
-  userId: string;
+  createdByUserId: string;
   meaning: string;
   description: string;
   createdAt: string;
   tags: Tag[];
   likes: string[];
   dislikes: string[];
+  favoriteByUserdIds: string[]; // TODO rename
 };
 
 export default Word;

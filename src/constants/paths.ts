@@ -28,6 +28,8 @@ export enum ApiRoute {
   UsersLogin = '/api/auth/login',
   UsersLogout = '/api/auth/logout',
   Words = '/api/words',
+  FavouriteWords = '/api/profile/favorites', // TODO rename to api/words/favourites
+  MyWords = '/api/profile/mywords',
   CreateAWord = '/api/word',
   ChangePassword = '/api/user/change-password',
   ResetPassword = '/api/user/reset-password',
@@ -40,20 +42,21 @@ export enum ApiRoute {
   LikeAWord = '/api/word/like',
   DislikeAWord = '/api/word/dislike',
   RemoveLike = '/api/word/removelike',
+  AddFavourite = '/api/word/addfavorite',
+  RemoveFavourite = '/api/word/removefavorite',
+  DeleteWord = '/api/word',
 }
 
-export const wordUrlCreator = (page = 0, limit = 20) =>
+export const wordUrlCreator = (page = 0, limit = 20): string =>
   `${ApiRoute.Words}?page=${page}&limit=${limit}`;
 
 export const rateAWordRouteCreator = (
-  route: ApiRoute.LikeAWord | ApiRoute.DislikeAWord | ApiRoute.RemoveLike,
+  route:
+    | ApiRoute.LikeAWord
+    | ApiRoute.DislikeAWord
+    | ApiRoute.DeleteWord
+    | ApiRoute.RemoveLike
+    | ApiRoute.AddFavourite
+    | ApiRoute.RemoveFavourite,
   id: string,
-) => `${route}/${id}`;
-
-export const apiRoutesCreator = (
-  baseUrl: string,
-  query: string,
-  additionalUrl?: string,
-): string => {
-  return additionalUrl ? `${baseUrl}/${query}/${additionalUrl}` : `${baseUrl}/${query}`;
-};
+): string => `${route}/${id}`;

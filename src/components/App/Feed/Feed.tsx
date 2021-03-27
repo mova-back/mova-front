@@ -35,8 +35,6 @@ const Feed: React.FC<IProps> = ({ className, option }) => {
       dispatch(wordsActions.fetchFeed(0, 20, option));
     }
   }, [dispatch, option, currentUser]);
-  // eslint-disable-next-line no-debugger
-  // debugger;
   return (
     <Box display="grid" gridGap={8} p={1} pb={10} className={className}>
       {fetching ? (
@@ -47,6 +45,7 @@ const Feed: React.FC<IProps> = ({ className, option }) => {
           {feed.map((word) => (
             <WordCard
               key={word._id}
+              isFavourited={word.isFavourited}
               likes={word.likes}
               dislikes={word.dislikes}
               _id={word._id}
@@ -57,7 +56,8 @@ const Feed: React.FC<IProps> = ({ className, option }) => {
               description={word.description}
               tags={word.tags}
               createdAt={word.createdAt}
-              userId={word.userId}
+              createdByUserId={word.createdByUserId}
+              currentUserId={currentUser?._id}
             />
           ))}
         </>

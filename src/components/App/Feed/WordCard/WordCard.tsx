@@ -33,11 +33,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import { Tag } from '../../../../models/word';
 import { FORMAT_DATE } from '../../../../constants/utilConstants';
 import { CustomThemeOptions } from '../../../../styles/types';
 import { wordsActions } from '../../../../store/words/wordsReducer';
-import { WordCardProps } from './types';
+import { WordCardInterface } from './types';
 import { RootState } from '../../../../store/rootReducer';
 
 const useStyles = makeStyles((theme) =>
@@ -83,6 +84,10 @@ const useStyles = makeStyles((theme) =>
   }),
 );
 
+interface WordCardProps extends WordCardInterface {
+  currentUserId: number | undefined;
+}
+
 const WordCard: React.FC<WordCardProps> = ({
   wordname,
   meaning,
@@ -91,13 +96,14 @@ const WordCard: React.FC<WordCardProps> = ({
   createdAt,
   isLiked,
   isDisliked,
-  userId,
+  createdByUserId,
+  isFavourited,
   className,
   _id,
+  currentUserId,
   likes,
   dislikes,
 }) => {
-  const [bookmarked, setBookmarked] = React.useState(false);
   const [expanded, setExpanded] = React.useState(false);
   const [showDropdown, setShowDropdown] = React.useState(false);
   const anchorRef = React.useRef<HTMLButtonElement>(null);
@@ -111,8 +117,6 @@ const WordCard: React.FC<WordCardProps> = ({
 
   const theme: CustomThemeOptions = useTheme();
   const classes = useStyles(theme);
-  // eslint-disable-next-line no-debugger
-  debugger;
   return (
     <Card className={clsx(classes.root, className)} component="article">
       <CardContent>
@@ -125,9 +129,15 @@ const WordCard: React.FC<WordCardProps> = ({
               id="bookmarkButton"
               color="inherit"
               aria-label="bookmark"
-              onClick={() => setBookmarked(!bookmarked)}
+              onClick={() => {
+                if (!isFavourited) {
+                  dispatch(wordsActions.addFavourite(_id));
+                } else {
+                  dispatch(wordsActions.removeFavourite(_id));
+                }
+              }}
             >
-              {bookmarked ? <BookmarkIcon /> : <BookmarkBorderIcon />}
+              {isFavourited ? <BookmarkIcon /> : <BookmarkBorderIcon />}
             </IconButton>
           </Box>
         </Box>
@@ -257,6 +267,17 @@ const WordCard: React.FC<WordCardProps> = ({
                       src="./assets/images/alert.png"
                       alt="alert"
                     />
+                  </MenuItem>
+                  <MenuItem
+                    disabled={String(currentUserId) !== createdByUserId}
+                    className={classes.menuItem}
+                    onClick={() => {
+                      dispatch(wordsActions.deleteWord(_id));
+                    }}
+                  >
+                    {/* TODO add user role verification */}
+                    <span>Выдалiць</span>
+                    <DeleteForeverIcon />
                   </MenuItem>
                 </MenuList>
               </ClickAwayListener>
