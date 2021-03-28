@@ -43,7 +43,9 @@ import { RootState } from '../../../../store/rootReducer';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
-    root: {},
+    root: {
+      margin: 5,
+    },
     bookmark: {
       margin: theme.spacing(-1, -1, 0, 0),
       position: 'absolute',

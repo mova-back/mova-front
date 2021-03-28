@@ -26,10 +26,6 @@ const useStyles = makeStyles(() =>
 
 const MyDictionaryPage: React.FC = () => {
   const [tab, setTab] = useState('favourite');
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(wordsActions.fetchFeed(0, 20, tab));
-  }, [dispatch, tab]);
 
   const classes = useStyles();
   return (
