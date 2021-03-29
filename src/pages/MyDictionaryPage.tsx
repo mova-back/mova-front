@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Button, ButtonGroup, createStyles, makeStyles } from '@material-ui/core';
-import { useDispatch } from 'react-redux';
 import Wrapper from '../components/App/Wrapper/Wrapper';
 import BottomNav from '../components/App/BottomNav/BottomNav';
-import { wordsActions } from '../store/words/wordsReducer';
 import Feed from '../components/App/Feed/Feed';
+import { hasRefreshToken } from '../services/auth.service';
+import PleaseSignIn from '../components/PleaseSignIn/PleaseSignIn';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -31,23 +31,27 @@ const MyDictionaryPage: React.FC = () => {
   return (
     <div>
       <Wrapper>
-        <div>
-          <ButtonGroup
-            size="small"
-            className={classes.sec}
-            disableElevation
-            variant="contained"
-            color="primary"
-          >
-            <Button onClick={() => setTab('favourite')}>Словы са стужкi</Button>
-            <Button onClick={() => setTab('my')}>Мае словы</Button>
-          </ButtonGroup>
-          {tab === 'favourite' ? (
-            <Feed options={{ variant: 'favoriteWords' }} />
-          ) : (
-            <Feed options={{ variant: 'createdWords' }} />
-          )}
-        </div>
+        {hasRefreshToken() ? (
+          <div>
+            <ButtonGroup
+              size="small"
+              className={classes.sec}
+              disableElevation
+              variant="contained"
+              color="primary"
+            >
+              <Button onClick={() => setTab('favourite')}>Словы са стужкi</Button>
+              <Button onClick={() => setTab('my')}>Мае словы</Button>
+            </ButtonGroup>
+            {tab === 'favourite' ? (
+              <Feed options={{ variant: 'favoriteWords' }} />
+            ) : (
+              <Feed options={{ variant: 'createdWords' }} />
+            )}
+          </div>
+        ) : (
+          <PleaseSignIn />
+        )}
       </Wrapper>
       <BottomNav />
     </div>
