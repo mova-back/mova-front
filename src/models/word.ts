@@ -2,12 +2,13 @@ export type Tag = string;
 
 type Word = {
   updatedAt: string;
+  createdAt: string;
   _id: string;
   wordname: string;
   createdByUserId: string;
   meaning: string;
   description: string;
-  createdAt: string;
+  swearing: boolean;
   tags: Tag[];
   likes: string[];
   dislikes: string[];

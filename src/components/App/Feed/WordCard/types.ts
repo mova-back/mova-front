@@ -9,6 +9,7 @@ export interface WordCardInterface {
   createdAt: string;
   createdByUserId: string;
   className?: string;
+  swearing: boolean;
   _id: string;
   likes: number;
   dislikes: number;

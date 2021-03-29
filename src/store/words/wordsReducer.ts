@@ -20,7 +20,7 @@ import NewWordData from '../../models/forms/newWordData';
 import { FeedService } from '../../services/FeedService';
 import { RootState } from '../rootReducer';
 import { useHistory } from 'react-router-dom';
-import { ApiRoute, Page } from '../../constants/paths';
+import { ApiRoute, FeedUrlOptionsType, Page } from '../../constants/paths';
 import { WordCardInterface } from '../../components/App/Feed/WordCard/types';
 import { hasRefreshToken } from '../../services/auth.service';
 
@@ -44,17 +44,21 @@ const DELETE_WORD_SUCCESS = 'wordsReducer/DELETE_WORD_SUCCESS';
 const REMOVE_FAVOURITE = 'wordsReducer/REMOVE_FAVOURITE';
 const ADD_FAVOURITE_SUCCESS = 'wordsReducer/ADD_FAVOURITE_SUCCESS';
 const REMOVE_FAVOURITE_SUCCESS = 'wordsReducer/REMOVE_FAVOURITE_SUCCESS';
+const CHANGE_WORD = 'wordsReducer/CHANGE_WORD';
+const SET_CURRENTLY_MODIFIED_WORD = 'wordsReducer/SET_CURRENTLY_MODIFIED_WORD';
 
 type WordsActionType = InferActionsTypes<typeof wordsActions>;
 
 type ReducerState = {
   feed: WordCardInterface[];
   fetching: boolean;
+  currentlyModifiedWord: NewWordData | null;
 };
 
 const initialState: ReducerState = {
   feed: [],
   fetching: false,
+  currentlyModifiedWord: null,
 };
 
 // --REDUCER--
@@ -199,6 +203,11 @@ const wordsReducer = (state: ReducerState = initialState, action: WordsActionTyp
         ...state,
         feed: state.feed.filter((word) => word._id !== action.payload.id),
       };
+    case SET_CURRENTLY_MODIFIED_WORD:
+      return {
+        ...state,
+        currentlyModifiedWord: action.payload,
+      };
     default:
       return state;
   }
@@ -223,17 +232,10 @@ export const wordsActions = {
       payload: { id, ratingType, isLiked, isDisliked },
     } as const),
 
-  fetchFeed: (page: number, limit = 20, option?: string) =>
-    ({
-      type: FETCH_FEED,
-      payload: {
-        page,
-        limit,
-        option,
-      },
-    } as const),
+  fetchFeed: (options: FeedUrlOptionsType) =>
+    ({ type: FETCH_FEED, payload: { options } } as const),
 
-  fetchFeedSuccess: (data: WordCardInterface[], page: number) => {
+  fetchFeedSuccess: (data: WordCardInterface[], page?: number) => {
     return {
       type: FETCH_FEED_SUCCESS,
       payload: {
@@ -268,6 +270,16 @@ export const wordsActions = {
 
   removeFavouriteSuccess: (id: string) =>
     ({ type: REMOVE_FAVOURITE_SUCCESS, payload: { id } } as const),
+
+  changeWord: (
+    newWord: NewWordData,
+    meta: FormikHelpers<NewWordData>,
+    history: ReturnType<typeof useHistory>,
+    id: string,
+  ) => ({ type: CHANGE_WORD, payload: { id, newWord, meta, history } } as const),
+
+  setCurrentlyModifiedWord: (currentWord: NewWordData) =>
+    ({ type: SET_CURRENTLY_MODIFIED_WORD, payload: { ...currentWord } } as const),
 };
 
 // --WORKER-SAGAS--
@@ -282,7 +294,7 @@ export function* createANewWordWorker({
     tags: newWord.tags.split(',').map((i) => i.trim()), // creating ['tag1', 'tag2'] from 'tag1, tag2'
   };
   try {
-    yield call<typeof wordsService.createANewWord>(wordsService.createANewWord, result);
+    yield call(wordsService.createANewWord, result);
     yield call(resetForm, {});
     yield call(setSubmitting, false);
     yield put(wordsActions.createANewWordSuccess());
@@ -351,8 +363,8 @@ export function* feedWorker(
   action: ReturnType<typeof wordsActions.fetchFeed>,
 ): Generator<StrictEffect, void, any> {
   try {
-    const { page, limit, option } = action.payload;
-    const words: AxiosResponse<Word[]> = yield call(FeedService.fetchFeed, page, limit, option);
+    const { options} = action.payload;
+    const words: AxiosResponse<Word[]> = yield call(FeedService.fetchFeed, options);
     const user: string = yield select((state: RootState) => state.user.currentUser?._id);
     const result = words.data.map((item) => {
       return {
@@ -364,7 +376,7 @@ export function* feedWorker(
         isDisliked: item.dislikes.includes(user),
       };
     });
-
+    const { page } = options;
     yield put(wordsActions.fetchFeedSuccess(result, page));
   } catch (e) {
     yield put(
@@ -441,6 +453,41 @@ function* deleteWordWorker({ payload }: ReturnType<typeof wordsActions.deleteWor
   }
 }
 
+function* changeWordWorker({
+  payload,
+}: ReturnType<typeof wordsActions.changeWord>): Generator<StrictEffect, void, unknown> {
+  const { meta, newWord, history, id } = payload;
+  const { resetForm, setSubmitting } = meta;
+  const result = {
+    ...newWord,
+    tags: newWord.tags.split(',').map((i) => i.trim()), // creating ['tag1', 'tag2'] from 'tag1, tag2'
+  };
+  try {
+    yield call(wordsService.changeWord, result, id);
+    yield call(resetForm, {});
+    yield call(setSubmitting, false);
+    yield put(wordsActions.createANewWordSuccess());
+    yield put(
+      notificationActions.addNotification({
+        type: NotificationTypes.success,
+        message: 'Слова зменена',
+      }),
+    );
+    // yield put(wordsActions.setCurrentlyModifiedWord(null));
+    history.push(Page.Home);
+  } catch (e) {
+    yield call(resetForm, {});
+    yield call(setSubmitting, false);
+    yield put(
+      notificationActions.addNotification({
+        type: NotificationTypes.error,
+        message: e.message,
+      }),
+    );
+    yield put(wordsActions.createANewWordError());
+  }
+}
+
 // --WATCHER-SAGAS--
 export const wordsSagas = [
   takeEvery(CREATE_A_NEW_WORD, createANewWordWorker),
@@ -448,6 +495,7 @@ export const wordsSagas = [
   takeLatest(FETCH_FEED, feedWorker),
   takeEvery(ADD_FAVOURITE, addFavouriteWorker),
   takeEvery(REMOVE_FAVOURITE, removeFavouriteWorker),
+  takeEvery(CHANGE_WORD, changeWordWorker),
   takeEvery(DELETE_WORD, deleteWordWorker),
 ];
 

@@ -1,7 +1,7 @@
 import { call, StrictEffect } from 'redux-saga/effects';
 
 import { AxiosResponse } from 'axios';
-import { ApiRoute, rateAWordRouteCreator } from '../constants/paths';
+import { ApiRoute, addIdToPath } from '../constants/paths';
 import { http } from './http.service';
 import Word from '../models/word';
 
@@ -25,19 +25,22 @@ type NewWordWithTags = {
 };
 
 const wordsService = {
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  *createANewWord(word: NewWordWithTags) {
-    // eslint-disable-next-line no-debugger
-    debugger;
-    const result: AxiosResponse<CreateWordResponse> = yield call(
-      http(true).post,
-      ApiRoute.CreateAWord,
-      word,
-      {
-        withCredentials: true,
-      },
-    );
-    return result.data.data;
+  *createANewWord(
+    word: NewWordWithTags,
+  ): Generator<StrictEffect, CreateWordResponse, AxiosResponse<CreateWordResponse>> {
+    const result = yield call(http(true).post, ApiRoute.CreateAWord, word, {
+      withCredentials: true,
+    });
+    return result.data;
+  },
+  *changeWord(
+    word: NewWordWithTags,
+    id: string,
+  ): Generator<StrictEffect, CreateWordResponse, AxiosResponse<CreateWordResponse>> {
+    const result = yield call(http(true).patch, addIdToPath(ApiRoute.CreateAWord, id), word, {
+      withCredentials: true,
+    });
+    return result.data;
   },
   *rateAWord(
     route: ApiRoute.LikeAWord | ApiRoute.DislikeAWord | ApiRoute.RemoveLike,
@@ -45,7 +48,7 @@ const wordsService = {
   ): Generator<StrictEffect, RateAWordResponseType, AxiosResponse<RateAWordResponseType>> {
     const result = yield call(
       http(true).put,
-      rateAWordRouteCreator(route, id),
+      addIdToPath(route, id),
       {},
       { withCredentials: true },
     );
@@ -56,7 +59,7 @@ const wordsService = {
   ): Generator<StrictEffect, RateAWordResponseType, AxiosResponse<RateAWordResponseType>> {
     const result = yield call(
       http(true).put,
-      rateAWordRouteCreator(ApiRoute.AddFavourite, id),
+      addIdToPath(ApiRoute.AddFavourite, id),
       {},
       { withCredentials: true },
     );
@@ -67,7 +70,7 @@ const wordsService = {
   ): Generator<StrictEffect, RateAWordResponseType, AxiosResponse<RateAWordResponseType>> {
     const result = yield call(
       http(true).put,
-      rateAWordRouteCreator(ApiRoute.RemoveFavourite, id),
+      addIdToPath(ApiRoute.RemoveFavourite, id),
       {},
       { withCredentials: true },
     );
@@ -78,7 +81,7 @@ const wordsService = {
   ): Generator<StrictEffect, RateAWordResponseType, AxiosResponse<RateAWordResponseType>> {
     const result = yield call(
       http(true).delete,
-      rateAWordRouteCreator(ApiRoute.DeleteWord, id),
+      addIdToPath(ApiRoute.DeleteWord, id),
       {},
       { withCredentials: true },
     );

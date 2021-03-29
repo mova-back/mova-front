@@ -7,6 +7,7 @@ import NewWord from '../components/NewWord/NewWord';
 import BottomNav from '../components/App/BottomNav/BottomNav';
 import { hasRefreshToken } from '../services/auth.service';
 import { Page } from '../constants/paths';
+import { wordsActions } from '../store/words/wordsReducer';
 
 const PleaseSignIn = () => (
   <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
@@ -22,7 +23,11 @@ const NewWordPage: React.FC = () => {
   return (
     <>
       <Wrapper actionBarHeader="Дадаць слова">
-        {hasRefreshToken() ? <NewWord /> : <PleaseSignIn />}
+        {hasRefreshToken() ? (
+          <NewWord action={wordsActions.fetchCreateANewWord} />
+        ) : (
+          <PleaseSignIn />
+        )}
       </Wrapper>
       <BottomNav />
     </>

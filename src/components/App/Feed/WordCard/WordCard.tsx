@@ -34,18 +34,19 @@ import { useEffect } from 'react';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import CreateIcon from '@material-ui/icons/Create';
+import { useHistory } from 'react-router-dom';
 import { Tag } from '../../../../models/word';
 import { FORMAT_DATE } from '../../../../constants/utilConstants';
 import { CustomThemeOptions } from '../../../../styles/types';
 import { wordsActions } from '../../../../store/words/wordsReducer';
 import { WordCardInterface } from './types';
 import { RootState } from '../../../../store/rootReducer';
+import { Page } from '../../../../constants/paths';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
-    root: {
-      margin: 5,
-    },
+    root: {},
     bookmark: {
       margin: theme.spacing(-1, -1, 0, 0),
       position: 'absolute',
@@ -78,6 +79,7 @@ const useStyles = makeStyles((theme) =>
     popper: {
       marginTop: '8px',
       zIndex: 10002,
+      width: 300,
     },
     menu: {
       boxShadow: '4px 12px 25px rgba(71, 55, 255, 0.3)',
@@ -101,6 +103,7 @@ const WordCard: React.FC<WordCardProps> = ({
   createdByUserId,
   isFavourited,
   className,
+  swearing,
   _id,
   currentUserId,
   likes,
@@ -109,6 +112,7 @@ const WordCard: React.FC<WordCardProps> = ({
   const [expanded, setExpanded] = React.useState(false);
   const [showDropdown, setShowDropdown] = React.useState(false);
   const anchorRef = React.useRef<HTMLButtonElement>(null);
+  const history = useHistory();
   const dispatch = useDispatch();
 
   const maxMeaningLength = 120;
@@ -280,6 +284,28 @@ const WordCard: React.FC<WordCardProps> = ({
                     {/* TODO add user role verification */}
                     <span>Выдалiць</span>
                     <DeleteForeverIcon />
+                  </MenuItem>
+
+                  <MenuItem
+                    disabled={String(currentUserId) !== createdByUserId}
+                    className={classes.menuItem}
+                    onClick={() => {
+                      dispatch(
+                        wordsActions.setCurrentlyModifiedWord({
+                          wordname,
+                          swearing,
+                          tags: tags.join(','),
+                          usages: '', // TODO change this mocked data
+                          meaning,
+                          extended_description: description,
+                        }),
+                      );
+                      history.push(`/change-word/${_id}`);
+                    }}
+                  >
+                    {/* TODO add user role verification */}
+                    <span>Рэдактаваць</span>
+                    <CreateIcon />
                   </MenuItem>
                 </MenuList>
               </ClickAwayListener>

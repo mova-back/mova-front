@@ -17,6 +17,7 @@ export enum Page {
   ResetPassword = '/reset-password',
   ChangeEmail = '/change-email',
   ConfirmEmail = '/confirm-email',
+  ChangeWord = '/change-word/:id',
 }
 
 export enum ApiRoute {
@@ -47,16 +48,33 @@ export enum ApiRoute {
   DeleteWord = '/api/word',
 }
 
-export const wordUrlCreator = (page = 0, limit = 20): string =>
-  `${ApiRoute.Words}?page=${page}&limit=${limit}`;
+// http://localhost:4400/api/words?variant=mywords&page=0&limit=20&orderBy[field]=likes&orderBy[direction]=asc
 
-export const rateAWordRouteCreator = (
+export type FeedUrlOptionsType = {
+  page?: number;
+  limit?: number;
+  variant?: 'all' | 'createdWords' | 'favoriteWords';
+  orderByField?: 'likes' | 'createdAt';
+  orderByDirection?: 'asc' | 'desc';
+};
+
+export const wordUrlCreator = ({
+  page = 0,
+  limit = 20,
+  variant = 'all',
+  orderByField = 'likes',
+  orderByDirection = 'asc',
+}: FeedUrlOptionsType): string =>
+  `${ApiRoute.Words}?variant=${variant}&page=${page}&limit=${limit}&orderBy[field]=${orderByField}&orderBy[direction]=${orderByDirection}`;
+
+export const addIdToPath = (
   route:
     | ApiRoute.LikeAWord
     | ApiRoute.DislikeAWord
     | ApiRoute.DeleteWord
     | ApiRoute.RemoveLike
     | ApiRoute.AddFavourite
+    | ApiRoute.CreateAWord
     | ApiRoute.RemoveFavourite,
   id: string,
 ): string => `${route}/${id}`;

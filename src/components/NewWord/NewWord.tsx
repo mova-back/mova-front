@@ -9,9 +9,9 @@ import {
   makeStyles,
 } from '@material-ui/core';
 
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { useHistory } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 import Input from '../Input/Input';
 import Switch from '../Switch/Switch';
 import ActionButton from '../ActionButton/ActionButton';
@@ -22,6 +22,7 @@ import { transformToCapitalize, transformToUppercase } from '../../utils';
 import { NEWWORD_NO_REQUIRED, NEWWORD_REQUIRED } from '../../constants/forms/newword';
 import NewWordData from '../../models/forms/newWordData';
 import { wordsActions } from '../../store/words/wordsReducer';
+import { RootState } from '../../store/rootReducer';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -66,17 +67,41 @@ const useStyles = makeStyles(() =>
   }),
 );
 
-const NewWord: React.FC = () => {
+interface NewWordProps {
+  action: typeof wordsActions.fetchCreateANewWord | typeof wordsActions.changeWord;
+}
+
+const NewWord: React.FC<NewWordProps> = ({ action }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const history = useHistory();
+  const { id } = useParams<{ id: string }>();
+  const currentlyModifiedWord = useSelector((state: RootState) => state.word.currentlyModifiedWord);
+  const determineInitialValues = (): NewWordData => {
+    if (id) {
+      if (currentlyModifiedWord) {
+        return currentlyModifiedWord;
+      }
+    }
+    return NewWordSchema.initialState;
+  };
+  debugger;
   return (
     <Formik
-      initialValues={NewWordSchema.initialState}
+      initialValues={determineInitialValues()}
       enableReinitialize
       validationSchema={NewWordSchema.validSchema}
       onSubmit={(values: NewWordData, meta: FormikHelpers<NewWordData>) => {
-        dispatch(wordsActions.fetchCreateANewWord(values, meta, history));
+        // dispatch(action(values, meta, history, id?));
+        switch (action) {
+          case wordsActions.fetchCreateANewWord:
+            dispatch(action(values, meta, history));
+            break;
+          case wordsActions.changeWord:
+            dispatch(action(values, meta, history, id));
+            break;
+          default:
+        }
       }}
     >
       {({ dirty, isValid, isSubmitting }: FormikProps<NewWordData>) => (

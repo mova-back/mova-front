@@ -42,7 +42,11 @@ const MyDictionaryPage: React.FC = () => {
             <Button onClick={() => setTab('favourite')}>Словы са стужкi</Button>
             <Button onClick={() => setTab('my')}>Мае словы</Button>
           </ButtonGroup>
-          {tab === 'favourite' ? <Feed option="favourite" /> : <Feed option="my" />}
+          {tab === 'favourite' ? (
+            <Feed options={{ variant: 'favoriteWords' }} />
+          ) : (
+            <Feed options={{ variant: 'createdWords' }} />
+          )}
         </div>
       </Wrapper>
       <BottomNav />

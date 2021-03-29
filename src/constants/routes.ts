@@ -15,6 +15,7 @@ import MyDictionaryPage from '../pages/MyDictionaryPage';
 import ConfirmRegistrationPage from '../pages/ConfirmRegistrationOrMailPage';
 import ResetPasswordPage from '../pages/ResetPasswordPage';
 import ChangeEmailPage from '../pages/ChangeEmailPage';
+import ChangeWordPage from '../pages/ChangeWordPage';
 
 const ROUTES = [
   {
@@ -103,6 +104,7 @@ const ROUTES = [
     component: MyDictionaryPage,
   },
   { path: Page.ChangeEmail, exact: true, component: ChangeEmailPage },
+  { path: Page.ChangeWord, exact: false, component: ChangeWordPage },
 ];
 
 export default ROUTES;
