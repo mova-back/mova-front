@@ -8,7 +8,7 @@ import Word from '../models/word';
 export const FeedService = {
   *fetchFeed(options: FeedUrlOptionsType): Generator<StrictEffect, Word[], AxiosResponse<Word[]>> {
     debugger;
-    const response = yield call(http(false).get, wordUrlCreator(options));
+    const response = yield call(http(true).get, wordUrlCreator(options));
     return response.data;
   },
 };
