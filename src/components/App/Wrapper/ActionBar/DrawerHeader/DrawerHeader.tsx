@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
-import { Box, createStyles, IconButton, makeStyles } from '@material-ui/core';
+import { Box, Button, createStyles, IconButton, makeStyles } from '@material-ui/core';
 import LockOpenIcon from '@material-ui/icons/LockOpen';
 
 import CurrentUser from './CurrentUser/CurrentUser';
@@ -37,15 +37,16 @@ const DrawerHeader: React.FC<IProps> = ({ onAction }) => {
   return (
     <Box p={2} display="flex" justifyContent="space-around">
       {!fetching && !currentUser ? (
-        <IconButton
+        <Button
           className={classes.action}
-          edge="end"
           component={Link}
           to={Page.Login}
+          color="primary"
+          variant="contained"
           onClick={handleLoginClick}
         >
-          <LockOpenIcon />
-        </IconButton>
+          Залагiнiцца
+        </Button>
       ) : (
         <CurrentUser user={currentUser} fetching={fetching} onLogoutClicked={handleLogout} />
       )}
