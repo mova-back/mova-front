@@ -12,7 +12,7 @@ import {
   Select,
 } from '@material-ui/core';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import VerticalAlignBottomIcon from '@material-ui/icons/VerticalAlignBottom';
 import VerticalAlignTopIcon from '@material-ui/icons/VerticalAlignTop';
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -22,7 +22,6 @@ import Loader from '../../Loader/Loader';
 import SearchField from './SearchField/SearchField';
 import { wordsActions } from '../../../store/words/wordsReducer';
 import { hasRefreshToken } from '../../../services/auth.service';
-import { FeedUrlOptionsType } from '../../../constants/paths';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -53,13 +52,8 @@ const SelectSortBy: React.FC<{
   const styles = useStyles();
   return (
     <FormControl className={styles.select}>
-      <InputLabel id="demo-simple-select-helper-label">Sort by:</InputLabel>
-      <Select
-        labelId="demo-simple-select-helper-label"
-        id="demo-simple-select-helper"
-        value={value}
-        onChange={handleChange}
-      >
+      <InputLabel>Sort by:</InputLabel>
+      <Select value={value} onChange={handleChange}>
         <MenuItem value="likes">Likes</MenuItem>
         <MenuItem value="createdAt">Date</MenuItem>
       </Select>
@@ -100,7 +94,7 @@ const Feed: React.FC<IProps> = ({ className, options }) => {
   const currentUser = useSelector((state: RootState) => state.user.currentUser);
   const [currentPage, setCurrentPage] = useState(0);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (hasRefreshToken()) {
       if (currentUser)
         dispatch(
@@ -122,19 +116,23 @@ const Feed: React.FC<IProps> = ({ className, options }) => {
       );
     }
   }, [dispatch, options, currentUser, orderBy, direction, currentPage]);
+  useEffect(() => {
+    window.scrollTo({ top: 70, behavior: 'smooth' });
+  }, [fetching]);
   const totalCount = useSelector((state: RootState) => state.word.totalCount);
   const hasMore = +totalCount > (currentPage + 1) * 20;
-  debugger;
 
   return (
     <InfiniteScroll
+      loader=""
       className={classes.scroll}
       hasMore={hasMore}
-      loader="Loading..."
       dataLength={+totalCount}
       next={() => {
         setCurrentPage((page) => page + 1);
-        console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+      }}
+      refreshFunction={() => {
+        setCurrentPage(0);
       }}
     >
       <Box display="grid" gridGap={8} p={1} pb={10} className={className}>

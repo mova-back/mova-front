@@ -54,7 +54,7 @@ const ActionBar: React.FC<IProps> = ({ header, settingsElementMode }) => {
 
   return (
     <>
-      <AppBar position="relative">
+      <AppBar position="sticky">
         <Toolbar>
           <Route path={settingsPaths || drawerRoutePaths}>
             <IconButton
