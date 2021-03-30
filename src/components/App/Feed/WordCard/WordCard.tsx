@@ -11,6 +11,10 @@ import {
   CardContent,
   ClickAwayListener,
   createStyles,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   Grow,
   IconButton,
   makeStyles,
@@ -18,10 +22,10 @@ import {
   MenuList,
   Paper,
   Popper,
+  TextareaAutosize,
   Typography,
+  useTheme,
 } from '@material-ui/core';
-
-import { useTheme } from '@material-ui/core/styles';
 
 import BookmarkIcon from '@material-ui/icons/Bookmark';
 import BookmarkBorderIcon from '@material-ui/icons/BookmarkBorder';
@@ -30,21 +34,21 @@ import ThumbDownOutlinedIcon from '@material-ui/icons/ThumbDownOutlined';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import CreateIcon from '@material-ui/icons/Create';
 import { useHistory } from 'react-router-dom';
+import { useState } from 'react';
 import { Tag } from '../../../../models/word';
 import { FORMAT_DATE } from '../../../../constants/utilConstants';
-import { CustomThemeOptions } from '../../../../styles/types';
+import { CustomTheme, CustomThemeOptions } from '../../../../styles/types';
 import { wordsActions } from '../../../../store/words/wordsReducer';
 import { WordCardInterface } from './types';
 import { RootState } from '../../../../store/rootReducer';
 import { Page } from '../../../../constants/paths';
 
-const useStyles = makeStyles((theme) =>
+const useStyles = makeStyles<CustomTheme>((theme) =>
   createStyles({
     root: {},
     bookmark: {
@@ -85,6 +89,24 @@ const useStyles = makeStyles((theme) =>
       boxShadow: '4px 12px 25px rgba(71, 55, 255, 0.3)',
       borderRadius: '8px',
     },
+    dialog: {
+      background: `${theme.palette.gradient.main}`,
+    },
+    dialogContent: {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    textarea: {
+      outline: 'none',
+      borderRadius: `8px`,
+      border: 'none',
+      width: '80%',
+      transition: 'all 0.3s',
+      '&:focus': {
+        boxShadow: `0 3px 3px 0px ${theme.palette.secondary.main}`,
+      },
+    },
   }),
 );
 
@@ -109,11 +131,15 @@ const WordCard: React.FC<WordCardProps> = ({
   likes,
   dislikes,
 }) => {
-  const [expanded, setExpanded] = React.useState(false);
-  const [showDropdown, setShowDropdown] = React.useState(false);
+  const [expanded, setExpanded] = useState(false);
+  const [dialogIsOpen, setDialogIsOpen] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
   const anchorRef = React.useRef<HTMLButtonElement>(null);
   const history = useHistory();
   const dispatch = useDispatch();
+  const dialogHandleClose = () => {
+    setDialogIsOpen(false);
+  };
 
   const maxMeaningLength = 120;
   const meaningShort =
@@ -121,7 +147,7 @@ const WordCard: React.FC<WordCardProps> = ({
       ? `${meaning.slice(0, maxMeaningLength)}...`
       : meaning;
 
-  const theme: CustomThemeOptions = useTheme();
+  const theme = useTheme<CustomThemeOptions>();
   const classes = useStyles(theme);
   return (
     <Card className={clsx(classes.root, className)} component="article">
@@ -266,7 +292,14 @@ const WordCard: React.FC<WordCardProps> = ({
                       alt="share"
                     />
                   </MenuItem>
-                  <MenuItem className={classes.menuItem}>
+
+                  <MenuItem
+                    onClick={() => {
+                      setShowDropdown(false);
+                      setDialogIsOpen(true);
+                    }}
+                    className={classes.menuItem}
+                  >
                     <span>Паведаміць мадератару</span>
                     <img
                       className={classes.menuItemIcon}
@@ -274,6 +307,7 @@ const WordCard: React.FC<WordCardProps> = ({
                       alt="alert"
                     />
                   </MenuItem>
+
                   <MenuItem
                     disabled={String(currentUserId) !== createdByUserId}
                     className={classes.menuItem}
@@ -313,6 +347,30 @@ const WordCard: React.FC<WordCardProps> = ({
           </Grow>
         )}
       </Popper>
+      <Dialog
+        onClose={dialogHandleClose}
+        aria-labelledby="customized-dialog-title"
+        open={dialogIsOpen}
+      >
+        <Box className={classes.dialog}>
+          <DialogTitle>Паведамiце мадэратару аб памылцы цi абразе</DialogTitle>
+          <DialogContent dividers className={classes.dialogContent}>
+            <TextareaAutosize
+              className={classes.textarea}
+              rowsMax={20}
+              rowsMin={10}
+              aria-label="maximum height"
+              defaultValue="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
+      ut labore et dolore magna aliqua."
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button autoFocus onClick={dialogHandleClose} color="primary">
+              АДПРАВIЦЬ
+            </Button>
+          </DialogActions>
+        </Box>
+      </Dialog>
     </Card>
   );
 };

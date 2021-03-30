@@ -1,4 +1,5 @@
-import { ThemeOptions } from '@material-ui/core';
+import { Theme, ThemeOptions } from '@material-ui/core';
+import { Palette } from '@material-ui/core/styles/createPalette';
 
 export type Sizes = {
   [key in 'xl' | 'l' | 'm' | 's' | 'xs']: string;
@@ -21,7 +22,22 @@ export type Colors = {
     | 'borderOpacity10']: string;
 };
 
+interface CustomPalette extends Palette {
+  gradient: {
+    main: string;
+  };
+}
+
+export interface CustomTheme extends Theme {
+  palette: CustomPalette;
+  custom: {
+    colors: Colors;
+    sizes: Sizes;
+  };
+}
+
 export interface CustomThemeOptions extends ThemeOptions {
+  palette: CustomPalette;
   custom: {
     colors: Colors;
     sizes: Sizes;

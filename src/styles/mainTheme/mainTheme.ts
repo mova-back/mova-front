@@ -1,7 +1,7 @@
 import { CustomThemeOptions } from '../types';
 import { colors, sizes, fonts } from './variables';
 
-const mainTheme: CustomThemeOptions = {
+const mainTheme = {
   palette: {
     primary: {
       main: colors.primary,
@@ -16,6 +16,9 @@ const mainTheme: CustomThemeOptions = {
     text: {
       primary: colors.text,
       secondary: colors.textOpacity80,
+    },
+    gradient: {
+      main: `linear-gradient(180deg, ${colors.backgroundColor}  0%, ${colors.primaryLight} 60%)`,
     },
   },
   typography: {

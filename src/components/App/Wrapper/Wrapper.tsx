@@ -1,14 +1,15 @@
 import * as React from 'react';
 import { useEffect } from 'react';
 
-import { Box, createStyles, makeStyles } from '@material-ui/core';
+import { Box, createStyles, makeStyles, useTheme } from '@material-ui/core';
 import { IProps } from './types';
 import ActionBar from './ActionBar/ActionBar';
+import { CustomThemeOptions } from '../../../styles/types';
 
-const useStyles = makeStyles(() =>
+const useStyles = makeStyles<CustomThemeOptions>((theme) =>
   createStyles({
     wrapper: {
-      background: 'linear-gradient(180deg, rgba(239,237,255,1) 0%, rgba(255,255,255,1) 60%)',
+      background: `${theme.palette.gradient.main}`,
       minHeight: 'calc(100vh - 112px)',
       display: 'flex',
       flexDirection: 'column',
@@ -17,7 +18,8 @@ const useStyles = makeStyles(() =>
 );
 
 const Wrapper: React.FC<IProps> = ({ actionBarHeader, children }) => {
-  const classes = useStyles();
+  const theme = useTheme<CustomThemeOptions>();
+  const classes = useStyles(theme);
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
