@@ -87,5 +87,17 @@ const wordsService = {
     );
     return result.data;
   },
+  *reportWord(
+    id: string,
+    message: string,
+  ): Generator<StrictEffect, RateAWordResponseType, AxiosResponse<RateAWordResponseType>> {
+    const result = yield call(
+      http(true).post,
+      addIdToPath(ApiRoute.ReportWord, id),
+      { message },
+      { withCredentials: true },
+    );
+    return result.data;
+  },
 };
 export default wordsService;

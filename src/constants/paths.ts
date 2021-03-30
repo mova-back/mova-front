@@ -46,6 +46,7 @@ export enum ApiRoute {
   AddFavourite = '/api/word/addfavorite',
   RemoveFavourite = '/api/word/removefavorite',
   DeleteWord = '/api/word',
+  ReportWord = '/api/word/addreport',
 }
 
 // http://localhost:4400/api/words?variant=mywords&page=0&limit=20&orderBy[field]=likes&orderBy[direction]=asc
@@ -75,6 +76,7 @@ export const addIdToPath = (
     | ApiRoute.RemoveLike
     | ApiRoute.AddFavourite
     | ApiRoute.CreateAWord
+    | ApiRoute.ReportWord
     | ApiRoute.RemoveFavourite,
   id: string,
 ): string => `${route}/${id}`;

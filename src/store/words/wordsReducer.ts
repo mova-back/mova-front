@@ -46,6 +46,7 @@ const ADD_FAVOURITE_SUCCESS = 'wordsReducer/ADD_FAVOURITE_SUCCESS';
 const REMOVE_FAVOURITE_SUCCESS = 'wordsReducer/REMOVE_FAVOURITE_SUCCESS';
 const CHANGE_WORD = 'wordsReducer/CHANGE_WORD';
 const SET_CURRENTLY_MODIFIED_WORD = 'wordsReducer/SET_CURRENTLY_MODIFIED_WORD';
+const REPORT_WORD = 'wordsReducer/REPORT_WORD';
 
 type WordsActionType = InferActionsTypes<typeof wordsActions>;
 
@@ -232,8 +233,7 @@ export const wordsActions = {
       payload: { id, ratingType, isLiked, isDisliked },
     } as const),
 
-  fetchFeed: (options: FeedUrlOptionsType) =>
-    ({ type: FETCH_FEED, payload: { options } } as const),
+  fetchFeed: (options: FeedUrlOptionsType) => ({ type: FETCH_FEED, payload: { options } } as const),
 
   fetchFeedSuccess: (data: WordCardInterface[], page?: number) => {
     return {
@@ -280,6 +280,8 @@ export const wordsActions = {
 
   setCurrentlyModifiedWord: (currentWord: NewWordData) =>
     ({ type: SET_CURRENTLY_MODIFIED_WORD, payload: { ...currentWord } } as const),
+
+  reportWord: (id: string, message: string) => ({ type: REPORT_WORD, payload: { id, message } } as const),
 };
 
 // --WORKER-SAGAS--
@@ -363,7 +365,7 @@ export function* feedWorker(
   action: ReturnType<typeof wordsActions.fetchFeed>,
 ): Generator<StrictEffect, void, any> {
   try {
-    const { options} = action.payload;
+    const { options } = action.payload;
     const words: AxiosResponse<Word[]> = yield call(FeedService.fetchFeed, options);
     const user: string = yield select((state: RootState) => state.user.currentUser?._id);
     const result = words.data.map((item) => {
@@ -488,6 +490,27 @@ function* changeWordWorker({
   }
 }
 
+function* reportWordWorker({ payload }: ReturnType<typeof wordsActions.reportWord>) {
+  try {
+    const { id, message } = payload;
+    yield call(wordsService.reportWord, id, message);
+    yield put(
+      notificationActions.addNotification({
+        type: NotificationTypes.error,
+        message: 'Дзякуй за паведамленне',
+      }),
+    );
+  } catch (e) {
+    console.error(e);
+    yield put(
+      notificationActions.addNotification({
+        type: NotificationTypes.error,
+        message: 'Не ўдалося паведамiць мадэратара',
+      }),
+    );
+  }
+}
+
 // --WATCHER-SAGAS--
 export const wordsSagas = [
   takeEvery(CREATE_A_NEW_WORD, createANewWordWorker),
@@ -497,6 +520,7 @@ export const wordsSagas = [
   takeEvery(REMOVE_FAVOURITE, removeFavouriteWorker),
   takeEvery(CHANGE_WORD, changeWordWorker),
   takeEvery(DELETE_WORD, deleteWordWorker),
+  takeEvery(REPORT_WORD, reportWordWorker),
 ];
 
 export default wordsReducer;

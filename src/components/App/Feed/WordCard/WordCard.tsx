@@ -104,7 +104,7 @@ const useStyles = makeStyles<CustomTheme>((theme) =>
       width: '80%',
       transition: 'all 0.3s',
       '&:focus': {
-        boxShadow: `0 3px 3px 0px ${theme.palette.secondary.main}`,
+        boxShadow: `0 3px 15px 1px ${theme.palette.secondary.light}`,
       },
     },
   }),
@@ -135,6 +135,7 @@ const WordCard: React.FC<WordCardProps> = ({
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const anchorRef = React.useRef<HTMLButtonElement>(null);
+  const [reportMessage, setreportMessage] = useState('');
   const history = useHistory();
   const dispatch = useDispatch();
   const dialogHandleClose = () => {
@@ -356,18 +357,28 @@ const WordCard: React.FC<WordCardProps> = ({
           <DialogTitle>Паведамiце мадэратару аб памылцы цi абразе</DialogTitle>
           <DialogContent dividers className={classes.dialogContent}>
             <TextareaAutosize
+              onChange={(e) => setreportMessage(e.target.value)}
+              value={reportMessage}
               className={classes.textarea}
               rowsMax={20}
               rowsMin={10}
-              aria-label="maximum height"
-              defaultValue="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-      ut labore et dolore magna aliqua."
             />
           </DialogContent>
           <DialogActions>
-            <Button autoFocus onClick={dialogHandleClose} color="primary">
-              АДПРАВIЦЬ
-            </Button>
+            <Box width="100%" display="flex" alignItems="center" justifyContent="center">
+              <Button
+                variant="contained"
+                autoFocus
+                onClick={() => {
+                  dialogHandleClose();
+                  dispatch(wordsActions.reportWord(_id, reportMessage));
+                  setreportMessage('');
+                }}
+                color="secondary"
+              >
+                АДПРАВIЦЬ
+              </Button>
+            </Box>
           </DialogActions>
         </Box>
       </Dialog>

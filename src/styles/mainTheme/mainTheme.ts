@@ -9,6 +9,7 @@ const mainTheme = {
     },
     secondary: {
       main: colors.button,
+      light: colors.buttonOpacity10,
     },
     error: {
       main: colors.error,
@@ -23,6 +24,10 @@ const mainTheme = {
   },
   typography: {
     fontFamily: '"Lato", "Arial", sans-serif',
+    fontSize: 14,
+    fontWeightLight: 300,
+    fontWeightRegular: 400,
+    fontWeightMedium: 500,
   },
   shape: {
     borderRadius: 8,
@@ -32,6 +37,12 @@ const mainTheme = {
     sizes,
   },
   overrides: {
+    MuiButton: {
+      containedSecondary: {
+        color: 'white',
+        fontFamily: '"Lato"',
+      },
+    },
     MuiCssBaseline: {
       '@global': {
         '@font-face': [fonts.latoRegular, fonts.latoBold, fonts.latoItalic],

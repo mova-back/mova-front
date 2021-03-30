@@ -51,7 +51,6 @@ const LogoutPage: React.FC = () => {
         <ActionButton
           variant="contained"
           color="secondary"
-          type="submit"
           className={classes.button}
           onClick={onButtonClick}
         >
