@@ -4,11 +4,17 @@ import { ApiRoute, FeedUrlOptionsType, wordUrlCreator } from '../constants/paths
 import { http } from './http.service';
 import { AxiosResponse } from 'axios';
 import Word from '../models/word';
-
+export interface FeedReturnType {
+  feed: Word[];
+  totalCount: string;
+}
 export const FeedService = {
-  *fetchFeed(options: FeedUrlOptionsType): Generator<StrictEffect, Word[], AxiosResponse<Word[]>> {
-    debugger;
+  *fetchFeed(
+    options: FeedUrlOptionsType,
+  ): Generator<StrictEffect, FeedReturnType, AxiosResponse<{ data: Word[]; success: boolean }>> {
     const response = yield call(http(true).get, wordUrlCreator(options));
-    return response.data;
+    debugger;
+    const result = { feed: response.data.data, totalCount: response.headers['x-total-count'] };
+    return result;
   },
 };

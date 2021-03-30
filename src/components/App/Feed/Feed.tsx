@@ -15,6 +15,7 @@ import {
 import { useState } from 'react';
 import VerticalAlignBottomIcon from '@material-ui/icons/VerticalAlignBottom';
 import VerticalAlignTopIcon from '@material-ui/icons/VerticalAlignTop';
+import InfiniteScroll from 'react-infinite-scroll-component';
 import WordCard from './WordCard/WordCard';
 import { RootState } from '../../../store/rootReducer';
 import Loader from '../../Loader/Loader';
@@ -31,12 +32,15 @@ const useStyles = makeStyles(() =>
     select: {
       maxWidth: 120,
     },
+    scroll: {
+      zIndex: 10,
+    },
   }),
 );
 
 interface IProps {
   className?: string;
-  options?: FeedUrlOptionsType;
+  options: { variant: 'all' | 'createdWords' | 'favoriteWords' };
 }
 
 const SelectSortBy: React.FC<{
@@ -94,6 +98,7 @@ const Feed: React.FC<IProps> = ({ className, options }) => {
   const [orderBy, setOrderBy] = useState<'likes' | 'createdAt'>('likes');
   const [direction, setDirection] = useState<'asc' | 'desc'>('desc');
   const currentUser = useSelector((state: RootState) => state.user.currentUser);
+  const [currentPage, setCurrentPage] = useState(0);
 
   React.useEffect(() => {
     if (hasRefreshToken()) {
@@ -103,48 +108,69 @@ const Feed: React.FC<IProps> = ({ className, options }) => {
             ...options,
             orderByField: orderBy,
             orderByDirection: direction,
+            page: currentPage,
           }),
         );
     } else {
       dispatch(
-        wordsActions.fetchFeed({ ...options, orderByField: orderBy, orderByDirection: direction }),
+        wordsActions.fetchFeed({
+          ...options,
+          orderByField: orderBy,
+          orderByDirection: direction,
+          page: currentPage,
+        }),
       );
     }
-  }, [dispatch, options, currentUser, orderBy, direction]);
-  return (
-    <Box display="grid" gridGap={8} p={1} pb={10} className={className}>
-      {fetching ? (
-        <Loader className={classes.loader} />
-      ) : (
-        <>
-          <SearchField />
-          <Box display="flex" alignItems="center" justifyContent="space-between">
-            <SelectSortBy value={orderBy} callback={setOrderBy} />
-            <OrderButton value={direction} callback={setDirection} />
-          </Box>
+  }, [dispatch, options, currentUser, orderBy, direction, currentPage]);
+  const totalCount = useSelector((state: RootState) => state.word.totalCount);
+  const hasMore = +totalCount > (currentPage + 1) * 20;
+  debugger;
 
-          {feed.map((word) => (
-            <WordCard
-              key={word._id}
-              swearing={word.swearing}
-              isFavourited={word.isFavourited}
-              likes={word.likes}
-              dislikes={word.dislikes}
-              _id={word._id}
-              wordname={word.wordname}
-              meaning={word.meaning}
-              isLiked={word.isLiked}
-              isDisliked={word.isDisliked}
-              description={word.description}
-              tags={word.tags}
-              createdAt={word.createdAt}
-              createdByUserId={word.createdByUserId}
-              currentUserId={currentUser?._id}
-            />
-          ))}
-        </>
-      )}
-    </Box>
+  return (
+    <InfiniteScroll
+      className={classes.scroll}
+      hasMore={hasMore}
+      loader="Loading..."
+      dataLength={+totalCount}
+      next={() => {
+        setCurrentPage((page) => page + 1);
+        console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+      }}
+    >
+      <Box display="grid" gridGap={8} p={1} pb={10} className={className}>
+        {fetching ? (
+          <Loader className={classes.loader} />
+        ) : (
+          <>
+            <SearchField />
+            <Box display="flex" alignItems="center" justifyContent="space-between">
+              <SelectSortBy value={orderBy} callback={setOrderBy} />
+              <OrderButton value={direction} callback={setDirection} />
+            </Box>
+
+            {feed.map((word) => (
+              <WordCard
+                key={word._id}
+                swearing={word.swearing}
+                isFavourited={word.isFavourited}
+                likes={word.likes}
+                dislikes={word.dislikes}
+                _id={word._id}
+                wordname={word.wordname}
+                meaning={word.meaning}
+                isLiked={word.isLiked}
+                isDisliked={word.isDisliked}
+                description={word.description}
+                tags={word.tags}
+                createdAt={word.createdAt}
+                createdByUserId={word.createdByUserId}
+                currentUserId={currentUser?._id}
+              />
+            ))}
+          </>
+        )}
+      </Box>
+    </InfiniteScroll>
   );
 };
 

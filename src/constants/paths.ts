@@ -52,9 +52,9 @@ export enum ApiRoute {
 // http://localhost:4400/api/words?variant=mywords&page=0&limit=20&orderBy[field]=likes&orderBy[direction]=asc
 
 export type FeedUrlOptionsType = {
-  page?: number;
+  page: number;
   limit?: number;
-  variant?: 'all' | 'createdWords' | 'favoriteWords';
+  variant: 'all' | 'createdWords' | 'favoriteWords';
   orderByField?: 'likes' | 'createdAt';
   orderByDirection?: 'asc' | 'desc';
 };

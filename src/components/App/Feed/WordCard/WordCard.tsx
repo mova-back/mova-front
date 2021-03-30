@@ -98,13 +98,17 @@ const useStyles = makeStyles<CustomTheme>((theme) =>
       alignItems: 'center',
     },
     textarea: {
+      fontFamily: '"Arial"',
+      fontSize: 15,
+      padding: '10px',
       outline: 'none',
       borderRadius: `8px`,
       border: 'none',
       width: '80%',
+      boxShadow: `0 3px 15px 1px ${theme.palette.secondary.light}`,
       transition: 'all 0.3s',
       '&:focus': {
-        boxShadow: `0 3px 15px 1px ${theme.palette.secondary.light}`,
+        boxShadow: `0 3px 25px 3px ${theme.palette.secondary.light}`,
       },
     },
   }),
@@ -348,14 +352,10 @@ const WordCard: React.FC<WordCardProps> = ({
           </Grow>
         )}
       </Popper>
-      <Dialog
-        onClose={dialogHandleClose}
-        aria-labelledby="customized-dialog-title"
-        open={dialogIsOpen}
-      >
+      <Dialog onClose={dialogHandleClose} open={dialogIsOpen}>
         <Box className={classes.dialog}>
           <DialogTitle>Паведамiце мадэратару аб памылцы цi абразе</DialogTitle>
-          <DialogContent dividers className={classes.dialogContent}>
+          <DialogContent className={classes.dialogContent}>
             <TextareaAutosize
               onChange={(e) => setreportMessage(e.target.value)}
               value={reportMessage}

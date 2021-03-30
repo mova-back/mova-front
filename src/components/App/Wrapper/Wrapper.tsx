@@ -20,9 +20,9 @@ const useStyles = makeStyles<CustomThemeOptions>((theme) =>
 const Wrapper: React.FC<IProps> = ({ actionBarHeader, children }) => {
   const theme = useTheme<CustomThemeOptions>();
   const classes = useStyles(theme);
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, []);
+  // useEffect(() => {
+  //   window.scrollTo({ top: 0, behavior: 'smooth' });
+  // }, []);
   return (
     <>
       <ActionBar header={actionBarHeader} />

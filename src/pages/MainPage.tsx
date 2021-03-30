@@ -7,7 +7,7 @@ import BottomNav from '../components/App/BottomNav/BottomNav';
 const MainPage: React.FC = () => (
   <div>
     <Wrapper>
-      <Feed />
+      <Feed options={{ variant: 'all' }} />
     </Wrapper>
     <BottomNav />
   </div>

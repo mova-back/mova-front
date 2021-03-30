@@ -17,7 +17,7 @@ import NotificationTypes from '../../constants/notificationTypes';
 import Word from '../../models/word';
 import HttpError from '../../models/httpError';
 import NewWordData from '../../models/forms/newWordData';
-import { FeedService } from '../../services/FeedService';
+import { FeedReturnType, FeedService } from '../../services/FeedService';
 import { RootState } from '../rootReducer';
 import { useHistory } from 'react-router-dom';
 import { ApiRoute, FeedUrlOptionsType, Page } from '../../constants/paths';
@@ -54,12 +54,14 @@ type ReducerState = {
   feed: WordCardInterface[];
   fetching: boolean;
   currentlyModifiedWord: NewWordData | null;
+  totalCount: string;
 };
 
 const initialState: ReducerState = {
   feed: [],
   fetching: false,
   currentlyModifiedWord: null,
+  totalCount: '0',
 };
 
 // --REDUCER--
@@ -77,9 +79,10 @@ const wordsReducer = (state: ReducerState = initialState, action: WordsActionTyp
         isFetching: false,
       };
     case FETCH_FEED:
+      const { page } = action.payload.options;
       return {
         ...state,
-        fetching: true,
+        fetching: page === 0 ? true : false,
       };
 
     case FETCH_FEED_ERROR:
@@ -88,12 +91,13 @@ const wordsReducer = (state: ReducerState = initialState, action: WordsActionTyp
         fetching: false,
       };
     case FETCH_FEED_SUCCESS: {
-      const { data, page } = action.payload;
+      const { data, page, totalCount } = action.payload;
       return {
         ...state,
-        feed: [...data],
+        feed: page > 0 ? [...state.feed, ...data] : [...data],
         currentPage: page,
         fetching: false,
+        totalCount: totalCount,
       };
     }
     case LIKE_SUCCESS:
@@ -235,12 +239,13 @@ export const wordsActions = {
 
   fetchFeed: (options: FeedUrlOptionsType) => ({ type: FETCH_FEED, payload: { options } } as const),
 
-  fetchFeedSuccess: (data: WordCardInterface[], page?: number) => {
+  fetchFeedSuccess: (data: WordCardInterface[], totalCount: string, page: number) => {
     return {
       type: FETCH_FEED_SUCCESS,
       payload: {
         data,
         page,
+        totalCount,
       },
     } as const;
   },
@@ -281,7 +286,8 @@ export const wordsActions = {
   setCurrentlyModifiedWord: (currentWord: NewWordData) =>
     ({ type: SET_CURRENTLY_MODIFIED_WORD, payload: { ...currentWord } } as const),
 
-  reportWord: (id: string, message: string) => ({ type: REPORT_WORD, payload: { id, message } } as const),
+  reportWord: (id: string, message: string) =>
+    ({ type: REPORT_WORD, payload: { id, message } } as const),
 };
 
 // --WORKER-SAGAS--
@@ -366,9 +372,9 @@ export function* feedWorker(
 ): Generator<StrictEffect, void, any> {
   try {
     const { options } = action.payload;
-    const words: AxiosResponse<Word[]> = yield call(FeedService.fetchFeed, options);
+    const response: FeedReturnType = yield call(FeedService.fetchFeed, options);
     const user: string = yield select((state: RootState) => state.user.currentUser?._id);
-    const result = words.data.map((item) => {
+    const result = response.feed.map((item) => {
       return {
         ...item,
         isFavourited: item.favoriteByUserdIds.includes(user),
@@ -379,7 +385,7 @@ export function* feedWorker(
       };
     });
     const { page } = options;
-    yield put(wordsActions.fetchFeedSuccess(result, page));
+    yield put(wordsActions.fetchFeedSuccess(result, response.totalCount, page));
   } catch (e) {
     yield put(
       notificationActions.addNotification({

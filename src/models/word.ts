@@ -1,6 +1,6 @@
 export type Tag = string;
 
-type Word = {
+interface Word {
   updatedAt: string;
   createdAt: string;
   _id: string;
@@ -13,6 +13,6 @@ type Word = {
   likes: string[];
   dislikes: string[];
   favoriteByUserdIds: string[]; // TODO rename
-};
+}
 
 export default Word;
