@@ -17,7 +17,7 @@ const useStyles = makeStyles(() =>
     },
     sec: {
       position: 'absolute',
-      top: '100px',
+      top: '150px',
       left: '50%',
       transform: 'translate(-50%)',
     },

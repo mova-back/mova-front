@@ -1,5 +1,5 @@
 /* eslint-disable func-names */
-import { all } from 'redux-saga/effects';
+import { all, takeEvery } from 'redux-saga/effects';
 import notificationSagas from './notification/saga/notificationSaga';
 import { userSagas } from './user/reducer/userReducer';
 import { wordsSagas } from './words/wordsReducer';

@@ -91,7 +91,7 @@ type TokenData = {
   };
 };
 
-export async function refreshTokens(history?: ReturnType<typeof useHistory>) {
+export async function refreshTokens() {
   try {
     const response: TokenData = await axios
       .post(
@@ -109,11 +109,10 @@ export async function refreshTokens(history?: ReturnType<typeof useHistory>) {
     return response.data;
   } catch (error) {
     resetAuthData();
-    if (history) history.push(Page.Logout);
     throw new Error(error);
   }
 }
 
 export const debounceRefreshTokens = debounce((history?: ReturnType<typeof useHistory>) => {
-  return refreshTokens(history);
+  return refreshTokens();
 }, 100);
