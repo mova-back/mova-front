@@ -77,6 +77,7 @@ export const UserService = {
       {
         email,
         password,
+        fingerprint: yield call(AuthService.getFingerprint),
       },
       { withCredentials: true },
     );

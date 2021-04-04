@@ -20,17 +20,13 @@ export function http(auth: boolean | undefined) {
 
 function init(isAuth: boolean | undefined, instance: any) {
   if (isAuth) {
-    console.log('Auth route');
     instance.interceptors.request.use(
       (request: any) => {
         request.headers.authorization = AuthService.getAccessBearerToken();
         // if access token expired and refreshToken is exist >>>>>>> get new access token
-        console.log('AuthService.isAccessTokenExpired()', AuthService.isAccessTokenExpired());
-        console.log('AuthService.hasRefreshToken()', AuthService.hasRefreshToken());
         if (AuthService.isAccessTokenExpired() && AuthService.hasRefreshToken()) {
           return AuthService.debounceRefreshTokens()
             .then((response: any) => {
-              console.log('response.data.accessToken', response.data.accessToken);
               AuthService.setAccessBearerToken(response.data.accessToken);
               request.headers.authorization = AuthService.getAccessBearerToken();
               return request;
