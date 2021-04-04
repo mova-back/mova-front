@@ -1,4 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
+import FingerprintJS from '@fingerprintjs/fingerprintjs';
+
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { useHistory } from 'react-router';
 import { ApiRoute, Page } from '../constants/paths';
@@ -6,13 +8,20 @@ import { ApiRoute, Page } from '../constants/paths';
 let BEARER_TOKEN = '';
 let accessTokenExpDate = 0;
 
+type TokenData = {
+  data: {
+    accessToken: string;
+    refreshToken: string;
+  };
+};
+
 export function isAccessTokenExpired(): boolean {
   const updAccessTokenExpDate = accessTokenExpDate - 10;
   const nowTime = Math.floor(new Date().getTime() / 1000);
   return updAccessTokenExpDate <= nowTime;
 }
 
-export function parseTokenData(accessToken: string) {
+export function parseTokenData(accessToken: string): { exp: number } {
   let payload = '';
   let tokenData = {
     exp: 0,
@@ -66,9 +75,7 @@ export function resetAuthData(): void {
   setAccessBearerToken('');
 }
 
-// https://stackoverflow.com/questions/35228052/debounce-function-implemented-with-promises
-// eslint-disable-next-line @typescript-eslint/ban-types
-export function debounce(inner: () => {}, ms = 0) {
+export function debounce(inner: () => Promise<unknown>, ms = 0): () => Promise<unknown> {
   let timer: ReturnType<typeof setTimeout>;
   let resolves: Array<(value?: unknown) => void> = [];
 
@@ -84,19 +91,22 @@ export function debounce(inner: () => {}, ms = 0) {
   };
 }
 
-type TokenData = {
-  data: {
-    accessToken: string;
-    refreshToken: string;
-  };
-};
+export async function getFingerprint(): Promise<string> {
+  const fp = await FingerprintJS.load();
 
-export async function refreshTokens(history?: ReturnType<typeof useHistory>) {
+  const result = await fp.get({ debug: true });
+  const { visitorId } = result;
+  return visitorId;
+}
+
+export async function refreshTokens(
+  history?: ReturnType<typeof useHistory>,
+): Promise<Record<string, string>> {
   try {
     const response: TokenData = await axios
       .post(
         ApiRoute.Refresh,
-        {},
+        { fingerprint: await getFingerprint() },
         {
           withCredentials: true,
         },

@@ -13,7 +13,6 @@ export const FeedService = {
     options: FeedUrlOptionsType,
   ): Generator<StrictEffect, FeedReturnType, AxiosResponse<{ data: Word[]; success: boolean }>> {
     const response = yield call(http(true).get, wordUrlCreator(options));
-    debugger;
     const result = { feed: response.data.data, totalCount: response.headers['x-total-count'] };
     return result;
   },
