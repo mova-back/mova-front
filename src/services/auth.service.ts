@@ -119,11 +119,10 @@ export async function refreshTokens(
     return response.data;
   } catch (error) {
     resetAuthData();
-    if (history) history.push(Page.Logout);
     throw new Error(error);
   }
 }
 
 export const debounceRefreshTokens = debounce((history?: ReturnType<typeof useHistory>) => {
-  return refreshTokens(history);
+  return refreshTokens();
 }, 100);

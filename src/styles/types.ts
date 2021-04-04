@@ -26,6 +26,9 @@ interface CustomPalette extends Palette {
   gradient: {
     main: string;
   };
+  header: {
+    lg: string;
+  };
 }
 
 export interface CustomTheme extends Theme {

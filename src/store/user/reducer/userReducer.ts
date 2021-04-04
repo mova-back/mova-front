@@ -1,6 +1,6 @@
 import { useHistory } from 'react-router-dom';
 import { FormikHelpers } from 'formik';
-import { call, put, StrictEffect, takeEvery, takeLatest } from 'redux-saga/effects';
+import { call, delay, put, StrictEffect, take, takeEvery, takeLatest } from 'redux-saga/effects';
 import User from '../../../models/user';
 import HttpError from '../../../models/httpError';
 import SignUpFormData from '../../../models/forms/signUpFormData';
@@ -45,7 +45,7 @@ export const REGISTRATION_SUCCESS = 'REGISTRATION_SUCCESS';
 export const REGISTRATION_ERROR = 'REGISTRATION_ERROR';
 export const RESET_PASSWORD = 'RESET_PASSWORD';
 
-export const GET_CURRENT_USER = 'GET_CURRENT_USER';
+export const SET_CURRENT_USER = 'GET_CURRENT_USER';
 export const GET_CURRENT_USER_SUCCESS = 'GET_CURRENT_USER_SUCCESS';
 export const GET_CURRENT_USER_ERROR = 'GET_CURRENT_USER_ERROR';
 export const CONFIRM_PASSWORD = 'CONFIRM_PASSWORD';
@@ -59,7 +59,7 @@ export type UserActionsType = InferActionsTypes<typeof userActions>;
 const userReducer = (state: UserState = initialState, action: UserActionsType): UserState => {
   switch (action.type) {
     case REGISTRATION:
-    case GET_CURRENT_USER:
+    case SET_CURRENT_USER:
     case CONFIRM_REGISTRATION:
       return {
         ...state,
@@ -105,8 +105,7 @@ export const userActions = {
   login: (data: LoginFormData, meta: FormikHelpers<LoginFormData>) =>
     ({
       type: LOGIN,
-      payload: data,
-      meta,
+      payload: { data, meta },
     } as const),
 
   loginSuccess: (data: User) => ({ type: LOGIN_SUCCESS, payload: data } as const),
@@ -175,19 +174,19 @@ export const userActions = {
       payload: error,
     } as const),
 
-  getCurrentUser: () =>
+  setCurrentUser: () =>
     ({
-      type: GET_CURRENT_USER,
+      type: SET_CURRENT_USER,
       fetching: true,
     } as const),
 
-  getCurrentUserSuccess: (user: User) =>
+  setCurrentUserSuccess: (user: User) =>
     ({
       type: GET_CURRENT_USER_SUCCESS,
       payload: user,
       fetching: false,
     } as const),
-  getCurrentUserError: (error: HttpError) =>
+  setCurrentUserError: (error: HttpError) =>
     ({
       type: GET_CURRENT_USER_ERROR,
       payload: error,
@@ -314,40 +313,58 @@ export function* resetPasswordWorker({
   }
 }
 
-export function* getCurrentUserWorker(): Generator<StrictEffect, void, User> {
+export function* setCurrentUserWorker(): Generator<StrictEffect, void, User> {
   try {
     const user: User = yield call(UserService.getCurrent);
-    yield put(userActions.getCurrentUserSuccess(user));
+    yield put(userActions.setCurrentUserSuccess(user));
   } catch (e) {
-    yield put(userActions.getCurrentUserError(e));
+    yield put(userActions.setCurrentUserError(e));
   }
 }
 
-export function* signInWorker({
-  payload,
-  meta,
-}: ReturnType<typeof userActions.login>): Generator<StrictEffect, void, User> {
-  const { resetForm, setSubmitting } = meta;
-  try {
-    const { rememberMe, ...loginData } = payload;
-    const user: User = yield call(UserService.signIn, loginData);
-    yield put(
-      notificationActions.addNotification({
-        type: NotificationTypes.success,
-        message: 'Logged in',
-      }),
-    );
-    yield put(userActions.loginSuccess(user));
-  } catch (e) {
-    yield call(resetForm, {});
-    yield call(setSubmitting, false);
-    yield put(
-      notificationActions.addNotification({
-        type: NotificationTypes.error,
-        message: e.message,
-      }),
-    );
-    yield put(userActions.loginError(e));
+export function* signInWorker(): Generator<StrictEffect, void, any> {
+  // this is an imitation of takeFirst(ACTION_NAME, workerSaga)
+  while (true) {
+    const action: ReturnType<typeof userActions.login> = yield take(LOGIN);
+    try {
+      const {
+        payload: {
+          data: { rememberMe, ...loginData },
+        },
+      } = action;
+      const user: User = yield call(UserService.signIn, loginData);
+      yield put(
+        notificationActions.addNotification({
+          type: NotificationTypes.success,
+          message: 'Logged in',
+        }),
+      );
+      yield put(userActions.loginSuccess(user));
+    } catch (e) {
+      const {
+        payload: {
+          meta: { resetForm, setSubmitting },
+        },
+      } = action;
+      yield call(resetForm, {});
+      yield call(setSubmitting, false);
+      if (e.response.status === 500) {
+        yield put(
+          notificationActions.addNotification({
+            type: NotificationTypes.error,
+            message: 'Калi ласка зарэгiстрыруйцесь',
+          }),
+        );
+      } else {
+        yield put(
+          notificationActions.addNotification({
+            type: NotificationTypes.error,
+            message: 'Something went wrong with login',
+          }),
+        );
+      }
+      yield put(userActions.loginError(e));
+    }
   }
 }
 
@@ -413,8 +430,9 @@ export function* changeEmailWorker({ payload }: ReturnType<typeof userActions.ch
 
 export const userSagas = [
   takeEvery(REGISTRATION, signUpWorker),
-  takeEvery(GET_CURRENT_USER, getCurrentUserWorker),
-  takeEvery(LOGIN, signInWorker),
+  takeLatest(SET_CURRENT_USER, setCurrentUserWorker),
+  // takeEvery(LOGIN, signInWorker),
+  signInWorker(),
   takeEvery(LOGOUT, signOutWorker),
   takeEvery(CONFIRM_REGISTRATION, confirmRegistrationWorker),
   takeEvery(CONFIRM_PASSWORD, confirmResetPasswordWorker),

@@ -9,7 +9,6 @@ const MainPage: React.FC = () => (
     <Wrapper>
       <Feed options={{ variant: 'all' }} />
     </Wrapper>
-    <BottomNav />
   </div>
 );
 

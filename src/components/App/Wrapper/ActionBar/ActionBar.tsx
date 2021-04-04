@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Route } from 'react-router-dom';
+import { NavLink, Route } from 'react-router-dom';
 
 import {
   AppBar,
@@ -14,6 +14,7 @@ import {
   ListItemIcon,
   createStyles,
   makeStyles,
+  Hidden,
 } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
@@ -24,14 +25,27 @@ import NAV_DRAWER_ROUTES from '../../../../constants/navDrawerRoutes';
 import DrawerHeader from './DrawerHeader/DrawerHeader';
 import { Page } from '../../../../constants/paths';
 import { IProps } from './types';
+import { CustomThemeOptions } from '../../../../styles/types';
 
-const useStyles = makeStyles(() =>
+const useStyles = makeStyles<CustomThemeOptions>((theme) =>
   createStyles({
     header: {
       fontSize: '20px',
       lineHeight: '24px',
       width: '100%',
       textAlign: 'center',
+    },
+    appBar: {
+      background: `${theme.palette.header.lg}`,
+      height: 120,
+      display: 'flex',
+      justifyContent: 'center',
+    },
+    header__link: {
+      marginLeft: 40,
+      whiteSpace: 'nowrap',
+      color: 'white',
+      textDecoration: 'none',
     },
   }),
 );
@@ -54,7 +68,7 @@ const ActionBar: React.FC<IProps> = ({ header, settingsElementMode }) => {
 
   return (
     <>
-      <AppBar position="sticky">
+      <AppBar className={classes.appBar} position="static">
         <Toolbar>
           <Route path={settingsPaths || drawerRoutePaths}>
             <IconButton
@@ -67,14 +81,25 @@ const ActionBar: React.FC<IProps> = ({ header, settingsElementMode }) => {
               <ArrowBackIcon />
             </IconButton>
           </Route>
-          <h1 className={classes.header}>{header}</h1>
-          {!settingsElementMode ? (
-            <Box marginLeft="auto">
-              <IconButton edge="end" color="inherit" aria-label="menu" onClick={toggleDrawer}>
-                <MenuIcon />
-              </IconButton>
+          <Hidden mdDown>
+            <Box>
+              {NAV_DRAWER_ROUTES.map((route) => (
+                <NavLink to={route.path} key={route.label} className={classes.header__link}>
+                  {route.label}
+                </NavLink>
+              ))}
             </Box>
-          ) : null}
+          </Hidden>
+          <h1 className={classes.header}>{header}</h1>
+          <Hidden lgUp>
+            {!settingsElementMode ? (
+              <Box marginLeft="auto">
+                <IconButton edge="end" color="inherit" aria-label="menu" onClick={toggleDrawer}>
+                  <MenuIcon />
+                </IconButton>
+              </Box>
+            ) : null}
+          </Hidden>
         </Toolbar>
       </AppBar>
       <Drawer anchor="right" open={drawerVisible} onClose={toggleDrawer}>

@@ -8,20 +8,6 @@ import { hasRefreshToken, debounceRefreshTokens } from '../../services/auth.serv
 import { RootState } from '../../store/rootReducer';
 
 const App: React.FC = () => {
-  const dispatch = useDispatch();
-  const { currentUser } = useSelector((state: RootState) => state.user);
-
-  React.useEffect(() => {
-    async function firstLoad() {
-      if (hasRefreshToken() && !currentUser) {
-        await debounceRefreshTokens();
-        dispatch(userActions.getCurrentUser());
-      }
-    }
-
-    firstLoad();
-  }, [dispatch, currentUser]);
-
   return (
     <div>
       <SnackbarContainer />
