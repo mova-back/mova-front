@@ -116,9 +116,6 @@ const Feed: React.FC<IProps> = ({ className, options }) => {
       );
     }
   }, [dispatch, options, currentUser, orderBy, direction, currentPage]);
-  useEffect(() => {
-    window.scrollTo({ top: 70, behavior: 'smooth' });
-  }, [fetching]);
   const totalCount = useSelector((state: RootState) => state.word.totalCount);
   const hasMore = +totalCount > (currentPage + 1) * 20;
 

@@ -9,10 +9,12 @@ const SearchField: React.FC = () => {
   const useStyles = makeStyles(() =>
     createStyles({
       root: {
+        position: 'absolute',
+        top: -30,
+        zIndex: 5,
         borderRadius: '8px',
         boxShadow: '4px 12px 25px rgba(71, 55, 255, 0.08)',
         background: theme.custom.colors.primaryLight,
-        left: '20%',
         width: '60%',
       },
     }),

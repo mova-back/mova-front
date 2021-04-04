@@ -21,6 +21,9 @@ const mainTheme = {
     gradient: {
       main: `linear-gradient(180deg, ${colors.backgroundColor}  0%, ${colors.primaryLight} 60%)`,
     },
+    header: {
+      lg: 'rgb(56,79,125)',
+    },
   },
   typography: {
     fontFamily: '"Lato", "Arial", sans-serif',
