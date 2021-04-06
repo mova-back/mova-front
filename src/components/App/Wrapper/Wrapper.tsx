@@ -40,7 +40,10 @@ const useStyles = makeStyles((theme: CustomTheme) =>
         width: '100%',
       },
     },
+
     sidebarContainer: {
+      position: 'sticky',
+      top: 0,
       background: 'white',
     },
     sidebar: {

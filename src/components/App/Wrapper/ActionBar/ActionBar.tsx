@@ -47,6 +47,9 @@ const useStyles = makeStyles<CustomThemeOptions>((theme) =>
       color: 'white',
       textDecoration: 'none',
     },
+    activeLink: {
+      color: `${theme.palette.secondary.main}`,
+    },
   }),
 );
 
@@ -84,7 +87,12 @@ const ActionBar: React.FC<IProps> = ({ header, settingsElementMode }) => {
           <Hidden mdDown>
             <Box>
               {NAV_DRAWER_ROUTES.map((route) => (
-                <NavLink to={route.path} key={route.label} className={classes.header__link}>
+                <NavLink
+                  to={route.path}
+                  key={route.label}
+                  className={classes.header__link}
+                  activeClassName={classes.activeLink}
+                >
                   {route.label}
                 </NavLink>
               ))}

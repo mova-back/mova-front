@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Field, FieldProps, Form, Formik, FormikHelpers, FormikProps } from 'formik';
+import { ErrorMessage, Field, FieldProps, Form, Formik, FormikHelpers, FormikProps } from 'formik';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 
@@ -49,20 +49,25 @@ const LoginForm: React.FC = () => {
         dispatch(userActions.login(values, meta));
       }}
     >
-      {({ dirty, isValid, isSubmitting }: FormikProps<LoginFormData>) => (
+      {({ dirty, isValid, isSubmitting, touched, handleBlur }: FormikProps<LoginFormData>) => (
         <Form>
           <Box display="grid" gridGap={16}>
             {LOGIN.map((field) => (
-              <Field key={field.id} name={field.name}>
-                {({ field: formikField, meta }: FieldProps) => (
-                  <Input
-                    {...formikField}
-                    label={field.label}
-                    error={Boolean(meta.error && meta.value)}
-                    helperText={meta.error && meta.value ? meta.error : ''}
-                  />
-                )}
-              </Field>
+              <>
+                <Field key={field.id} name={field.name}>
+                  {({ field: formikField, meta }: FieldProps) => (
+                    <Input
+                      {...formikField}
+                      label={field.label}
+                      handleBlur={handleBlur}
+                      error={Boolean(meta.error && touched[field.name as 'email' | 'password'])}
+                      helperText={
+                        meta.error && touched[field.name as 'email' | 'password'] ? meta.error : ''
+                      }
+                    />
+                  )}
+                </Field>
+              </>
             ))}
 
             <Field name="rememberMe">

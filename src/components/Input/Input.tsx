@@ -59,7 +59,7 @@ const useStyles = makeStyles((theme) =>
       },
     },
     helperText: {
-      fontSize: 10,
+      fontSize: 12,
       lineHeight: '12px',
       paddingLeft: theme.spacing(3),
       margin: '4px 0',
@@ -100,6 +100,10 @@ interface IProps {
   error?: boolean;
   name: string;
   helperText?: string;
+  handleBlur?: {
+    (e: React.FocusEvent<any>): void;
+    <T = any>(fieldOrEvent: T): T extends string ? (e: any) => void : void;
+  };
 }
 
 const Input: React.FC<IProps> = ({
@@ -111,6 +115,7 @@ const Input: React.FC<IProps> = ({
   onChange,
   error,
   helperText,
+  handleBlur,
   name,
 }) => {
   const classes = useStyles();
@@ -145,7 +150,10 @@ const Input: React.FC<IProps> = ({
           value={value}
           onChange={onChange}
           onFocus={handleOnFocus}
-          onBlur={handleOnBlur}
+          onBlur={(e) => {
+            if (handleBlur) handleBlur(e);
+            handleOnBlur();
+          }}
           className={classes.input}
         />
       </div>

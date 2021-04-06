@@ -343,25 +343,15 @@ export function* signInWorker(): Generator<StrictEffect, void, any> {
     } catch (e) {
       const {
         payload: {
-          meta: { resetForm, setSubmitting },
+          meta: { resetForm, setSubmitting, setFieldError },
         },
       } = action;
-      yield call(resetForm, {});
       yield call(setSubmitting, false);
-      if (e.response.status === 500) {
-        yield put(
-          notificationActions.addNotification({
-            type: NotificationTypes.error,
-            message: 'Калi ласка зарэгiстрыруйцесь',
-          }),
-        );
-      } else {
-        yield put(
-          notificationActions.addNotification({
-            type: NotificationTypes.error,
-            message: 'Something went wrong with login',
-          }),
-        );
+      if (e.response.status === 403) {
+        yield call(setFieldError, 'password', 'Incorrect password');
+      }
+      if (e.response.status === 404) {
+        yield call(setFieldError, 'email', 'There is no user with such email');
       }
       yield put(userActions.loginError(e));
     }
