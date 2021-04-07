@@ -231,7 +231,6 @@ const SettingsPage: React.FC = () => {
           ) : null}
         </>
       )}
-      <BottomNav />
     </Wrapper>
   );
 };

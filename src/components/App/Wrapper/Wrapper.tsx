@@ -49,6 +49,7 @@ const useStyles = makeStyles((theme: CustomTheme) =>
     sidebar: {
       width: '80%',
       minHeight: '100vh',
+      marginTop: 25,
     },
     active: {
       fontWeight: 'bold',

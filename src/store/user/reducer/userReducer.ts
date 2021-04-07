@@ -209,13 +209,19 @@ export function* signUpWorker({
     yield call(setSubmitting, false);
     history.push(Page.ThankYou);
   } catch (e) {
+    const { setFieldError } = payload.meta;
+    if (e.response.data.message === 'This email already taken, try use another') {
+      yield call(setFieldError, 'email', 'This email has already been taken!');
+    }
+    if (e.response.data.message === 'This user already taken, try use another') {
+      yield call(setFieldError, 'username', 'This username has already been taken!');
+    }
     yield put(
       notificationActions.addNotification({
         type: NotificationTypes.error,
         message: e.message,
       }),
     );
-    yield call(resetForm, {});
     yield call(setSubmitting, false);
     yield put(userActions.registrationError(e));
   }

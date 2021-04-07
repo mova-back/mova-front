@@ -390,7 +390,7 @@ export function* feedWorker(
     yield put(
       notificationActions.addNotification({
         type: NotificationTypes.error,
-        message: e.message,
+        message: 'Штосцi пайшло не так... Абнавiце старонку',
       }),
     );
     yield put(wordsActions.fetchFeedError(e));

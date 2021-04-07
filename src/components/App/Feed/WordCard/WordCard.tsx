@@ -154,6 +154,7 @@ const WordCard: React.FC<WordCardProps> = ({
 
   const theme = useTheme<CustomThemeOptions>();
   const classes = useStyles(theme);
+  console.log('DISABLED: ', !currentUserId);
   return (
     <Card className={clsx(classes.root, className)} component="article">
       <CardContent>
@@ -200,6 +201,7 @@ const WordCard: React.FC<WordCardProps> = ({
       </CardContent>
       <CardActions disableSpacing>
         <Button
+          disabled={!currentUserId}
           startIcon={
             isLiked ? (
               <ThumbUpIcon className={classes.thumb} />
@@ -216,6 +218,7 @@ const WordCard: React.FC<WordCardProps> = ({
         </Button>
 
         <Button
+          disabled={!currentUserId}
           startIcon={
             isDisliked ? (
               <ThumbDownIcon className={classes.thumb} />
@@ -320,7 +323,6 @@ const WordCard: React.FC<WordCardProps> = ({
                       dispatch(wordsActions.deleteWord(_id));
                     }}
                   >
-                    {/* TODO add user role verification */}
                     <span>Выдалiць</span>
                     <DeleteForeverIcon />
                   </MenuItem>

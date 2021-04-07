@@ -46,7 +46,7 @@ const SignUpForm: React.FC = () => {
         dispatch(userActions.registration(values, meta, history));
       }}
     >
-      {({ isSubmitting, dirty, isValid }: FormikProps<SignUpFormData>) => (
+      {({ isSubmitting, dirty, isValid, handleBlur, touched }: FormikProps<SignUpFormData>) => (
         <Form>
           <Box display="grid" gridGap={16}>
             {SIGNUP.map((field) => (
@@ -55,8 +55,15 @@ const SignUpForm: React.FC = () => {
                   <Input
                     {...formikField}
                     label={field.label}
-                    error={Boolean(meta.error && meta.value)}
-                    helperText={meta.error && meta.value ? meta.error : ''}
+                    handleBlur={handleBlur}
+                    error={Boolean(
+                      meta.error && touched[field.name as 'email' | 'password' | 'username'],
+                    )}
+                    helperText={
+                      meta.error && touched[field.name as 'email' | 'password' | 'username']
+                        ? meta.error
+                        : ''
+                    }
                   />
                 )}
               </Field>
