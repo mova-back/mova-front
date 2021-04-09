@@ -17,6 +17,7 @@ import ResetPasswordPage from '../pages/ResetPasswordPage';
 import ChangeEmailPage from '../pages/ChangeEmailPage';
 import ChangeWordPage from '../pages/ChangeWordPage';
 import ModeratorFeedPage from '../pages/ModeratorFeedPage';
+import AccountsPage from '../pages/AccountsPage';
 
 const ROUTES = [
   {
@@ -107,6 +108,7 @@ const ROUTES = [
   { path: Page.ChangeEmail, exact: true, component: ChangeEmailPage },
   { path: Page.ChangeWord, exact: false, component: ChangeWordPage },
   { path: Page.ModeratorFeed, exact: false, component: ModeratorFeedPage },
+  { path: Page.Accounts, exact: false, component: AccountsPage },
 ];
 
 export default ROUTES;

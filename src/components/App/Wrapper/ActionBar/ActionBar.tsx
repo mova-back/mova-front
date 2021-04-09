@@ -91,6 +91,13 @@ const ActionBar: React.FC<IProps> = ({ header, settingsElementMode }) => {
       path: Page.ModeratorFeed,
     });
   }
+  if (userRole === 'ROLE_ADMIN' && navRoutes[navRoutes.length - 1].label !== 'Спiс пользавацелей') {
+    navRoutes.push({
+      icon: <AccountBalanceIcon />,
+      label: 'Спiс пользавацелей',
+      path: Page.Accounts,
+    });
+  }
 
   const drawerRoutePaths = React.useMemo(() => navRoutes.map((route) => route.path), [navRoutes]);
   const settingsPaths = [Page.Feedback, Page.Logout, Page.DeleteAcc];

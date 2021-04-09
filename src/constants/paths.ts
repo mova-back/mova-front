@@ -19,6 +19,8 @@ export enum Page {
   ConfirmEmail = '/confirm-email',
   ChangeWord = '/change-word/:id',
   ModeratorFeed = '/moderator-feed',
+  Accounts = '/accounts',
+  Promote = '/api/user/promote/:id',
 }
 
 export enum ApiRoute {
@@ -50,6 +52,7 @@ export enum ApiRoute {
   ReportWord = '/api/word/addreport',
   ModeratorWords = '/api/words/reports',
   RemoveWordFromModeratorFeed = '/api/word/return/',
+  Accounts = '/api/users',
 }
 
 // http://localhost:4400/api/words?variant=mywords&page=0&limit=20&orderBy[field]=likes&orderBy[direction]=asc

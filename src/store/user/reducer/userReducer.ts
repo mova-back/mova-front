@@ -349,7 +349,7 @@ export function* signInWorker(): Generator<StrictEffect, void, any> {
     } catch (e) {
       const {
         payload: {
-          meta: { resetForm, setSubmitting, setFieldError },
+          meta: { setSubmitting, setFieldError },
         },
       } = action;
       yield call(setSubmitting, false);
