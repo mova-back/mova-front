@@ -13,6 +13,7 @@ const useStyles = makeStyles(() =>
   createStyles({
     action: {
       marginLeft: 'auto',
+      color: 'white',
     },
   }),
 );
@@ -35,18 +36,11 @@ const DrawerHeader: React.FC<IProps> = ({ onAction }) => {
   }, [onAction]);
 
   return (
-    <Box p={2} display="flex" justifyContent="space-around">
+    <Box p={2} display="flex" justifyContent="space-around" alignItems="center">
       {!fetching && !currentUser ? (
-        <Button
-          className={classes.action}
-          component={Link}
-          to={Page.Login}
-          color="primary"
-          variant="contained"
-          onClick={handleLoginClick}
-        >
+        <Link className={classes.action} to={Page.Login} onClick={handleLoginClick}>
           Залагiнiцца
-        </Button>
+        </Link>
       ) : (
         <CurrentUser user={currentUser} fetching={fetching} onLogoutClicked={handleLogout} />
       )}

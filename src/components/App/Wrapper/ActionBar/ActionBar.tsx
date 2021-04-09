@@ -16,6 +16,7 @@ import {
   makeStyles,
   Hidden,
   Button,
+  Typography,
 } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
@@ -77,6 +78,7 @@ const ActionBar: React.FC<IProps> = ({ header, settingsElementMode }) => {
   const [drawerVisible, setDrawerVisible] = React.useState(false);
 
   const userRole = useSelector((state: RootState) => state.user.currentUser?.role);
+  const userName = useSelector((state: RootState) => state.user.currentUser?.username);
   const navRoutes = NAV_DRAWER_ROUTES;
   // adding new tab to navbar in header
   if (
@@ -105,17 +107,19 @@ const ActionBar: React.FC<IProps> = ({ header, settingsElementMode }) => {
     <>
       <AppBar className={classes.appBar} position="static">
         <Toolbar className={classes.toolbar}>
-          <Route path={settingsPaths || drawerRoutePaths}>
-            <IconButton
-              edge="start"
-              color="inherit"
-              aria-label="back"
-              component={RouterNavLink}
-              to={settingsElementMode ? Page.Settings : Page.Home}
-            >
-              <ArrowBackIcon />
-            </IconButton>
-          </Route>
+          <Hidden lgUp>
+            <Route path={settingsPaths || drawerRoutePaths}>
+              <IconButton
+                edge="start"
+                color="inherit"
+                aria-label="back"
+                component={RouterNavLink}
+                to={settingsElementMode ? Page.Settings : Page.Home}
+              >
+                <ArrowBackIcon />
+              </IconButton>
+            </Route>
+          </Hidden>
           <Hidden mdDown>
             <Box>
               {navRoutes.map((route) => (
@@ -134,13 +138,7 @@ const ActionBar: React.FC<IProps> = ({ header, settingsElementMode }) => {
             <h1 className={classes.header}>{header}</h1>
           </Hidden>
           <Hidden mdDown>
-            <NavLink
-              activeClassName={classes.header__link_active}
-              className={classes.header__link}
-              to={Page.Login}
-            >
-              Уваход/Рэгiстрацыя
-            </NavLink>
+            <DrawerHeader onAction={handleLogout} />
           </Hidden>
           <Hidden lgUp>
             {!settingsElementMode ? (

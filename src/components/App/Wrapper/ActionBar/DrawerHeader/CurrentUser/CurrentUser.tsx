@@ -41,12 +41,17 @@ const CurrentUser: React.FC<IProps> = ({ user, fetching, onLogoutClicked }) => {
         <Box display="flex" alignItems="center" justifyContent="space-between">
           <div>
             <Typography variant="body2">{user.username}</Typography>
-            <Typography variant="body2" color="textSecondary">
+            {/* <Typography variant="body2" color="textSecondary">
               {user.email}
-            </Typography>
+            </Typography> */}
           </div>
           <Link to="/logout">
-            <IconButton className={classes.action} edge="end" onClick={onLogoutClicked}>
+            <IconButton
+              color="secondary"
+              className={classes.action}
+              edge="end"
+              onClick={onLogoutClicked}
+            >
               <ExitToAppIcon />
             </IconButton>
           </Link>
