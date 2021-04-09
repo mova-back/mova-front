@@ -99,5 +99,16 @@ const wordsService = {
     );
     return result.data;
   },
+  *removeWordFromModeratorFeed(
+    id: string,
+  ): Generator<StrictEffect, RateAWordResponseType, AxiosResponse<RateAWordResponseType>> {
+    const result = yield call(
+      http(true).put,
+      addIdToPath(ApiRoute.RemoveWordFromModeratorFeed, id),
+      {},
+      { withCredentials: true },
+    );
+    return result.data;
+  },
 };
 export default wordsService;

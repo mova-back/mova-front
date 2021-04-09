@@ -17,11 +17,19 @@ import NotificationTypes from '../../constants/notificationTypes';
 import Word from '../../models/word';
 import HttpError from '../../models/httpError';
 import NewWordData from '../../models/forms/newWordData';
-import { FeedReturnType, FeedService } from '../../services/FeedService';
+import { FeedReturnType, FeedService, ModeratorFeedReturnType } from '../../services/FeedService';
 import { RootState } from '../rootReducer';
 import { useHistory } from 'react-router-dom';
-import { ApiRoute, FeedUrlOptionsType, Page } from '../../constants/paths';
-import { WordCardInterface } from '../../components/App/Feed/WordCard/types';
+import {
+  ApiRoute,
+  FeedUrlOptionsType,
+  ModeratorFeedUrlOptionsType,
+  Page,
+} from '../../constants/paths';
+import {
+  ModeratorWordCardInterface,
+  WordCardInterface,
+} from '../../components/App/Feed/WordCard/types';
 import { hasRefreshToken } from '../../services/auth.service';
 
 // --CONSTANTS--
@@ -47,11 +55,15 @@ const REMOVE_FAVOURITE_SUCCESS = 'wordsReducer/REMOVE_FAVOURITE_SUCCESS';
 const CHANGE_WORD = 'wordsReducer/CHANGE_WORD';
 const SET_CURRENTLY_MODIFIED_WORD = 'wordsReducer/SET_CURRENTLY_MODIFIED_WORD';
 const REPORT_WORD = 'wordsReducer/REPORT_WORD';
+const FETCH_MODERATOR_FEED = 'wordsReducer/FETCH_MODERATOR_FEED';
+const FETCH_MODERATOR_FEED_SUCCESS = 'wordReducer/FETCH_MODERATOR_FEED_SUCCESS';
+const REMOVE_WORD_FROM_MODERATOR_FEED = 'wordReducer/REMOVE_WORD_FROM_MODERATOR_FEED';
 
 type WordsActionType = InferActionsTypes<typeof wordsActions>;
 
 type ReducerState = {
   feed: WordCardInterface[];
+  moderatorFeed: ModeratorWordCardInterface[];
   fetching: boolean;
   currentlyModifiedWord: NewWordData | null;
   totalCount: string;
@@ -59,6 +71,7 @@ type ReducerState = {
 
 const initialState: ReducerState = {
   feed: [],
+  moderatorFeed: [],
   fetching: false,
   currentlyModifiedWord: null,
   totalCount: '0',
@@ -79,6 +92,7 @@ const wordsReducer = (state: ReducerState = initialState, action: WordsActionTyp
         isFetching: false,
       };
     case FETCH_FEED:
+    case FETCH_MODERATOR_FEED:
       const { page } = action.payload.options;
       return {
         ...state,
@@ -95,6 +109,16 @@ const wordsReducer = (state: ReducerState = initialState, action: WordsActionTyp
       return {
         ...state,
         feed: page > 0 ? [...state.feed, ...data] : [...data],
+        currentPage: page,
+        fetching: false,
+        totalCount: totalCount,
+      };
+    }
+    case FETCH_MODERATOR_FEED_SUCCESS: {
+      const { data, page, totalCount } = action.payload;
+      return {
+        ...state,
+        moderatorFeed: page > 0 ? [...state.moderatorFeed, ...data] : [...data],
         currentPage: page,
         fetching: false,
         totalCount: totalCount,
@@ -207,6 +231,7 @@ const wordsReducer = (state: ReducerState = initialState, action: WordsActionTyp
       return {
         ...state,
         feed: state.feed.filter((word) => word._id !== action.payload.id),
+        moderatorFeed: state.moderatorFeed.filter((word) => word._id !== action.payload.id),
       };
     case SET_CURRENTLY_MODIFIED_WORD:
       return {
@@ -265,6 +290,9 @@ export const wordsActions = {
 
   deleteWord: (id: string) => ({ type: DELETE_WORD, payload: { id } } as const),
 
+  removeWordFromModeratorFeed: (id: string) =>
+    ({ type: REMOVE_WORD_FROM_MODERATOR_FEED, payload: { id } } as const),
+
   deleteWordSuccess: (id: string) => ({ type: DELETE_WORD_SUCCESS, payload: { id } } as const),
 
   addFavourite: (id: string) => ({ type: ADD_FAVOURITE, payload: { id } } as const),
@@ -288,6 +316,22 @@ export const wordsActions = {
 
   reportWord: (id: string, message: string) =>
     ({ type: REPORT_WORD, payload: { id, message } } as const),
+  fetchModeratorFeed: (options: ModeratorFeedUrlOptionsType) =>
+    ({ type: FETCH_MODERATOR_FEED, payload: { options } } as const),
+  fetchModeratorFeedSuccess: (
+    data: ModeratorWordCardInterface[],
+    totalCount: string,
+    page: number,
+  ) => {
+    return {
+      type: FETCH_MODERATOR_FEED_SUCCESS,
+      payload: {
+        data,
+        page,
+        totalCount,
+      },
+    } as const;
+  },
 };
 
 // --WORKER-SAGAS--
@@ -386,6 +430,36 @@ export function* feedWorker(
     });
     const { page } = options;
     yield put(wordsActions.fetchFeedSuccess(result, response.totalCount, page));
+  } catch (e) {
+    yield put(
+      notificationActions.addNotification({
+        type: NotificationTypes.error,
+        message: 'Штосцi пайшло не так... Абнавiце старонку',
+      }),
+    );
+    yield put(wordsActions.fetchFeedError(e));
+  }
+}
+
+export function* moderatorFeedWorker(
+  action: ReturnType<typeof wordsActions.fetchModeratorFeed>,
+): Generator<StrictEffect, void, any> {
+  try {
+    const { options } = action.payload;
+    const response: ModeratorFeedReturnType = yield call(FeedService.fetchModeratorFeed, options);
+    const user: string = yield select((state: RootState) => state.user.currentUser?._id);
+    const result = response.feed.map((item) => {
+      return {
+        ...item,
+        isFavourited: item.favoriteByUserdIds.includes(user),
+        likes: item.likes.length,
+        dislikes: item.dislikes.length,
+        isLiked: item.likes.includes(user),
+        isDisliked: item.dislikes.includes(user),
+      };
+    });
+    const { page } = options;
+    yield put(wordsActions.fetchModeratorFeedSuccess(result, response.totalCount, page));
   } catch (e) {
     yield put(
       notificationActions.addNotification({
@@ -517,6 +591,23 @@ function* reportWordWorker({ payload }: ReturnType<typeof wordsActions.reportWor
   }
 }
 
+function* removeWordFromModeratorFeedWorker({
+  payload,
+}: ReturnType<typeof wordsActions.removeWordFromModeratorFeed>) {
+  try {
+    const { id } = payload;
+    yield call(wordsService.removeWordFromModeratorFeed, id);
+    yield put(wordsActions.deleteWordSuccess(id));
+  } catch (e) {
+    yield put(
+      notificationActions.addNotification({
+        type: NotificationTypes.error,
+        message: 'Не ўдалося убраць слова',
+      }),
+    );
+  }
+}
+
 // --WATCHER-SAGAS--
 export const wordsSagas = [
   takeEvery(CREATE_A_NEW_WORD, createANewWordWorker),
@@ -527,6 +618,8 @@ export const wordsSagas = [
   takeEvery(CHANGE_WORD, changeWordWorker),
   takeEvery(DELETE_WORD, deleteWordWorker),
   takeEvery(REPORT_WORD, reportWordWorker),
+  takeEvery(FETCH_MODERATOR_FEED, moderatorFeedWorker),
+  takeEvery(REMOVE_WORD_FROM_MODERATOR_FEED, removeWordFromModeratorFeedWorker),
 ];
 
 export default wordsReducer;

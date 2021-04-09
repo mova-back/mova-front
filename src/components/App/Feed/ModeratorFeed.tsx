@@ -26,6 +26,8 @@ import SearchField from './SearchField/SearchField';
 import { wordsActions } from '../../../store/words/wordsReducer';
 import { hasRefreshToken } from '../../../services/auth.service';
 import { CustomTheme } from '../../../styles/types';
+import { OrderByFieldModeratorType } from '../../../constants/paths';
+import ModeratorWordCard from './WordCard/ModeratorWordCard';
 
 const useStyles = makeStyles<CustomTheme>((theme) =>
   createStyles({
@@ -47,39 +49,39 @@ const useStyles = makeStyles<CustomTheme>((theme) =>
 
 interface IProps {
   className?: string;
-  options: { variant: 'all' | 'createdWords' | 'favoriteWords' };
+  options: { variant: 'all' };
 }
 
 const SortBy: React.FC<{
-  value: 'likes' | 'createdAt';
-  callback: (a: 'likes' | 'createdAt') => void;
+  value: OrderByFieldModeratorType;
+  callback: (a: OrderByFieldModeratorType) => void;
   direction: 'asc' | 'desc';
   setDirection: (a: 'asc' | 'desc') => void;
 }> = ({ value, callback, direction, setDirection }) => {
   const handleLikesClick = () => {
-    if (value === 'likes') {
+    if (value === 'reports') {
       setDirection(direction === 'asc' ? 'desc' : 'asc');
     }
-    callback('likes');
+    callback('reports');
   };
   const handleDateClick = () => {
-    if (value === 'createdAt') {
+    if (value === 'reportedAt') {
       setDirection(direction === 'asc' ? 'desc' : 'asc');
     }
-    callback('createdAt');
+    callback('reportedAt');
   };
   const theme = useTheme<CustomTheme>();
   const classes = useStyles(theme && { theme });
   return (
     <ButtonGroup>
       <Button
-        className={value === 'createdAt' ? classes.orderButton_active : classes.orderButton}
+        className={value === 'reportedAt' ? classes.orderButton_active : classes.orderButton}
         variant="text"
         onClick={handleDateClick}
       >
-        Дата
+        Дата жалабы
         {(() => {
-          if (value === 'createdAt') {
+          if (value === 'reportedAt') {
             if (direction === 'desc') {
               return <VerticalAlignBottomIcon fontSize="small" />;
             }
@@ -89,13 +91,13 @@ const SortBy: React.FC<{
         })()}
       </Button>
       <Button
-        className={value === 'likes' ? classes.orderButton_active : classes.orderButton}
+        className={value === 'reports' ? classes.orderButton_active : classes.orderButton}
         variant="text"
         onClick={handleLikesClick}
       >
-        Падабайкi
+        Колькасць жалаб
         {(() => {
-          if (value === 'likes') {
+          if (value === 'reports') {
             if (direction === 'desc') {
               return <VerticalAlignBottomIcon fontSize="small" />;
             }
@@ -107,12 +109,12 @@ const SortBy: React.FC<{
     </ButtonGroup>
   );
 };
-const Feed: React.FC<IProps> = ({ className, options }) => {
+const ModeratorFeed: React.FC<IProps> = ({ className, options }) => {
   const dispatch = useDispatch();
   const theme = useTheme<CustomTheme>();
   const classes = useStyles(theme && { theme });
-  const { feed, fetching } = useSelector((state: RootState) => state.word);
-  const [orderBy, setOrderBy] = useState<'likes' | 'createdAt'>('createdAt');
+  const { moderatorFeed, fetching } = useSelector((state: RootState) => state.word);
+  const [orderBy, setOrderBy] = useState<OrderByFieldModeratorType>('reportedAt');
   const [direction, setDirection] = useState<'asc' | 'desc'>('desc');
   const currentUser = useSelector((state: RootState) => state.user.currentUser);
   const [currentPage, setCurrentPage] = useState(0);
@@ -121,7 +123,7 @@ const Feed: React.FC<IProps> = ({ className, options }) => {
     if (hasRefreshToken()) {
       if (currentUser)
         dispatch(
-          wordsActions.fetchFeed({
+          wordsActions.fetchModeratorFeed({
             ...options,
             orderByField: orderBy,
             orderByDirection: direction,
@@ -130,7 +132,7 @@ const Feed: React.FC<IProps> = ({ className, options }) => {
         );
     } else {
       dispatch(
-        wordsActions.fetchFeed({
+        wordsActions.fetchModeratorFeed({
           ...options,
           orderByField: orderBy,
           orderByDirection: direction,
@@ -170,8 +172,8 @@ const Feed: React.FC<IProps> = ({ className, options }) => {
               />
             </Box>
 
-            {feed.map((word) => (
-              <WordCard
+            {moderatorFeed.map((word) => (
+              <ModeratorWordCard
                 key={word._id}
                 swearing={word.swearing}
                 isFavourited={word.isFavourited}
@@ -184,6 +186,7 @@ const Feed: React.FC<IProps> = ({ className, options }) => {
                 isDisliked={word.isDisliked}
                 description={word.description}
                 tags={word.tags}
+                complaints={word.complaints}
                 createdAt={word.createdAt}
                 createdByUserId={word.createdByUserId}
                 currentUserId={currentUser?._id}
@@ -196,4 +199,4 @@ const Feed: React.FC<IProps> = ({ className, options }) => {
   );
 };
 
-export default Feed;
+export default ModeratorFeed;

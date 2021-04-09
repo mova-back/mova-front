@@ -16,6 +16,7 @@ import ConfirmRegistrationPage from '../pages/ConfirmRegistrationOrMailPage';
 import ResetPasswordPage from '../pages/ResetPasswordPage';
 import ChangeEmailPage from '../pages/ChangeEmailPage';
 import ChangeWordPage from '../pages/ChangeWordPage';
+import ModeratorFeedPage from '../pages/ModeratorFeedPage';
 
 const ROUTES = [
   {
@@ -105,6 +106,7 @@ const ROUTES = [
   },
   { path: Page.ChangeEmail, exact: true, component: ChangeEmailPage },
   { path: Page.ChangeWord, exact: false, component: ChangeWordPage },
+  { path: Page.ModeratorFeed, exact: false, component: ModeratorFeedPage },
 ];
 
 export default ROUTES;

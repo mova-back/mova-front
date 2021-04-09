@@ -18,6 +18,7 @@ export enum Page {
   ChangeEmail = '/change-email',
   ConfirmEmail = '/confirm-email',
   ChangeWord = '/change-word/:id',
+  ModeratorFeed = '/moderator-feed',
 }
 
 export enum ApiRoute {
@@ -47,18 +48,25 @@ export enum ApiRoute {
   RemoveFavourite = '/api/word/removefavorite',
   DeleteWord = '/api/word',
   ReportWord = '/api/word/addreport',
+  ModeratorWords = '/api/words/reports',
+  RemoveWordFromModeratorFeed = '/api/word/return/',
 }
 
 // http://localhost:4400/api/words?variant=mywords&page=0&limit=20&orderBy[field]=likes&orderBy[direction]=asc
 
-export type FeedUrlOptionsType = {
+export interface FeedUrlOptionsType {
   page: number;
   limit?: number;
   variant: 'all' | 'createdWords' | 'favoriteWords';
   orderByField?: 'likes' | 'createdAt';
   orderByDirection?: 'asc' | 'desc';
-};
+}
 
+export type OrderByFieldModeratorType = 'reports' | 'reportedAt';
+export interface ModeratorFeedUrlOptionsType extends Omit<FeedUrlOptionsType, 'orderByField'> {
+  orderByField?: OrderByFieldModeratorType;
+}
+type ValueOf<T> = T[keyof T];
 export const wordUrlCreator = ({
   page = 0,
   limit = 20,
@@ -67,16 +75,13 @@ export const wordUrlCreator = ({
   orderByDirection = 'asc',
 }: FeedUrlOptionsType): string =>
   `${ApiRoute.Words}?variant=${variant}&page=${page}&limit=${limit}&orderBy[field]=${orderByField}&orderBy[direction]=${orderByDirection}`;
+export const moderatorWordUrlCreator = ({
+  page = 0,
+  limit = 20,
+  variant = 'all',
+  orderByField = 'reports',
+  orderByDirection = 'asc',
+}: ModeratorFeedUrlOptionsType): string =>
+  `${ApiRoute.ModeratorWords}?variant=${variant}&page=${page}&limit=${limit}&orderBy[field]=${orderByField}&orderBy[direction]=${orderByDirection}`;
 
-export const addIdToPath = (
-  route:
-    | ApiRoute.LikeAWord
-    | ApiRoute.DislikeAWord
-    | ApiRoute.DeleteWord
-    | ApiRoute.RemoveLike
-    | ApiRoute.AddFavourite
-    | ApiRoute.CreateAWord
-    | ApiRoute.ReportWord
-    | ApiRoute.RemoveFavourite,
-  id: string,
-): string => `${route}/${id}`;
+export const addIdToPath = (route: ValueOf<ApiRoute>, id: string): string => `${route}/${id}`;

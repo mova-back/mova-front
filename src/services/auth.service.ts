@@ -96,12 +96,11 @@ export async function getFingerprint(): Promise<string> {
 
   const result = await fp.get({ debug: true });
   const { visitorId } = result;
+  console.log('fingerprint: ', visitorId);
   return visitorId;
 }
 
-export async function refreshTokens(
-  history?: ReturnType<typeof useHistory>,
-): Promise<Record<string, string>> {
+export async function refreshTokens(): Promise<Record<string, string>> {
   try {
     const response: TokenData = await axios
       .post(

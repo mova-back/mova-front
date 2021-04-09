@@ -1,3 +1,5 @@
+import { Complaint } from '../../../../services/FeedService';
+
 export interface WordCardInterface {
   isLiked: boolean;
   isFavourited: boolean;
@@ -13,4 +15,8 @@ export interface WordCardInterface {
   _id: string;
   likes: number;
   dislikes: number;
+}
+
+export interface ModeratorWordCardInterface extends WordCardInterface {
+  complaints: Complaint[];
 }

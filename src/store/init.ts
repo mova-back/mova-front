@@ -4,11 +4,15 @@ import { userActions } from './user/reducer/userReducer';
 
 // eslint-disable-next-line import/prefer-default-export
 export function* init(store: any) {
-  debugger;
-  yield delay(150);
-  const { currentUser } = store.getState().user;
-  if (hasRefreshToken() && !currentUser) {
-    yield call(refreshTokens);
-    store.dispatch(userActions.setCurrentUser());
+  try {
+    yield delay(150);
+    const { currentUser } = store.getState().user;
+    if (hasRefreshToken() && !currentUser) {
+      debugger;
+      yield call(refreshTokens);
+      store.dispatch(userActions.setCurrentUser());
+    }
+  } catch (e) {
+    throw new Error(e);
   }
 }

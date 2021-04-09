@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { NavLink, Route } from 'react-router-dom';
+import { Link, NavLink, Route } from 'react-router-dom';
 
 import {
   AppBar,
@@ -15,19 +15,23 @@ import {
   createStyles,
   makeStyles,
   Hidden,
+  Button,
 } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 
+import { useSelector } from 'react-redux';
+import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
 import RouterNavLink from '../../BottomNav/RouterNavLink/RouterNavLink';
 import NAV_DRAWER_ROUTES from '../../../../constants/navDrawerRoutes';
 import DrawerHeader from './DrawerHeader/DrawerHeader';
 import { Page } from '../../../../constants/paths';
 import { IProps } from './types';
-import { CustomThemeOptions } from '../../../../styles/types';
+import { CustomTheme, CustomThemeOptions } from '../../../../styles/types';
+import { RootState } from '../../../../store/rootReducer';
 
-const useStyles = makeStyles<CustomThemeOptions>((theme) =>
+const useStyles = makeStyles<CustomTheme>((theme) =>
   createStyles({
     header: {
       fontSize: '20px',
@@ -47,8 +51,22 @@ const useStyles = makeStyles<CustomThemeOptions>((theme) =>
       color: 'white',
       textDecoration: 'none',
     },
-    activeLink: {
+    header__link_active: {
       color: `${theme.palette.secondary.main}`,
+    },
+    signInButton: {
+      color: 'white',
+      whiteSpace: 'nowrap',
+    },
+    toolbar: {
+      padding: 0,
+      display: 'flex',
+      justifyContent: 'space-between',
+      width: '80%',
+      [theme.breakpoints.down('md')]: {
+        width: '100%',
+        padding: 10,
+      },
     },
   }),
 );
@@ -58,7 +76,21 @@ const ActionBar: React.FC<IProps> = ({ header, settingsElementMode }) => {
 
   const [drawerVisible, setDrawerVisible] = React.useState(false);
 
-  const drawerRoutePaths = React.useMemo(() => NAV_DRAWER_ROUTES.map((route) => route.path), []);
+  const userRole = useSelector((state: RootState) => state.user.currentUser?.role);
+  const navRoutes = NAV_DRAWER_ROUTES;
+  // adding new tab to navbar in header
+  if (
+    userRole === 'ROLE_MODERATOR' &&
+    navRoutes[navRoutes.length - 1].label !== 'Мадэратарская стужка'
+  ) {
+    navRoutes.push({
+      icon: <AccountBalanceIcon />,
+      label: 'Мадэратарская стужка',
+      path: Page.ModeratorFeed,
+    });
+  }
+
+  const drawerRoutePaths = React.useMemo(() => navRoutes.map((route) => route.path), [navRoutes]);
   const settingsPaths = [Page.Feedback, Page.Logout, Page.DeleteAcc];
 
   const toggleDrawer = React.useCallback(() => {
@@ -72,7 +104,7 @@ const ActionBar: React.FC<IProps> = ({ header, settingsElementMode }) => {
   return (
     <>
       <AppBar className={classes.appBar} position="static">
-        <Toolbar>
+        <Toolbar className={classes.toolbar}>
           <Route path={settingsPaths || drawerRoutePaths}>
             <IconButton
               edge="start"
@@ -86,22 +118,33 @@ const ActionBar: React.FC<IProps> = ({ header, settingsElementMode }) => {
           </Route>
           <Hidden mdDown>
             <Box>
-              {NAV_DRAWER_ROUTES.map((route) => (
+              {navRoutes.map((route) => (
                 <NavLink
                   to={route.path}
                   key={route.label}
                   className={classes.header__link}
-                  activeClassName={classes.activeLink}
+                  activeClassName={classes.header__link_active}
                 >
                   {route.label}
                 </NavLink>
               ))}
             </Box>
           </Hidden>
-          <h1 className={classes.header}>{header}</h1>
+          <Hidden lgUp>
+            <h1 className={classes.header}>{header}</h1>
+          </Hidden>
+          <Hidden mdDown>
+            <NavLink
+              activeClassName={classes.header__link_active}
+              className={classes.header__link}
+              to={Page.Login}
+            >
+              Уваход/Рэгiстрацыя
+            </NavLink>
+          </Hidden>
           <Hidden lgUp>
             {!settingsElementMode ? (
-              <Box marginLeft="auto">
+              <Box marginLeft="auto" marginRight="5px">
                 <IconButton edge="end" color="inherit" aria-label="menu" onClick={toggleDrawer}>
                   <MenuIcon />
                 </IconButton>
@@ -114,7 +157,7 @@ const ActionBar: React.FC<IProps> = ({ header, settingsElementMode }) => {
         <DrawerHeader onAction={handleLogout} />
         <Divider />
         <List>
-          {NAV_DRAWER_ROUTES.map((route) => (
+          {navRoutes.map((route) => (
             <ListItem
               button
               component={RouterNavLink}

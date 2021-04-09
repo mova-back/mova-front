@@ -39,6 +39,7 @@ const useStyles = makeStyles((theme: CustomTheme) =>
       [theme.breakpoints.down('md')]: {
         width: '100%',
       },
+      marginTop: 20,
     },
 
     sidebarContainer: {
@@ -47,19 +48,21 @@ const useStyles = makeStyles((theme: CustomTheme) =>
       background: 'white',
     },
     sidebar: {
-      width: '80%',
+      width: '100%',
       minHeight: '100vh',
       marginTop: 25,
     },
     active: {
       fontWeight: 'bold',
-      color: 'red',
     },
     list__item: {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
       flexDirection: 'column',
+    },
+    gridContainer: {
+      marginTop: 20,
     },
   }),
 );
@@ -96,7 +99,7 @@ const Wrapper: React.FC<IProps> = ({ actionBarHeader, children }) => {
                       activeClassName={classes.active}
                       exact
                     >
-                      <Icon>{icon}</Icon>
+                      <Icon color="disabled">{icon}</Icon>
                       <ListItemText primary={label} />
                     </ListItem>
                   ))}
