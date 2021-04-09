@@ -1,46 +1,25 @@
-import LatoThin from '../../fonts/Lato-Thin.ttf';
-import LatoLight from '../../fonts/Lato-Light.ttf';
-import LatoRegular from '../../fonts/Lato-Regular.ttf';
-import LatoBold from '../../fonts/Lato-Bold.ttf';
-import LatoBlack from '../../fonts/Lato-Black.ttf';
-import LatoItalic from '../../fonts/Lato-Italic.ttf';
+import LatoRegularWoff2 from '../../fonts/Lato-Regular.woff2';
+import LatoBoldWoff2 from '../../fonts/Lato-Bold.woff2';
+import LatoItalicWoff2 from '../../fonts/Lato-Italic.woff2';
 
 const fonts = {
-  latoThin: {
-    fontFamily: 'Lato',
-    fontStyle: 'normal',
-    fontWeight: 100,
-    src: `url(${LatoThin}) format('ttf')`,
-  },
-  latoLight: {
-    fontFamily: 'Lato',
-    fontStyle: 'normal',
-    fontWeight: 300,
-    src: `url(${LatoLight}) format('ttf')`,
-  },
   latoRegular: {
     fontFamily: 'Lato',
     fontStyle: 'normal',
     fontWeight: 400,
-    src: `url(${LatoRegular}) format('ttf')`,
+    src: `url(${LatoRegularWoff2}) format('woff2')`,
   },
   latoBold: {
     fontFamily: 'Lato',
     fontStyle: 'normal',
     fontWeight: 700,
-    src: `url(${LatoBold}) format('ttf')`,
-  },
-  latoBlack: {
-    fontFamily: 'Lato',
-    fontStyle: 'normal',
-    fontWeight: 700,
-    src: `url(${LatoBlack}) format('ttf')`,
+    src: `url(${LatoBoldWoff2}) format('woff2')`,
   },
   latoItalic: {
     fontFamily: 'Lato',
     fontStyle: 'italic',
     fontWeight: 400,
-    src: `url(${LatoItalic}) format('woff2')`,
+    src: `url(${LatoItalicWoff2}) format('woff2')`,
   },
 };
 

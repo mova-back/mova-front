@@ -28,7 +28,6 @@ const mainTheme = {
   typography: {
     fontFamily: '"Lato", "Arial", sans-serif',
     fontSize: 14,
-    fontWeightThin: 100,
     fontWeightLight: 300,
     fontWeightRegular: 400,
     fontWeightMedium: 500,
@@ -49,14 +48,7 @@ const mainTheme = {
     },
     MuiCssBaseline: {
       '@global': {
-        '@font-face': [
-          fonts.latoRegular,
-          fonts.latoBold,
-          fonts.latoItalic,
-          fonts.latoThin,
-          fonts.latoLight,
-          fonts.latoBlack,
-        ],
+        '@font-face': [fonts.latoRegular, fonts.latoBold, fonts.latoItalic],
       },
     },
     MuiBottomNavigation: {
