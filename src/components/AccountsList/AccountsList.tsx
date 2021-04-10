@@ -35,6 +35,11 @@ const useStyles = makeStyles<CustomTheme>((theme) =>
         justifyContent: 'center',
       },
     },
+    grid: {
+      [theme.breakpoints.down('sm')]: {
+        gridTemplateColumns: '12fr',
+      },
+    },
   }),
 );
 
@@ -70,10 +75,23 @@ const AccountsList: React.FC = () => {
   const classes = useStyles(theme);
   return (
     <div>
-      <SearchField />
-      <Box paddingTop="15px" display="flex" flexWrap="wrap">
-        {fetching ? <Loader /> : accounts.map((item) => <AccountCard {...item} />)}
-      </Box>
+      {fetching ? (
+        <Loader />
+      ) : (
+        <>
+          <SearchField />
+          <Box
+            className={classes.grid}
+            paddingTop="15px"
+            display="grid"
+            gridTemplateColumns="6fr 6fr"
+          >
+            {accounts.map((item) => (
+              <AccountCard {...item} />
+            ))}
+          </Box>
+        </>
+      )}
     </div>
   );
 };
