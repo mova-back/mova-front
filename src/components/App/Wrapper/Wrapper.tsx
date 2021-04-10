@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme: CustomTheme) =>
     },
     main: {
       position: 'relative',
-      minHeight: 'calc(100vh - 125px)',
+      minHeight: 'calc(100vh - 140px)',
       minWidth: '80%',
       display: 'flex',
       flexDirection: 'column',
@@ -46,11 +46,11 @@ const useStyles = makeStyles((theme: CustomTheme) =>
       position: 'sticky',
       top: 0,
       background: 'white',
+      height: '100vh',
     },
     sidebar: {
       width: '100%',
-      minHeight: '100vh',
-      marginTop: 25,
+      marginTop: 15,
     },
     active: {
       fontWeight: 'bold',
