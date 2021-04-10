@@ -24,7 +24,7 @@ import BottomNav from '../BottomNav/BottomNav';
 const useStyles = makeStyles((theme: CustomTheme) =>
   createStyles({
     mainContainer: {
-      background: `${theme.palette.gradient.main}`,
+      background: 'linear-gradient(34deg, rgba(7,184,134,0.4) 0%, rgba(122,93,253,0.4) 100%)',
       display: 'flex',
     },
     main: {
@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme: CustomTheme) =>
     sidebarContainer: {
       position: 'sticky',
       top: 0,
-      background: 'white',
+      background: 'linear-gradient(126deg, rgba(122,93,253,0.4) 0%, rgba(7,184,134,0.4) 100%)',
       height: '100vh',
     },
     sidebar: {

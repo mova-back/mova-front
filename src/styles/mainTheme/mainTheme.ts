@@ -44,7 +44,8 @@ const mainTheme = {
     MuiButton: {
       containedSecondary: {
         color: 'white',
-        fontFamily: '"Lato"',
+        fontFamily: '"Lato", sans-serif',
+        fontWeight: 700,
       },
     },
     MuiCssBaseline: {

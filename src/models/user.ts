@@ -1,8 +1,10 @@
+export type RolesType = 'ROLE_USER' | 'ROLE_MODERATOR' | 'ROLE_ADMIN' | 'ROLE_ANONYMOUS';
+
 type User = {
-  _id: number;
+  _id: string;
   username: string;
   email: string;
-  role: 'ROLE_USER' | 'ROLE_MODERATOR' | 'ROLE_ADMIN' | 'ROLE_ANONYMOUS';
+  role: RolesType;
   created_at: string;
   updated_at: string;
   accessToken: string;

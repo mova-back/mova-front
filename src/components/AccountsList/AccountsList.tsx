@@ -27,6 +27,13 @@ const useStyles = makeStyles<CustomTheme>((theme) =>
       padding: 15,
       margin: 5,
     },
+    card_moderator: {
+      height: 200,
+      flexBasis: 350,
+      padding: 15,
+      margin: 5,
+      background: `${theme.palette.secondary.light}`,
+    },
     container: {
       [theme.breakpoints.down('md')]: {
         width: '100%',
@@ -47,8 +54,8 @@ const AccountCard: React.FC<Account> = ({ username, _id, email, role, created_at
   const theme = useTheme();
   const classes = useStyles(theme);
   return (
-    <Card className={classes.card}>
-      <CardHeader title={username} subheader={email} />
+    <Card className={role === 'ROLE_MODERATOR' ? classes.card_moderator : classes.card}>
+      <CardHeader title={username} subheader={_id} />
       <CardActions disableSpacing>
         <IconButton aria-label="add to favorites">
           <FavoriteIcon />

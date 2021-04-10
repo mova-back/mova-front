@@ -117,7 +117,7 @@ const useStyles = makeStyles<CustomTheme>((theme) =>
 );
 
 interface ModeratorWordCardProps extends ModeratorWordCardInterface {
-  currentUserId: number | undefined;
+  currentUserId?: string;
 }
 
 const ModeratorWordCard: React.FC<ModeratorWordCardProps> = ({

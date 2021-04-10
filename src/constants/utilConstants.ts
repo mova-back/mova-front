@@ -8,6 +8,6 @@ export const UNAUTHORIZED_ERROR_CODE = 401;
 export const FORBIDDEN_ERROR_CODE = 403;
 export const SERVER_ERROR_CODE = 500;
 
-export const AXIOS_TIMEOUT = 3000;
+export const AXIOS_TIMEOUT = 10000;
 
 export const FORMAT_DATE = 'dd.MM.yyyy';

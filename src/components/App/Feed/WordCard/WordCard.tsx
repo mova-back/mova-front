@@ -50,7 +50,9 @@ import { Page } from '../../../../constants/paths';
 
 const useStyles = makeStyles<CustomTheme>((theme) =>
   createStyles({
-    root: {},
+    root: {
+      background: 'rgba(255,255,255,0.5)',
+    },
     bookmark: {
       margin: theme.spacing(-1, -1, 0, 0),
       position: 'absolute',
@@ -86,7 +88,7 @@ const useStyles = makeStyles<CustomTheme>((theme) =>
       width: 300,
     },
     menu: {
-      boxShadow: '4px 12px 25px rgba(71, 55, 255, 0.3)',
+      // boxShadow: '4px 12px 25px rgba(71, 55, 255, 0.3)',
       borderRadius: '8px',
     },
     dialog: {
@@ -115,7 +117,7 @@ const useStyles = makeStyles<CustomTheme>((theme) =>
 );
 
 interface WordCardProps extends WordCardInterface {
-  currentUserId: number | undefined;
+  currentUserId?: string;
 }
 
 const WordCard: React.FC<WordCardProps> = ({
