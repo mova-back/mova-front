@@ -1,16 +1,13 @@
 import * as React from 'react';
-import { useEffect } from 'react';
 
 import {
   Box,
-  Drawer,
   Grid,
   Hidden,
   Icon,
   Link,
   List,
   ListItem,
-  ListItemIcon,
   ListItemText,
   Typography,
 } from '@material-ui/core';
@@ -18,7 +15,7 @@ import { NavLink } from 'react-router-dom';
 import { createStyles, makeStyles, useTheme } from '@material-ui/core/styles';
 import { IProps } from './types';
 import ActionBar from './ActionBar/ActionBar';
-import { CustomTheme, CustomThemeOptions } from '../../../styles/types';
+import { CustomTheme } from '../../../styles/types';
 import BOTTOM_NAVIGATION from '../../../constants/bottomNavRoutes';
 import RouterNavLink from '../BottomNav/RouterNavLink/RouterNavLink';
 import { Page } from '../../../constants/paths';
