@@ -14,7 +14,12 @@ const accountsServise = {
     return response.data.data;
   },
   *promoteUser(id: string): Generator<StrictEffect, any, any> {
-    const response = yield call(http(true).post, addIdToPath(ApiRoute.Promote, id));
+    const response = yield call(
+      http(true).put,
+      addIdToPath(ApiRoute.Promote, id),
+      {},
+      { withCredentials: true },
+    );
     return response.data;
   },
 };

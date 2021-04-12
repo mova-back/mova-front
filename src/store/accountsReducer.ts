@@ -78,6 +78,7 @@ function* promoteUserWorker({
   payload,
 }: ReturnType<typeof accountsActions.promoteUser>): Generator<StrictEffect, void, unknown> {
   try {
+    debugger;
     const { id } = payload;
     yield call(accountsServise.promoteUser, id);
     yield put(accountsActions.promoteUserSuccess(id));

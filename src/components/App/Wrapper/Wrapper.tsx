@@ -42,7 +42,8 @@ const useStyles = makeStyles((theme: CustomTheme) =>
     sidebarContainer: {
       position: 'sticky',
       top: 0,
-      background: 'linear-gradient(126deg, rgba(122,93,253,0.3) 0%, rgba(7,184,134,0.3) 100%)',
+      color: 'white',
+      background: 'rgb(56,79,125)',
       height: '100vh',
     },
     sidebar: {

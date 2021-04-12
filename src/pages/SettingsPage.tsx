@@ -170,30 +170,6 @@ const SettingsPage: React.FC = () => {
               </Link>
             </div>
           ) : null}
-          <div className={classes.swearWordsSwitchContainer}>
-            <span className={classes.switchLabel}>Паказваць лаянку ў стужцы</span>
-            <Switch
-              disableRipple
-              classes={{
-                root: classes.switchRoot,
-              }}
-            />
-          </div>
-          <div className={classes.radioContainer}>
-            <div className={classes.radioContainerLabel}>Паказваць словы ў стужцы:</div>
-            <RadioGroup defaultValue="popular">
-              <FormControlLabel
-                value="popular"
-                control={<Radio color="default" />}
-                label="Самыя папулярныя"
-              />
-              <FormControlLabel
-                value="new"
-                control={<Radio color="default" />}
-                label="Самыя новыя"
-              />
-            </RadioGroup>
-          </div>
           {currentUser ? (
             <>
               <Tab

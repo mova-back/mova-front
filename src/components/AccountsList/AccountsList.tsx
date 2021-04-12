@@ -10,8 +10,9 @@ import {
 } from '@material-ui/core';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import FavoriteIcon from '@material-ui/icons/Favorite';
+import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import ShareIcon from '@material-ui/icons/Share';
+import VisibilityIcon from '@material-ui/icons/Visibility';
 import { Account } from '../../services/accountsServise';
 import { accountsActions } from '../../store/accountsReducer';
 import { RootState } from '../../store/rootReducer';
@@ -32,7 +33,7 @@ const useStyles = makeStyles<CustomTheme>((theme) =>
       flexBasis: 350,
       padding: 15,
       margin: 5,
-      background: `${theme.palette.secondary.light}`,
+      background: `${theme.palette.secondary.main}`,
     },
     container: {
       [theme.breakpoints.down('md')]: {
@@ -53,14 +54,25 @@ const useStyles = makeStyles<CustomTheme>((theme) =>
 const AccountCard: React.FC<Account> = ({ username, _id, email, role, created_at, updated_at }) => {
   const theme = useTheme();
   const classes = useStyles(theme);
+  const dispatch = useDispatch();
   return (
     <Card className={role === 'ROLE_MODERATOR' ? classes.card_moderator : classes.card}>
       <CardHeader title={username} subheader={_id} />
       <CardActions disableSpacing>
-        <IconButton aria-label="add to favorites">
-          <FavoriteIcon />
-        </IconButton>
-        <IconButton aria-label="share">
+        {role !== 'ROLE_MODERATOR' ? (
+          <IconButton
+            onClick={() => {
+              dispatch(accountsActions.promoteUser(_id));
+            }}
+          >
+            <VisibilityIcon />
+          </IconButton>
+        ) : (
+          <IconButton>
+            <VisibilityOffIcon />
+          </IconButton>
+        )}
+        <IconButton>
           <ShareIcon />
         </IconButton>
       </CardActions>

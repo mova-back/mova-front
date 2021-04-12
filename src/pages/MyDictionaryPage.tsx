@@ -53,7 +53,6 @@ const MyDictionaryPage: React.FC = () => {
           <PleaseSignIn />
         )}
       </Wrapper>
-      <BottomNav />
     </div>
   );
 };
