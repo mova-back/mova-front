@@ -1,6 +1,7 @@
 /* eslint-disable */
 import {
   call,
+  delay,
   put,
   select,
   SelectEffect,
@@ -416,6 +417,9 @@ export function* feedWorker(
 ): Generator<StrictEffect, void, any> {
   try {
     const { options } = action.payload;
+    if (options.search.length > 0) {
+      yield delay(400);
+    }
     const response: FeedReturnType = yield call(FeedService.fetchFeed, options);
     const user: string = yield select((state: RootState) => state.user.currentUser?._id);
     const result = response.feed.map((item) => {

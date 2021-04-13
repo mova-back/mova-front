@@ -63,6 +63,7 @@ export interface FeedUrlOptionsType {
   variant: 'all' | 'createdWords' | 'favoriteWords';
   orderByField?: 'likes' | 'createdAt';
   orderByDirection?: 'asc' | 'desc';
+  search: string;
 }
 
 export type OrderByFieldModeratorType = 'reports' | 'reportedAt';
@@ -76,15 +77,27 @@ export const wordUrlCreator = ({
   variant = 'all',
   orderByField = 'likes',
   orderByDirection = 'asc',
-}: FeedUrlOptionsType): string =>
-  `${ApiRoute.Words}?variant=${variant}&page=${page}&limit=${limit}&orderBy[field]=${orderByField}&orderBy[direction]=${orderByDirection}`;
+  search,
+}: FeedUrlOptionsType): string => {
+  let url = `${ApiRoute.Words}?variant=${variant}&page=${page}&limit=${limit}&orderBy[field]=${orderByField}&orderBy[direction]=${orderByDirection}`;
+  if (search.length > 0) {
+    url += `&search=${search.split(' ').join('+')}`;
+  }
+  return url;
+};
 export const moderatorWordUrlCreator = ({
   page = 0,
   limit = 20,
   variant = 'all',
   orderByField = 'reports',
   orderByDirection = 'asc',
-}: ModeratorFeedUrlOptionsType): string =>
-  `${ApiRoute.ModeratorWords}?variant=${variant}&page=${page}&limit=${limit}&orderBy[field]=${orderByField}&orderBy[direction]=${orderByDirection}`;
+  search,
+}: ModeratorFeedUrlOptionsType): string => {
+  let url = `${ApiRoute.ModeratorWords}?variant=${variant}&page=${page}&limit=${limit}&orderBy[field]=${orderByField}&orderBy[direction]=${orderByDirection}`;
+  if (search.length > 0) {
+    url += `&search=${search.split(' ').join('+')}`;
+  }
+  return url;
+};
 
 export const addIdToPath = (route: ValueOf<ApiRoute>, id: string): string => `${route}/${id}`;

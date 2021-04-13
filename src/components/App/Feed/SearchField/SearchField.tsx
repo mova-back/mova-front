@@ -4,7 +4,11 @@ import { makeStyles, createStyles, useTheme } from '@material-ui/core/styles';
 import SearchIcon from '@material-ui/icons/Search';
 import { CustomTheme, CustomThemeOptions } from '../../../../styles/types';
 
-const SearchField: React.FC = () => {
+interface IProps {
+  onChange: (a: any) => void;
+}
+
+const SearchField: React.FC<IProps> = ({ onChange }) => {
   const useStyles = makeStyles<CustomTheme>((theme) =>
     createStyles({
       root: {
@@ -41,6 +45,9 @@ const SearchField: React.FC = () => {
         placeholder="Пошук слоў"
         type="search"
         variant="outlined"
+        onChange={(e) => {
+          onChange(e.target.value);
+        }}
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
@@ -56,4 +63,4 @@ const SearchField: React.FC = () => {
   );
 };
 
-export default SearchField;
+export default React.memo(SearchField);

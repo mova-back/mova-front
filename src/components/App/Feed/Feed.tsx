@@ -116,7 +116,7 @@ const Feed: React.FC<IProps> = ({ className, options }) => {
   const [direction, setDirection] = useState<'asc' | 'desc'>('desc');
   const currentUser = useSelector((state: RootState) => state.user.currentUser);
   const [currentPage, setCurrentPage] = useState(0);
-
+  const [searchQuery, setSearchQuery] = useState('');
   useEffect(() => {
     if (hasRefreshToken()) {
       if (currentUser)
@@ -126,6 +126,7 @@ const Feed: React.FC<IProps> = ({ className, options }) => {
             orderByField: orderBy,
             orderByDirection: direction,
             page: currentPage,
+            search: searchQuery,
           }),
         );
     } else {
@@ -135,10 +136,11 @@ const Feed: React.FC<IProps> = ({ className, options }) => {
           orderByField: orderBy,
           orderByDirection: direction,
           page: currentPage,
+          search: searchQuery,
         }),
       );
     }
-  }, [dispatch, options, currentUser, orderBy, direction, currentPage]);
+  }, [dispatch, options, currentUser, orderBy, direction, currentPage, searchQuery]);
   const totalCount = useSelector((state: RootState) => state.word.totalCount);
   const hasMore = +totalCount > (currentPage + 1) * 20;
 
@@ -156,21 +158,20 @@ const Feed: React.FC<IProps> = ({ className, options }) => {
       }}
     >
       <Box display="grid" gridGap={8} p={1} pb={10} className={className}>
-        {fetching ? (
-          <Loader className={classes.loader} />
-        ) : (
-          <>
-            <SearchField />
-            <Box display="flex" alignItems="center" justifyContent="space-between">
-              <SortBy
-                direction={direction}
-                setDirection={setDirection}
-                value={orderBy}
-                callback={setOrderBy}
-              />
-            </Box>
-
-            {feed.map((word) => (
+        <>
+          <SearchField onChange={setSearchQuery} />
+          <Box display="flex" alignItems="center" justifyContent="space-between">
+            <SortBy
+              direction={direction}
+              setDirection={setDirection}
+              value={orderBy}
+              callback={setOrderBy}
+            />
+          </Box>
+          {fetching ? (
+            <Loader className={classes.loader} />
+          ) : (
+            feed.map((word) => (
               <WordCard
                 key={word._id}
                 swearing={word.swearing}
@@ -188,9 +189,9 @@ const Feed: React.FC<IProps> = ({ className, options }) => {
                 createdByUserId={word.createdByUserId}
                 currentUserId={currentUser?._id}
               />
-            ))}
-          </>
-        )}
+            ))
+          )}
+        </>
       </Box>
     </InfiniteScroll>
   );

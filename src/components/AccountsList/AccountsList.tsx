@@ -8,7 +8,7 @@ import {
   makeStyles,
   useTheme,
 } from '@material-ui/core';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import ShareIcon from '@material-ui/icons/Share';
@@ -84,6 +84,7 @@ const AccountsList: React.FC = () => {
   const accounts = useSelector((state: RootState) => state.accounts.accounts);
   const dispatch = useDispatch();
   const userRole = useSelector((state: RootState) => state.user.currentUser?.role);
+  const [searchQuery, setSearchQuery] = useState('');
   useEffect(() => {
     if (userRole === 'ROLE_ADMIN') {
       dispatch(accountsActions.getAccounts());
@@ -98,7 +99,7 @@ const AccountsList: React.FC = () => {
         <Loader />
       ) : (
         <>
-          <SearchField />
+          <SearchField onChange={setSearchQuery} />
           <Box
             className={classes.grid}
             paddingTop="15px"

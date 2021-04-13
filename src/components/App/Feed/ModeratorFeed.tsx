@@ -118,6 +118,7 @@ const ModeratorFeed: React.FC<IProps> = ({ className, options }) => {
   const [direction, setDirection] = useState<'asc' | 'desc'>('desc');
   const currentUser = useSelector((state: RootState) => state.user.currentUser);
   const [currentPage, setCurrentPage] = useState(0);
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     if (hasRefreshToken()) {
@@ -128,6 +129,7 @@ const ModeratorFeed: React.FC<IProps> = ({ className, options }) => {
             orderByField: orderBy,
             orderByDirection: direction,
             page: currentPage,
+            search: searchQuery,
           }),
         );
     } else {
@@ -137,10 +139,11 @@ const ModeratorFeed: React.FC<IProps> = ({ className, options }) => {
           orderByField: orderBy,
           orderByDirection: direction,
           page: currentPage,
+          search: searchQuery,
         }),
       );
     }
-  }, [dispatch, options, currentUser, orderBy, direction, currentPage]);
+  }, [dispatch, options, currentUser, orderBy, direction, currentPage, searchQuery]);
   const totalCount = useSelector((state: RootState) => state.word.totalCount);
   const hasMore = +totalCount > (currentPage + 1) * 20;
 
@@ -162,7 +165,7 @@ const ModeratorFeed: React.FC<IProps> = ({ className, options }) => {
           <Loader className={classes.loader} />
         ) : (
           <>
-            <SearchField />
+            <SearchField onChange={setSearchQuery} />
             <Box display="flex" alignItems="center" justifyContent="space-between">
               <SortBy
                 direction={direction}
