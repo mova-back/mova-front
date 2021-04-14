@@ -18,7 +18,6 @@ const NewWordPage: React.FC = () => {
           <PleaseSignIn />
         )}
       </Wrapper>
-      <BottomNav />
     </>
   );
 };

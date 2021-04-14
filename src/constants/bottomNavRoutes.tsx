@@ -17,19 +17,19 @@ const BOTTOM_NAVIGATION: INav[] = [
   {
     id: 'dictionary',
     label: 'Мой слоўнік',
-    icon: <BookmarkBorderIcon />,
+    icon: <BookmarkBorderIcon color="secondary" />,
     path: Page.Dictionary,
   },
   {
     id: 'home',
     label: 'Стужка',
-    icon: <MenuBookIcon />,
+    icon: <MenuBookIcon color="secondary" />,
     path: Page.Home,
   },
   {
     id: 'addWord',
     label: 'Дадаць слова',
-    icon: <AddRoundedIcon />,
+    icon: <AddRoundedIcon color="secondary" />,
     path: Page.AddWord,
   },
 ];

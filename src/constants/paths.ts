@@ -1,3 +1,5 @@
+import { IGetAccountsOptions } from '../components/AccountsList/Types';
+
 export enum Page {
   Home = '/',
   Login = '/login',
@@ -71,6 +73,10 @@ export interface ModeratorFeedUrlOptionsType extends Omit<FeedUrlOptionsType, 'o
   orderByField?: OrderByFieldModeratorType;
 }
 type ValueOf<T> = T[keyof T];
+
+const addSearchQueryToPath = (path: string, searchQuery: string): string =>
+  `${path}&search=${searchQuery.split(' ').join('+')}`;
+
 export const wordUrlCreator = ({
   page = 0,
   limit = 20,
@@ -79,11 +85,11 @@ export const wordUrlCreator = ({
   orderByDirection = 'asc',
   search,
 }: FeedUrlOptionsType): string => {
-  let url = `${ApiRoute.Words}?variant=${variant}&page=${page}&limit=${limit}&orderBy[field]=${orderByField}&orderBy[direction]=${orderByDirection}`;
+  const path = `${ApiRoute.Words}?variant=${variant}&page=${page}&limit=${limit}&orderBy[field]=${orderByField}&orderBy[direction]=${orderByDirection}`;
   if (search.length > 0) {
-    url += `&search=${search.split(' ').join('+')}`;
+    return addSearchQueryToPath(path, search);
   }
-  return url;
+  return path;
 };
 export const moderatorWordUrlCreator = ({
   page = 0,
@@ -93,11 +99,19 @@ export const moderatorWordUrlCreator = ({
   orderByDirection = 'asc',
   search,
 }: ModeratorFeedUrlOptionsType): string => {
-  let url = `${ApiRoute.ModeratorWords}?variant=${variant}&page=${page}&limit=${limit}&orderBy[field]=${orderByField}&orderBy[direction]=${orderByDirection}`;
+  const path = `${ApiRoute.ModeratorWords}?variant=${variant}&page=${page}&limit=${limit}&orderBy[field]=${orderByField}&orderBy[direction]=${orderByDirection}`;
   if (search.length > 0) {
-    url += `&search=${search.split(' ').join('+')}`;
+    return addSearchQueryToPath(path, search);
   }
-  return url;
+  return path;
+};
+
+export const accountsUrlCreator = ({ search, page = 0 }: IGetAccountsOptions): string => {
+  const path = `${ApiRoute.Accounts}?page=${page}`;
+  if (search.length > 0) {
+    return addSearchQueryToPath(path, search);
+  }
+  return path;
 };
 
 export const addIdToPath = (route: ValueOf<ApiRoute>, id: string): string => `${route}/${id}`;

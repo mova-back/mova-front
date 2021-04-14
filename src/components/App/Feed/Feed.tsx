@@ -18,7 +18,7 @@ import {
 import { useEffect, useState } from 'react';
 import VerticalAlignBottomIcon from '@material-ui/icons/VerticalAlignBottom';
 import VerticalAlignTopIcon from '@material-ui/icons/VerticalAlignTop';
-import InfiniteScroll from 'react-infinite-scroll-component';
+import useInfiniteScroll from 'react-infinite-scroll-hook';
 import WordCard from './WordCard/WordCard';
 import { RootState } from '../../../store/rootReducer';
 import Loader from '../../Loader/Loader';
@@ -117,6 +117,17 @@ const Feed: React.FC<IProps> = ({ className, options }) => {
   const currentUser = useSelector((state: RootState) => state.user.currentUser);
   const [currentPage, setCurrentPage] = useState(0);
   const [searchQuery, setSearchQuery] = useState('');
+  const totalCount = useSelector((state: RootState) => state.word.totalCount);
+  const hasMore = +totalCount > (currentPage + 1) * 10;
+  const [sentryRef] = useInfiniteScroll({
+    loading: fetching,
+    hasNextPage: hasMore,
+    onLoadMore: () => {
+      setCurrentPage((page) => page + 1);
+    },
+    rootMargin: '0px 0px 1000px 0px',
+    delayInMs: 1000,
+  });
   useEffect(() => {
     if (hasRefreshToken()) {
       if (currentUser)
@@ -127,6 +138,7 @@ const Feed: React.FC<IProps> = ({ className, options }) => {
             orderByDirection: direction,
             page: currentPage,
             search: searchQuery,
+            limit: 10,
           }),
         );
     } else {
@@ -137,63 +149,50 @@ const Feed: React.FC<IProps> = ({ className, options }) => {
           orderByDirection: direction,
           page: currentPage,
           search: searchQuery,
+          limit: 10,
         }),
       );
     }
   }, [dispatch, options, currentUser, orderBy, direction, currentPage, searchQuery]);
-  const totalCount = useSelector((state: RootState) => state.word.totalCount);
-  const hasMore = +totalCount > (currentPage + 1) * 20;
 
   return (
-    <InfiniteScroll
-      loader=""
-      className={classes.scroll}
-      hasMore={hasMore}
-      dataLength={+totalCount}
-      next={() => {
-        setCurrentPage((page) => page + 1);
-      }}
-      refreshFunction={() => {
-        setCurrentPage(0);
-      }}
-    >
-      <Box display="grid" gridGap={8} p={1} pb={10} className={className}>
-        <>
-          <SearchField onChange={setSearchQuery} />
-          <Box display="flex" alignItems="center" justifyContent="space-between">
-            <SortBy
-              direction={direction}
-              setDirection={setDirection}
-              value={orderBy}
-              callback={setOrderBy}
-            />
-          </Box>
-          {fetching ? (
-            <Loader className={classes.loader} />
-          ) : (
-            feed.map((word) => (
-              <WordCard
-                key={word._id}
-                swearing={word.swearing}
-                isFavourited={word.isFavourited}
-                likes={word.likes}
-                dislikes={word.dislikes}
-                _id={word._id}
-                wordname={word.wordname}
-                meaning={word.meaning}
-                isLiked={word.isLiked}
-                isDisliked={word.isDisliked}
-                description={word.description}
-                tags={word.tags}
-                createdAt={word.createdAt}
-                createdByUserId={word.createdByUserId}
-                currentUserId={currentUser?._id}
-              />
-            ))
-          )}
-        </>
-      </Box>
-    </InfiniteScroll>
+    <Box display="grid" gridGap={8} p={1} pb={10} className={className}>
+      <>
+        <SearchField onChange={setSearchQuery} />
+        <Box display="flex" alignItems="center" justifyContent="space-between">
+          <SortBy
+            direction={direction}
+            setDirection={setDirection}
+            value={orderBy}
+            callback={setOrderBy}
+          />
+        </Box>
+        {feed.map((word) => (
+          <WordCard
+            key={word._id}
+            swearing={word.swearing}
+            isFavourited={word.isFavourited}
+            likes={word.likes}
+            dislikes={word.dislikes}
+            _id={word._id}
+            wordname={word.wordname}
+            meaning={word.meaning}
+            isLiked={word.isLiked}
+            isDisliked={word.isDisliked}
+            description={word.description}
+            tags={word.tags}
+            createdAt={word.createdAt}
+            createdByUserId={word.createdByUserId}
+            currentUserId={currentUser?._id}
+          />
+        ))}
+      </>
+      {(fetching || hasMore) && (
+        <div ref={sentryRef}>
+          <Loader />
+        </div>
+      )}
+    </Box>
   );
 };
 

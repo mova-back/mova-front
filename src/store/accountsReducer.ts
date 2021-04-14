@@ -1,7 +1,11 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { StrictEffect, takeEvery, call, put } from '@redux-saga/core/effects';
+import { IGetAccountsOptions } from '../components/AccountsList/Types';
 import NotificationTypes from '../constants/notificationTypes';
-import accountsServise, { Account } from '../services/accountsServise';
+import { accountsUrlCreator } from '../constants/paths';
+import accountsServise from '../services/AccountsServise/accountsServise';
+
+import { Account, GetAccountsReturnType } from '../services/AccountsServise/types';
 import { notificationActions } from './notification/reducer/notificationReducer';
 import { InferActionsTypes } from './types';
 
@@ -13,11 +17,13 @@ const PROMOTE_USER_SUCCESS = 'accountsReducer/PROMOTE_USER_SUCCESS';
 type AccountsReducerStateType = {
   accounts: Account[];
   fetching: boolean;
+  totalCount: number;
 };
 
 const initialState = {
   accounts: [],
   fetching: false,
+  totalCount: 0,
 };
 
 type AccountsActionsType = InferActionsTypes<typeof accountsActions>;
@@ -26,13 +32,22 @@ const accountsReducer = (
   action: AccountsActionsType,
 ) => {
   switch (action.type) {
-    case GET_ACCOUNTS:
+    case GET_ACCOUNTS: {
+      const { page } = action.payload.options;
       return {
         ...state,
-        fetching: true,
+        fetching: page === 0 ? !state.fetching : false,
       };
-    case GET_ACCOUNTS_SUCCESS:
-      return { ...state, accounts: action.payload.data, fetching: false };
+    }
+    case GET_ACCOUNTS_SUCCESS: {
+      const { data, page, totalCount } = action.payload;
+      return {
+        ...state,
+        accounts: page > 0 ? [...state.accounts, ...data] : [...data],
+        fetching: false,
+        totalCount,
+      };
+    }
     case PROMOTE_USER_SUCCESS:
       return {
         ...state,
@@ -51,19 +66,28 @@ const accountsReducer = (
 // ---ACTIONS---
 
 export const accountsActions = {
-  getAccountsSuccess: (data: Account[]) =>
-    ({ type: GET_ACCOUNTS_SUCCESS, payload: { data } } as const),
-  getAccounts: () => ({ type: GET_ACCOUNTS } as const),
+  getAccountsSuccess: (data: Account[], totalCount: number, page: number) =>
+    ({ type: GET_ACCOUNTS_SUCCESS, payload: { data, totalCount, page } } as const),
+  getAccounts: (options: IGetAccountsOptions) =>
+    ({ type: GET_ACCOUNTS, payload: { options } } as const),
   promoteUser: (id: string) => ({ type: PROMOTE_USER, payload: { id } } as const),
   promoteUserSuccess: (id: string) => ({ type: PROMOTE_USER_SUCCESS, payload: { id } } as const),
 };
 
 // ---SAGAS---
 
-function* getAccountsWorker(): Generator<StrictEffect, void, Account[]> {
+function* getAccountsWorker({
+  payload,
+}: ReturnType<typeof accountsActions.getAccounts>): Generator<
+  StrictEffect,
+  void,
+  GetAccountsReturnType
+> {
   try {
-    const accounts = yield call(accountsServise.getAccounts);
-    yield put(accountsActions.getAccountsSuccess(accounts));
+    const response = yield call(accountsServise.getAccounts, payload.options);
+    yield put(
+      accountsActions.getAccountsSuccess(response.data, response.totalCount, payload.options.page),
+    );
   } catch (e) {
     yield put(
       notificationActions.addNotification({
