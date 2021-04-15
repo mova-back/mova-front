@@ -27,6 +27,7 @@ const LoginPage: React.FC = () => {
       headerText: {
         color: theme.custom.colors.textOpacity80,
         fontStyle: 'italic',
+        textAlign: 'center',
         fontSize: '16px',
       },
     }),
@@ -48,8 +49,8 @@ const LoginPage: React.FC = () => {
           </Link>
           <h2 className={classes.header}>Залагініцца</h2>
           <p className={classes.headerText}>
-            Каб пачаць карыстацца слоўнікам, калі ласка, увайдзі ў свой акаунт. Пасля ты зможаш
-            уносіць свае словы і ўзбагачаць нашу Родную мову!
+            Каб пачаць карыстацца слоўнікам, калі ласка, увайдзі ў свой акаунт.
+            <br /> Пасля ты зможаш уносіць свае словы і ўзбагачаць нашу Родную мову!
           </p>
         </div>
         <Box p={3}>

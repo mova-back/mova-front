@@ -29,6 +29,9 @@ const useStyles = makeStyles(() =>
       marginTop: -12,
       marginLeft: -12,
     },
+    form: {
+      marginLeft: 50,
+    },
   }),
 );
 
@@ -49,6 +52,7 @@ const ForgetPassword: React.FC = () => {
 
   return (
     <Formik
+      className={classes.form}
       initialValues={ForgetPasswordSchema.initialState}
       validationSchema={ForgetPasswordSchema.validSchema}
       onSubmit={(values: ForgetPasswordData, meta: FormikHelpers<ForgetPasswordData>) => {

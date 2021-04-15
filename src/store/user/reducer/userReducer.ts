@@ -216,12 +216,6 @@ export function* signUpWorker({
     if (e.response.data.message === 'This user already taken, try use another') {
       yield call(setFieldError, 'username', 'This username has already been taken!');
     }
-    yield put(
-      notificationActions.addNotification({
-        type: NotificationTypes.error,
-        message: e.message,
-      }),
-    );
     yield call(setSubmitting, false);
     yield put(userActions.registrationError(e));
   }
@@ -321,6 +315,7 @@ export function* resetPasswordWorker({
 
 export function* setCurrentUserWorker(): Generator<StrictEffect, void, User> {
   try {
+    debugger;
     const user: User = yield call(UserService.getCurrent);
     yield put(userActions.setCurrentUserSuccess(user));
   } catch (e) {
@@ -358,6 +353,14 @@ export function* signInWorker(): Generator<StrictEffect, void, any> {
       }
       if (e.response.status === 404) {
         yield call(setFieldError, 'email', 'There is no user with such email');
+      }
+      if (e.response.status === 500) {
+        yield put(
+          notificationActions.addNotification({
+            type: NotificationTypes.error,
+            message: 'Калi ласка зарэгiстрыруйцесь',
+          }),
+        );
       }
       yield put(userActions.loginError(e));
     }

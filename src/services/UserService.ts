@@ -91,7 +91,8 @@ export const UserService = {
   },
 
   *getCurrent(): Generator<StrictEffect, User, AxiosResponse<GetCurrentUserType>> {
-    const response = yield call(http(true).get, ApiRoute.User, {}, true);
+    const response = yield call(http(true).get, ApiRoute.User, {}, { withCredentials: true });
+    debugger;
     return response.data.data;
   },
 

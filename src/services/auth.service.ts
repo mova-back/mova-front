@@ -122,6 +122,6 @@ export async function refreshTokens(): Promise<Record<string, string>> {
   }
 }
 
-export const debounceRefreshTokens = debounce((history?: ReturnType<typeof useHistory>) => {
+export const debounceRefreshTokens = debounce(() => {
   return refreshTokens();
 }, 100);

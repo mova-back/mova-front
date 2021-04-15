@@ -129,30 +129,16 @@ const Feed: React.FC<IProps> = ({ className, options }) => {
     delayInMs: 1000,
   });
   useEffect(() => {
-    if (hasRefreshToken()) {
-      if (currentUser)
-        dispatch(
-          wordsActions.fetchFeed({
-            ...options,
-            orderByField: orderBy,
-            orderByDirection: direction,
-            page: currentPage,
-            search: searchQuery,
-            limit: 10,
-          }),
-        );
-    } else {
-      dispatch(
-        wordsActions.fetchFeed({
-          ...options,
-          orderByField: orderBy,
-          orderByDirection: direction,
-          page: currentPage,
-          search: searchQuery,
-          limit: 10,
-        }),
-      );
-    }
+    dispatch(
+      wordsActions.fetchFeed({
+        ...options,
+        orderByField: orderBy,
+        orderByDirection: direction,
+        page: currentPage,
+        search: searchQuery,
+        limit: 10,
+      }),
+    );
   }, [dispatch, options, currentUser, orderBy, direction, currentPage, searchQuery]);
 
   return (

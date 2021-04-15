@@ -36,7 +36,7 @@ export const FeedService = {
   *fetchFeed(
     options: FeedUrlOptionsType,
   ): Generator<StrictEffect, FeedReturnType, AxiosResponse<{ data: Word[]; success: boolean }>> {
-    const response = yield call(http(true).get, wordUrlCreator(options));
+    const response = yield call(http(false).get, wordUrlCreator(options));
     const result = { feed: response.data.data, totalCount: response.headers['x-total-count'] };
     return result;
   },

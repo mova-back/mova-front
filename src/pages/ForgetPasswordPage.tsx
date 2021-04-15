@@ -26,7 +26,7 @@ const ForgetPasswordPage: React.FC = () => {
       },
       headerContainer: {
         textAlign: 'center',
-        padding: '10% 0',
+        padding: '20px 0',
       },
       retryButton: {
         background: 'transparent',
@@ -49,6 +49,9 @@ const ForgetPasswordPage: React.FC = () => {
       link: {
         fontWeight: 'bold',
       },
+      formContainer: {
+        padding: 25,
+      },
     }),
   );
   const classes = useStyles();
@@ -62,42 +65,30 @@ const ForgetPasswordPage: React.FC = () => {
         <h2 className={classes.header}>Забыўся пароль?</h2>
         <p className={classes.note}>Калі ласка, укажы пошту, якую ты пазначыў пры рэгістрацыі</p>
       </div>
-      <ForgetPassword />
-      {/* {query ? (
-        <p className={classes.retryText}>
-          Нічога не прыйшло?
-          <button
-            type="button"
-            id="retryButton"
-            className={classes.retryButton}
-            onClick={() => setQuery('')}
+      <Box p={3}>
+        <ForgetPassword />
+        <Box pl={6} pr={6} mt={2} display="flex" justifyContent="space-between">
+          <Link
+            color="textPrimary"
+            underline="always"
+            variant="body1"
+            className={classes.link}
+            component={NavLink}
+            to={Page.Signup}
           >
-            <span className={classes.retryButtonText}>Адправіць яшчэ раз</span>
-          </button>
-        </p>
-      ) : null} */}
-
-      <Box pl={6} pr={6} mt={2} display="flex" justifyContent="space-between">
-        <Link
-          color="textPrimary"
-          underline="always"
-          variant="body1"
-          className={classes.link}
-          component={NavLink}
-          to={Page.Signup}
-        >
-          Стварыць акаунт
-        </Link>
-        <Link
-          color="textPrimary"
-          underline="always"
-          variant="body1"
-          className={classes.link}
-          component={NavLink}
-          to={Page.Login}
-        >
-          Залагініцца
-        </Link>
+            Стварыць акаунт
+          </Link>
+          <Link
+            color="textPrimary"
+            underline="always"
+            variant="body1"
+            className={classes.link}
+            component={NavLink}
+            to={Page.Login}
+          >
+            Залагініцца
+          </Link>
+        </Box>
       </Box>
     </Wrapper>
   );

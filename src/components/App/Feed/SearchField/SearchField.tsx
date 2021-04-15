@@ -25,7 +25,7 @@ const SearchField: React.FC<IProps> = ({ onChange }) => {
         zIndex: 5,
         display: 'flex',
         justifyContent: 'space-between',
-        width: '100%',
+        width: 'calc(100% - 5px)',
         left: 0,
       },
       button: {

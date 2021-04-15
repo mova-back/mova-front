@@ -8,6 +8,7 @@ export function* init(store: any) {
     yield delay(100);
     const { currentUser } = store.getState().user;
     if (hasRefreshToken() && !currentUser) {
+      debugger;
       yield call(refreshTokens);
       store.dispatch(userActions.setCurrentUser());
     }
