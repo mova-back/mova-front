@@ -17,8 +17,8 @@ const SearchField: React.FC<IProps> = ({ onChange }) => {
         background: theme.custom.colors.primaryLight,
         width: '80%',
         marginLeft: 5,
+        height: 40,
       },
-
       container: {
         position: 'absolute',
         top: -50,
@@ -28,9 +28,13 @@ const SearchField: React.FC<IProps> = ({ onChange }) => {
         width: 'calc(100% - 5px)',
         left: 0,
       },
+      input: {
+        height: 40,
+      },
       button: {
         width: '20%',
         marginLeft: 15,
+        height: 40,
       },
     }),
   );
@@ -49,6 +53,7 @@ const SearchField: React.FC<IProps> = ({ onChange }) => {
           onChange(e.target.value);
         }}
         InputProps={{
+          className: classes.input,
           startAdornment: (
             <InputAdornment position="start">
               <SearchIcon />
