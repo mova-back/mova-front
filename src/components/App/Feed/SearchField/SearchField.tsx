@@ -34,7 +34,6 @@ const SearchField: React.FC<IProps> = ({ onChange }) => {
       button: {
         width: '20%',
         marginLeft: 15,
-        height: 40,
       },
     }),
   );
@@ -61,7 +60,7 @@ const SearchField: React.FC<IProps> = ({ onChange }) => {
           ),
         }}
       />
-      <Button className={classes.button} color="secondary" variant="contained">
+      <Button className={classes.button} color="secondary" variant="contained" size="small">
         Знайсцi
       </Button>
     </div>

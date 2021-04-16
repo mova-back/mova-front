@@ -85,14 +85,12 @@ const NewWord: React.FC<NewWordProps> = ({ action }) => {
     }
     return NewWordSchema.initialState;
   };
-  debugger;
   return (
     <Formik
       initialValues={determineInitialValues()}
       enableReinitialize
       validationSchema={NewWordSchema.validSchema}
       onSubmit={(values: NewWordData, meta: FormikHelpers<NewWordData>) => {
-        // dispatch(action(values, meta, history, id?));
         switch (action) {
           case wordsActions.fetchCreateANewWord:
             dispatch(action(values, meta, history));
@@ -104,7 +102,7 @@ const NewWord: React.FC<NewWordProps> = ({ action }) => {
         }
       }}
     >
-      {({ dirty, isValid, isSubmitting }: FormikProps<NewWordData>) => (
+      {({ dirty, isValid, isSubmitting, handleBlur, touched }: FormikProps<NewWordData>) => (
         <div className={classes.root}>
           <Form>
             <Box display="grid" gridGap={16} className={classes.label}>
@@ -113,9 +111,13 @@ const NewWord: React.FC<NewWordProps> = ({ action }) => {
                   {({ field: formikField, meta }: FieldProps) => (
                     <Input
                       {...formikField}
+                      handleBlur={handleBlur}
+                      placeholder={field.placeholder}
                       label={transformToUppercase(field.label)}
-                      error={Boolean(meta.error && meta.touched)}
-                      helperText={meta.error && meta.touched ? field.helperText : ''}
+                      error={Boolean(meta.error && touched[field.name as keyof NewWordData])}
+                      helperText={
+                        meta.error && touched[field.name as keyof NewWordData] ? meta.error : ''
+                      }
                     />
                   )}
                 </Field>
@@ -138,8 +140,11 @@ const NewWord: React.FC<NewWordProps> = ({ action }) => {
                     <Input
                       {...formikField}
                       label={transformToCapitalize(field.label)}
-                      error={Boolean(meta.error && meta.value)}
-                      helperText={meta.error && meta.value ? field.helperText : ''}
+                      error={Boolean(meta.error && touched[field.name as keyof NewWordData])}
+                      placeholder={field.placeholder}
+                      helperText={
+                        meta.error && touched[field.name as keyof NewWordData] ? meta.error : ''
+                      }
                     />
                   )}
                 </Field>

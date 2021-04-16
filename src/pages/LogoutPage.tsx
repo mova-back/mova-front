@@ -37,11 +37,6 @@ const LogoutPage: React.FC = () => {
   const classes = useStyles();
   const history = useHistory();
   const dispatch = useDispatch();
-  const onButtonClick = () => {
-    dispatch(userActions.logout());
-    history.replace('');
-  };
-
   return (
     <Wrapper actionBarHeader="Разлагініцца" settingsElementMode>
       <Box textAlign="center" style={{ height: 'calc(100vh - 64px)' }}>
@@ -52,7 +47,10 @@ const LogoutPage: React.FC = () => {
           variant="contained"
           color="secondary"
           className={classes.button}
-          onClick={onButtonClick}
+          onClick={() => {
+            dispatch(userActions.logout());
+            history.replace('');
+          }}
         >
           Разлагініцца
         </ActionButton>
