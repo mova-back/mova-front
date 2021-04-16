@@ -147,6 +147,9 @@ const WordCard: React.FC<WordCardProps> = ({
   const dialogHandleClose = () => {
     setDialogIsOpen(false);
   };
+  const onCopyClick = () => {
+    navigator.clipboard.writeText(`Слова: ${wordname}, Значэнне: ${meaning}`);
+  };
 
   const maxMeaningLength = 120;
   const meaningShort =
@@ -286,7 +289,7 @@ const WordCard: React.FC<WordCardProps> = ({
                     }
                   }}
                 >
-                  <MenuItem className={classes.menuItem}>
+                  <MenuItem className={classes.menuItem} onClick={onCopyClick}>
                     <span>Капіраваць</span>
                     <img
                       className={classes.menuItemIcon}

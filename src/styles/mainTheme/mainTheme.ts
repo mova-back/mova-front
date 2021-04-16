@@ -49,6 +49,7 @@ const mainTheme = {
         fontWeight: 700,
       },
     },
+    MuiToggleButton: {},
     MuiCssBaseline: {
       '@global': {
         '@font-face': [

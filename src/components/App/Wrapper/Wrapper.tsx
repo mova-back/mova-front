@@ -35,6 +35,7 @@ const useStyles = makeStyles((theme: CustomTheme) =>
       flexDirection: 'column',
       [theme.breakpoints.down('md')]: {
         width: '100%',
+        minHeight: 'calc(100vh)',
       },
       marginTop: 20,
     },
@@ -62,6 +63,9 @@ const useStyles = makeStyles((theme: CustomTheme) =>
     gridContainer: {
       marginTop: 20,
     },
+    logoText: {
+      fontWeight: 700,
+    },
   }),
 );
 
@@ -84,7 +88,9 @@ const Wrapper: React.FC<IProps> = ({ actionBarHeader, children }) => {
                   <Link component={NavLink} to={Page.Home}>
                     <img src="./assets/images/logo.png" alt="app-logo" />
                   </Link>
-                  <Typography variant="h2">mova</Typography>
+                  <Typography className={classes.logoText} variant="h2">
+                    mova
+                  </Typography>
                 </Box>
                 <List>
                   {BOTTOM_NAVIGATION.map(({ id, label, icon, path }) => (

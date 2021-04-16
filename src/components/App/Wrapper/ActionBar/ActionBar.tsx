@@ -49,6 +49,8 @@ const useStyles = makeStyles<CustomTheme>((theme) =>
     header__link: {
       marginLeft: 40,
       whiteSpace: 'nowrap',
+      fontWeight: 400,
+      fontSize: '1rem',
       color: 'white',
       textDecoration: 'none',
     },

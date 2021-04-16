@@ -139,10 +139,10 @@ const Feed: React.FC<IProps> = ({ className, options }) => {
         limit: 10,
       }),
     );
-  }, [dispatch, options, currentUser, orderBy, direction, currentPage, searchQuery]);
+  }, [dispatch, options, orderBy, direction, currentPage, searchQuery]);
 
   return (
-    <Box display="grid" gridGap={8} p={1} pb={10} className={className}>
+    <Box display="grid" gridGap={8} p={1} className={className}>
       <>
         <SearchField onChange={setSearchQuery} />
         <Box display="flex" alignItems="center" justifyContent="space-between">

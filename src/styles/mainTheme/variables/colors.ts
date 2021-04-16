@@ -10,7 +10,7 @@ const colors: Colors = {
   textOpacity80: 'rgba(56, 79, 125, 0.8)',
   textOpacity45: 'rgba(56, 79, 125, 0.45)',
   textOpacity10: 'rgba(56, 79, 125, 0.1)',
-  primary: 'rgb(118, 84, 255)',
+  primary: 'rgb(56,79,125)',
   backgroundColor: '#EEECFF',
   primaryLight: '#FFFFFF',
   borderOpacity10: 'rgba(56, 79, 125, 0.1)',
