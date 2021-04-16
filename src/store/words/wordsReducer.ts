@@ -406,7 +406,7 @@ function* rateAWordWorker({
     yield put(
       notificationActions.addNotification({
         type: NotificationTypes.error,
-        message: 'Something went wrong with rating this word',
+        message: 'Не атрымалася ацаніць слова, абнавiце старонку',
       }),
     );
   }

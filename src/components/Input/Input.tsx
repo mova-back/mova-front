@@ -48,7 +48,6 @@ const useStyles = makeStyles((theme) =>
 
       fontSize: 16,
       lineHeight: '20px',
-      boxShadow: '0px 10px 15px #F0F0F0',
       transition: theme.transitions.create('box-shadow', {
         duration: theme.transitions.duration.shortest,
       }),

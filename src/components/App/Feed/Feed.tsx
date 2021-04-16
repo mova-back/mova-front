@@ -153,25 +153,27 @@ const Feed: React.FC<IProps> = ({ className, options }) => {
             callback={setOrderBy}
           />
         </Box>
-        {feed.map((word) => (
-          <WordCard
-            key={word._id}
-            swearing={word.swearing}
-            isFavourited={word.isFavourited}
-            likes={word.likes}
-            dislikes={word.dislikes}
-            _id={word._id}
-            wordname={word.wordname}
-            meaning={word.meaning}
-            isLiked={word.isLiked}
-            isDisliked={word.isDisliked}
-            description={word.description}
-            tags={word.tags}
-            createdAt={word.createdAt}
-            createdByUserId={word.createdByUserId}
-            currentUserId={currentUser?._id}
-          />
-        ))}
+        {!fetching
+          ? feed.map((word) => (
+              <WordCard
+                key={word._id}
+                swearing={word.swearing}
+                isFavourited={word.isFavourited}
+                likes={word.likes}
+                dislikes={word.dislikes}
+                _id={word._id}
+                wordname={word.wordname}
+                meaning={word.meaning}
+                isLiked={word.isLiked}
+                isDisliked={word.isDisliked}
+                description={word.description}
+                tags={word.tags}
+                createdAt={word.createdAt}
+                createdByUserId={word.createdByUserId}
+                currentUserId={currentUser?._id}
+              />
+            ))
+          : null}
       </>
       {(fetching || hasMore) && (
         <div ref={sentryRef}>
