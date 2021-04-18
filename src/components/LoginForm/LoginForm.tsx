@@ -1,7 +1,11 @@
-import * as React from 'react';
-import { ErrorMessage, Field, FieldProps, Form, Formik, FormikHelpers, FormikProps } from 'formik';
+import React, { useState } from 'react';
+import { Field, FieldProps, Form, Formik, FormikHelpers, FormikProps } from 'formik';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import IconButton from '@material-ui/core/IconButton';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
 import { Box, CircularProgress, createStyles, makeStyles } from '@material-ui/core';
 
@@ -11,8 +15,8 @@ import ActionButton from '../ActionButton/ActionButton';
 
 import LoginFormData from '../../models/forms/loginFormData';
 import LoginFormSchema from './LoginFormSchema';
-import LOGIN from '../../constants/forms/login';
 import { userActions } from '../../store/user/reducer/userReducer';
+import LOGIN from '../../constants/forms/login';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -29,6 +33,12 @@ const useStyles = makeStyles(() =>
     submitButton: {
       width: '100%',
     },
+    icon: {
+      position: 'absolute',
+      paddingTop: '1px',
+      top: '0',
+      right: '0',
+    },
   }),
 );
 
@@ -38,6 +48,7 @@ const useStyles = makeStyles(() =>
 
 const LoginForm: React.FC = () => {
   const classes = useStyles();
+  const [showHidePassword, changeShowHidePassword] = useState(false);
   const dispatch = useDispatch();
   return (
     <Formik
@@ -48,21 +59,52 @@ const LoginForm: React.FC = () => {
         meta.setSubmitting(true);
         dispatch(userActions.login(values, meta));
       }}
+      // render={(props) => {
+      //   return (
+      //     <button type="button" onClick={() => props.resetForm()}>
+      //       reset form
+      //     </button>
+      //   );
+      // }}
     >
       {({ dirty, isValid, isSubmitting, touched, handleBlur }: FormikProps<LoginFormData>) => (
         <Form>
           <Box display="grid" gridGap={16}>
             {LOGIN.map((field) => (
               <>
+                {/* <Button variant="contained" color="primary">
+                  Primary
+                </Button> */}
                 <Field key={field.id} name={field.name}>
                   {({ field: formikField, meta }: FieldProps) => (
                     <Input
+                      type={
+                        // eslint-disable-next-line no-nested-ternary
+                        field.name === 'password'
+                          ? showHidePassword
+                            ? 'text'
+                            : 'password'
+                          : field.type
+                      }
                       {...formikField}
                       label={field.label}
                       handleBlur={handleBlur}
                       error={Boolean(meta.error && touched[field.name as 'email' | 'password'])}
                       helperText={
                         meta.error && touched[field.name as 'email' | 'password'] ? meta.error : ''
+                      }
+                      endAdornment={
+                        field.name === 'password' && (
+                          <div className={classes.icon}>
+                            <IconButton
+                              aria-label="toggle password visibility"
+                              onClick={() => changeShowHidePassword(!showHidePassword)}
+                              onMouseDown={(event) => event.preventDefault()}
+                            >
+                              {showHidePassword ? <Visibility /> : <VisibilityOff />}
+                            </IconButton>
+                          </div>
+                        )
                       }
                     />
                   )}

@@ -8,7 +8,6 @@ import { Page } from '../constants/paths';
 import Wrapper from '../components/App/Wrapper/Wrapper';
 import { CustomThemeOptions } from '../styles/types';
 import LoginForm from '../components/LoginForm/LoginForm';
-import BottomNav from '../components/App/BottomNav/BottomNav';
 
 const LoginPage: React.FC = () => {
   const theme: CustomThemeOptions = useTheme();

@@ -103,6 +103,7 @@ interface IProps {
     (e: React.FocusEvent<any>): void;
     <T = any>(fieldOrEvent: T): T extends string ? (e: any) => void : void;
   };
+  endAdornment?: any;
 }
 
 const Input: React.FC<IProps> = ({
@@ -116,6 +117,7 @@ const Input: React.FC<IProps> = ({
   helperText,
   handleBlur,
   name,
+  endAdornment,
 }) => {
   const classes = useStyles();
   const [focused, setFocused] = React.useState(false);
@@ -155,6 +157,7 @@ const Input: React.FC<IProps> = ({
           }}
           className={classes.input}
         />
+        {endAdornment}
       </div>
       {helperText && <p className={classes.helperText}>{helperText}</p>}
     </div>
