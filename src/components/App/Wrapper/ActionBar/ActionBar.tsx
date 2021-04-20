@@ -71,7 +71,7 @@ const useStyles = makeStyles<CustomTheme>((theme) =>
       justifyContent: 'space-between',
       width: '80%',
       [theme.breakpoints.down('md')]: {
-        width: '0',
+        width: '99%',
         padding: 5,
         height: 0,
       },
