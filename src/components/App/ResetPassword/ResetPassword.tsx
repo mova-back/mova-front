@@ -2,8 +2,6 @@ import { Box, CircularProgress, createStyles, makeStyles } from '@material-ui/co
 import { FormikHelpers, FormikProps, FieldProps, Formik, Field, Form } from 'formik';
 import React from 'react';
 import { useDispatch } from 'react-redux';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { useLocation } from 'react-router';
 import resetPasswordFields, { ResetPasswordDataType } from '../../../constants/forms/resetPassword';
 import { userActions } from '../../../store/user/reducer/userReducer';
 import ActionButton from '../../ActionButton/ActionButton';

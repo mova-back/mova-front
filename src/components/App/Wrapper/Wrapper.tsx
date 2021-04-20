@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme: CustomTheme) =>
       marginTop: 15,
     },
     active: {
-      fontWeight: 'bold',
+      fontWeight: 'normal',
     },
     list__item: {
       display: 'flex',
@@ -64,7 +64,7 @@ const useStyles = makeStyles((theme: CustomTheme) =>
       marginTop: 20,
     },
     logoText: {
-      fontWeight: 700,
+      fontWeight: 'normal',
     },
   }),
 );

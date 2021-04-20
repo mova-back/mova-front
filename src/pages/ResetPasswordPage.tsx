@@ -31,7 +31,7 @@ const ResetPage: React.FC = () => {
       },
       retryButton: {
         background: 'transparent',
-        fontWeight: 'bold',
+        fontWeight: 'normal',
         textDecoration: 'underline',
         border: 'none',
         outline: 0,
@@ -53,7 +53,7 @@ const ResetPage: React.FC = () => {
         fontSize: '16px',
       },
       link: {
-        fontWeight: 'bold',
+        fontWeight: 'normal',
       },
     }),
   );

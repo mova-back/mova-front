@@ -30,7 +30,7 @@ const ForgetPasswordPage: React.FC = () => {
       },
       retryButton: {
         background: 'transparent',
-        fontWeight: 'bold',
+        fontWeight: 'normal',
         textDecoration: 'underline',
         border: 'none',
         outline: 0,
@@ -47,7 +47,7 @@ const ForgetPasswordPage: React.FC = () => {
         fontStyle: 'italic',
       },
       link: {
-        fontWeight: 'bold',
+        fontWeight: 'normal',
       },
       formContainer: {
         padding: 25,

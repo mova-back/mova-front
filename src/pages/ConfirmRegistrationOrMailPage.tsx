@@ -32,7 +32,7 @@ const useStyles = makeStyles(() =>
       fontStyle: 'italic',
     },
     link: {
-      fontWeight: 'bold',
+      fontWeight: 'normal',
     },
     icon: {
       transform: 'scale(5)',

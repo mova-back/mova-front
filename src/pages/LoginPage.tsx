@@ -14,7 +14,7 @@ const LoginPage: React.FC = () => {
   const useStyles = makeStyles(() =>
     createStyles({
       link: {
-        fontWeight: 'bold',
+        fontWeight: 'normal',
       },
       headerContainer: {
         textAlign: 'center',

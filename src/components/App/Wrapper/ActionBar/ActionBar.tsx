@@ -45,11 +45,15 @@ const useStyles = makeStyles<CustomTheme>((theme) =>
       height: 120,
       display: 'flex',
       justifyContent: 'center',
+      [theme.breakpoints.down('md')]: {
+        display: 'block',
+        height: 75,
+      },
     },
     header__link: {
       marginLeft: 40,
       whiteSpace: 'nowrap',
-      fontWeight: 400,
+      fontWeight: 'normal',
       fontSize: '1rem',
       color: 'white',
       textDecoration: 'none',
@@ -67,8 +71,9 @@ const useStyles = makeStyles<CustomTheme>((theme) =>
       justifyContent: 'space-between',
       width: '80%',
       [theme.breakpoints.down('md')]: {
-        width: '100%',
-        padding: 10,
+        width: '0',
+        padding: 5,
+        height: 0,
       },
     },
   }),

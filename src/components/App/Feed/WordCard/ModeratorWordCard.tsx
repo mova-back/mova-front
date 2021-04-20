@@ -100,7 +100,6 @@ const useStyles = makeStyles<CustomTheme>((theme) =>
       alignItems: 'center',
     },
     textarea: {
-      fontFamily: '"Arial"',
       fontSize: 15,
       padding: '10px',
       outline: 'none',

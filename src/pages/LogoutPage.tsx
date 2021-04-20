@@ -20,7 +20,7 @@ const useStyles = makeStyles(() =>
     },
     header: {
       fontSize: 20,
-      fontWeight: 'bold',
+      fontWeight: 'normal',
       marginTop: 40,
     },
     text: {

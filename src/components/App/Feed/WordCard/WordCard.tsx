@@ -99,8 +99,10 @@ const useStyles = makeStyles<CustomTheme>((theme) =>
       justifyContent: 'center',
       alignItems: 'center',
     },
+    dialogIcon: {
+      padding: 0,
+    },
     textarea: {
-      fontFamily: '"Arial"',
       fontSize: 15,
       padding: '10px',
       outline: 'none',
@@ -159,11 +161,10 @@ const WordCard: React.FC<WordCardProps> = ({
 
   const theme = useTheme<CustomThemeOptions>();
   const classes = useStyles(theme);
-  console.log('DISABLED: ', !currentUserId);
   return (
     <Card className={clsx(classes.root, className)} component="article">
       <CardContent>
-        <Box display="flex" position="relative" pr={5}>
+        <Box display="flex" position="relative" p={0}>
           <Typography variant="h6" align="left">
             {wordname}
           </Typography>
@@ -251,6 +252,7 @@ const WordCard: React.FC<WordCardProps> = ({
       </CardActions>
       <Box display="flex" justifyContent="center">
         <IconButton
+          className={classes.dialogIcon}
           aria-label="actions"
           size="small"
           id="anchor"

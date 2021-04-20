@@ -15,7 +15,7 @@ const useStyles = makeStyles(() =>
     },
     link: {
       fontStyle: 'normal',
-      fontWeight: 'bold',
+      fontWeight: 'normal',
     },
     headerContainer: {
       textAlign: 'center',

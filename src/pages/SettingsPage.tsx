@@ -46,7 +46,7 @@ const Tab: React.FC<TabProps> = ({ renderIcon, tabName, page }) => {
           borderRadius: 8,
         },
         '&:active': {
-          fontWeight: 'bold',
+          fontWeight: 'normal',
         },
       },
     }),
@@ -92,7 +92,7 @@ const SettingsPage: React.FC = () => {
         paddingLeft: 20,
       },
       inputLabel: {
-        fontWeight: 'bold',
+        fontWeight: 'normal',
         fontSize: 18,
         marginBottom: 10,
       },
@@ -133,7 +133,7 @@ const SettingsPage: React.FC = () => {
           borderRadius: 8,
         },
         '&:active': {
-          fontWeight: 'bold',
+          fontWeight: 'normal',
         },
       },
       bottomLinkIcon: {

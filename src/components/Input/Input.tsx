@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) =>
       },
     },
     label: {
-      fontWeight: 'bold',
+      fontWeight: 'normal',
       fontSize: 16,
       lineHeight: '20px',
       textTransform: 'uppercase',

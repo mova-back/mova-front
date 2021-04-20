@@ -40,8 +40,14 @@ const useStyles = makeStyles<CustomTheme>((theme) =>
     },
     orderButton_active: {
       color: `${theme.palette.secondary.main}`,
+      fontSize: '12px',
     },
-    orderButton: {},
+    orderButton: {
+      fontSize: '12px',
+    },
+    box: {
+      padding: '0 12px 0 10px',
+    },
   }),
 );
 
@@ -142,10 +148,10 @@ const Feed: React.FC<IProps> = ({ className, options }) => {
   }, [dispatch, options, orderBy, direction, currentPage, searchQuery]);
 
   return (
-    <Box display="grid" gridGap={8} p={1} className={className}>
+    <Box display="grid" gridGap={6} className={classes.box}>
       <>
         <SearchField onChange={setSearchQuery} />
-        <Box display="flex" alignItems="center" justifyContent="space-between">
+        <Box display="flex" justifyContent="flex-start" className={classes.sortBox} pl={1} pt={1}>
           <SortBy
             direction={direction}
             setDirection={setDirection}

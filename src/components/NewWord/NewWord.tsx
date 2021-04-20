@@ -39,7 +39,7 @@ const useStyles = makeStyles(() =>
       justifyContent: 'space-between',
       color: '#445984',
       fontSize: 16,
-      fontWeight: 700,
+      fontWeight: 'normal',
       margin: '15px 0 40px',
     },
     label: {

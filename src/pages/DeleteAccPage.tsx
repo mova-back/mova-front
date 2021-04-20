@@ -18,7 +18,7 @@ const useStyles = makeStyles(() =>
     },
     header: {
       fontSize: 20,
-      fontWeight: 'bold',
+      fontWeight: 'normal',
       marginTop: 40,
     },
     text: {
@@ -29,7 +29,7 @@ const useStyles = makeStyles(() =>
       marginTop: 150,
     },
     link: {
-      fontWeight: 'bold',
+      fontWeight: 'normal',
       marginTop: 25,
     },
   }),

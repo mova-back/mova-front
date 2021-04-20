@@ -1,5 +1,4 @@
-import { CustomThemeOptions } from '../types';
-import { colors, sizes, fonts } from './variables';
+import { colors, sizes } from './variables';
 
 const mainTheme = {
   palette: {
@@ -26,13 +25,10 @@ const mainTheme = {
     },
   },
   typography: {
-    fontFamily: '"Lato", "Arial", sans-serif',
-    fontSize: 14,
-    fontWeightThin: 100,
-    fontWeightLight: 300,
-    fontWeightRegular: 400,
-    fontWeightMedium: 500,
-    color: 'red',
+    fontFamily: ['Roboto'].join(','),
+    fontWeightLight: 'normal',
+    fontWeightRegular: 'normal',
+    fontWeightMedium: 'normal',
   },
   shape: {
     borderRadius: 8,
@@ -42,24 +38,29 @@ const mainTheme = {
     sizes,
   },
   overrides: {
+    MuiCardContent: {
+      root: {
+        padding: '10px',
+        '&:last-child': {
+          paddingBottom: 0,
+        },
+      },
+    },
+    MuiCardActions: {
+      root: {
+        padding: 5,
+      },
+    },
     MuiButton: {
       containedSecondary: {
         color: 'white',
-        fontFamily: '"Lato", sans-serif',
-        fontWeight: 700,
       },
+      text: { padding: 0 },
     },
     MuiToggleButton: {},
     MuiCssBaseline: {
       '@global': {
-        '@font-face': [
-          fonts.latoRegular,
-          fonts.latoBold,
-          fonts.latoItalic,
-          fonts.latoThin,
-          fonts.latoLight,
-          fonts.latoBlack,
-        ],
+        '@font-face': [],
       },
     },
     MuiBottomNavigation: {

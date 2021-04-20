@@ -25,7 +25,7 @@ const useStyles = makeStyles(() =>
       fontStyle: 'italic',
     },
     link: {
-      fontWeight: 'bold',
+      fontWeight: 'normal',
     },
   }),
 );

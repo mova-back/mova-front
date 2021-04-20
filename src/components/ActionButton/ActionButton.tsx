@@ -11,7 +11,7 @@ const ActionButton = withStyles({
   label: {
     textTransform: 'uppercase',
     letterSpacing: 2,
-    fontWeight: 'bold',
+    fontWeight: 'normal',
     color: 'white',
   },
 })(Button);
