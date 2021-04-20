@@ -71,11 +71,7 @@ const useStyles = makeStyles<CustomTheme>((theme) =>
       justifyContent: 'space-between',
       width: '80%',
       [theme.breakpoints.down('md')]: {
-<<<<<<< Updated upstream
-        width: '99%',
-=======
         width: '100%',
->>>>>>> Stashed changes
         padding: 5,
         height: 0,
       },
