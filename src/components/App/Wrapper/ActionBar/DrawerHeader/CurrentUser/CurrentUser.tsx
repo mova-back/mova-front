@@ -16,8 +16,7 @@ interface IProps {
 const CurrentUserPlaceholder: React.FC = () => {
   return (
     <div>
-      <Skeleton variant="text" width="40%" />
-      <Skeleton variant="text" width="30%" />
+      <Skeleton variant="text" width={200} />
     </div>
   );
 };
