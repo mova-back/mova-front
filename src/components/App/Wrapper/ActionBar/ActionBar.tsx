@@ -71,7 +71,11 @@ const useStyles = makeStyles<CustomTheme>((theme) =>
       justifyContent: 'space-between',
       width: '80%',
       [theme.breakpoints.down('md')]: {
+<<<<<<< Updated upstream
         width: '99%',
+=======
+        width: '100%',
+>>>>>>> Stashed changes
         padding: 5,
         height: 0,
       },
@@ -156,7 +160,7 @@ const ActionBar: React.FC<IProps> = ({ header, settingsElementMode }) => {
           </Hidden>
           <Hidden lgUp>
             {!settingsElementMode ? (
-              <Box marginLeft="auto" marginRight="5px">
+              <Box marginRight="5px">
                 <IconButton edge="end" color="inherit" aria-label="menu" onClick={toggleDrawer}>
                   <MenuIcon />
                 </IconButton>

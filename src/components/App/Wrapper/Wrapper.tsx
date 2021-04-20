@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme: CustomTheme) =>
       flexDirection: 'column',
       [theme.breakpoints.down('md')]: {
         width: '100%',
-        minHeight: 'calc(100vh)',
+        paddingBottom: '65px',
       },
       marginTop: 20,
     },
