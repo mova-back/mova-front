@@ -89,7 +89,7 @@ const Wrapper: React.FC<IProps> = ({ actionBarHeader, children }) => {
                     <img src="./assets/images/logo.png" alt="app-logo" />
                   </Link>
                   <Typography className={classes.logoText} variant="h2">
-                    mova
+                    umova
                   </Typography>
                 </Box>
                 <List>

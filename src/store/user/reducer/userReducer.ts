@@ -53,6 +53,7 @@ export const CHANGE_EMAIL = 'CHANGE_EMAIL';
 export const CONFIRM_CHANGE_EMAIL = 'CONFIRM_CHANGE_EMAIL';
 export const EMAIL_CHANGE_SUCCESS = 'EMAIL_CHANGE_SUCCESS';
 export const EMAIL_CHANGE_ERROR = 'EMAIL_CHANGE_ERROR';
+export const SEND_FEEDBACK = 'SEND_FEEDBACK';
 
 export type UserActionsType = InferActionsTypes<typeof userActions>;
 
@@ -191,6 +192,11 @@ export const userActions = {
       type: GET_CURRENT_USER_ERROR,
       payload: error,
     } as const),
+  sendFeedback: (message: string) =>
+    ({
+      type: SEND_FEEDBACK,
+      payload: { message },
+    } as const),
 };
 
 // ---WORKER-SAGAS---
@@ -315,7 +321,6 @@ export function* resetPasswordWorker({
 
 export function* setCurrentUserWorker(): Generator<StrictEffect, void, User> {
   try {
-    debugger;
     const user: User = yield call(UserService.getCurrent);
     yield put(userActions.setCurrentUserSuccess(user));
   } catch (e) {
@@ -422,6 +427,28 @@ export function* changeEmailWorker({ payload }: ReturnType<typeof userActions.ch
       notificationActions.addNotification({
         type: NotificationTypes.error,
         message: `${e.message} :(`,
+      }),
+    );
+  }
+}
+
+function* sendFeedbackWorker({
+  payload,
+}: ReturnType<typeof userActions.sendFeedback>): Generator<StrictEffect, void, unknown> {
+  try {
+    const { message } = payload;
+    yield call(UserService.sendFeedback, message);
+    yield put(
+      notificationActions.addNotification({
+        type: NotificationTypes.success,
+        message: 'Дзякуй за водгук!',
+      }),
+    );
+  } catch (e) {
+    yield put(
+      notificationActions.addNotification({
+        type: NotificationTypes.error,
+        message: 'Водгук не адпраулен, паспрабуйце пазней',
       }),
     );
   }

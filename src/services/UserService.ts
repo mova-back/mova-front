@@ -111,4 +111,7 @@ export const UserService = {
     const { oldPassword, newPassword } = formData;
     yield call(http(true).post, ApiRoute.ChangePassword, { oldPassword, newPassword });
   },
+  *sendFeedback(message: string) {
+    yield call(http(true).post, 'dd', { message }); // TODO change mocked values
+  },
 };

@@ -12,6 +12,7 @@ import {
   makeStyles,
   MenuItem,
   Select,
+  Typography,
   useTheme,
 } from '@material-ui/core';
 
@@ -77,40 +78,45 @@ const SortBy: React.FC<{
   const theme = useTheme<CustomTheme>();
   const classes = useStyles(theme && { theme });
   return (
-    <ButtonGroup>
-      <Button
-        className={value === 'createdAt' ? classes.orderButton_active : classes.orderButton}
-        variant="text"
-        onClick={handleDateClick}
-      >
-        Дата
-        {(() => {
-          if (value === 'createdAt') {
-            if (direction === 'desc') {
-              return <VerticalAlignBottomIcon fontSize="small" />;
+    <Box display="flex" alignItems="center">
+      <Box mr={2}>
+        <Typography>Сарцiраваць па: </Typography>
+      </Box>
+      <ButtonGroup>
+        <Button
+          className={value === 'createdAt' ? classes.orderButton_active : classes.orderButton}
+          variant="text"
+          onClick={handleDateClick}
+        >
+          Даце
+          {(() => {
+            if (value === 'createdAt') {
+              if (direction === 'desc') {
+                return <VerticalAlignBottomIcon fontSize="small" />;
+              }
+              return <VerticalAlignTopIcon fontSize="small" />;
             }
-            return <VerticalAlignTopIcon fontSize="small" />;
-          }
-          return null;
-        })()}
-      </Button>
-      <Button
-        className={value === 'likes' ? classes.orderButton_active : classes.orderButton}
-        variant="text"
-        onClick={handleLikesClick}
-      >
-        Падабайкi
-        {(() => {
-          if (value === 'likes') {
-            if (direction === 'desc') {
-              return <VerticalAlignBottomIcon fontSize="small" />;
+            return null;
+          })()}
+        </Button>
+        <Button
+          className={value === 'likes' ? classes.orderButton_active : classes.orderButton}
+          variant="text"
+          onClick={handleLikesClick}
+        >
+          Падабайкам
+          {(() => {
+            if (value === 'likes') {
+              if (direction === 'desc') {
+                return <VerticalAlignBottomIcon fontSize="small" />;
+              }
+              return <VerticalAlignTopIcon fontSize="small" />;
             }
-            return <VerticalAlignTopIcon fontSize="small" />;
-          }
-          return null;
-        })()}
-      </Button>
-    </ButtonGroup>
+            return null;
+          })()}
+        </Button>
+      </ButtonGroup>
+    </Box>
   );
 };
 const Feed: React.FC<IProps> = ({ className, options }) => {
